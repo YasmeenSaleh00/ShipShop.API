@@ -1,0 +1,97 @@
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using ShipShop.Application.Commands;
+using ShipShop.Application.Services;
+
+namespace ShipShop.API.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+
+    public class CategoryController : ControllerBase
+    {
+        private readonly CategoryService _categoryService;
+
+        public CategoryController(CategoryService categoryService)
+        {
+            this._categoryService = categoryService;
+        }
+
+        /// <summary>
+        /// This EndPoint To Show All Category
+        /// </summary>
+        [HttpGet]
+        public async Task<IActionResult> GetAllCategories()
+        {
+            var categories = await _categoryService.GetAllCategory();
+            if(categories == null || categories.Count == 0)
+            {
+                return NoContent();
+            } 
+            return Ok(categories);
+        }
+        /// <summary>
+        /// This EndPoint To get Category info
+        /// </summary>
+
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetCategory([FromRoute] int id)
+        {
+            if(id == 0 || id < 0)
+            {
+                return BadRequest();
+            }
+            var category = await _categoryService.GetById(id);
+            if(category == null)
+            {
+                return NotFound();
+            }
+            return Ok(category);
+
+        }
+        ///<summary>
+        ///This EndPoint to add new Category
+        ///</summary>
+        [HttpPost]
+        public async Task<IActionResult> AddCategory([FromBody] CategoryCommand command)
+        {
+            var id = await _categoryService.AddCategory(command);
+            return Ok($"Category with Id {id} was added successfully");
+        }
+        /// <summary>
+        /// This EndPoint To update Category info
+        /// </summary>
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateCategory([FromRoute]int id, UpdateCategoryCommand command)
+        {
+            if(id == 0 || id < 0)
+            {
+                return BadRequest();
+            }
+            var data = await _categoryService.GetById(id);
+            if (data == null)
+                return NotFound();
+            await _categoryService.UpdateCategory(id, command);
+
+            return Ok($"Category with Id {id} was updated successfully");
+        }
+        /// <summary>
+        /// This EndPoint To delete Category 
+        /// </summary>
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteCategory(int id)
+        {
+            if(id == 0 || id < 0)
+            {
+                return BadRequest();
+            }
+            await _categoryService.DeleteCategory(id);
+            return Ok($"Category with Id {id} was deleted successfully");
+        }
+
+    }
+}
