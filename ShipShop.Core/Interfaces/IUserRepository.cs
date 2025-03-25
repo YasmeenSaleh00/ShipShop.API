@@ -18,6 +18,6 @@ namespace ShipShop.Core.Interfaces
         Task<List<User>> FilterUserByRole(string roleName);
         Task<List<User>> SortUserByCreateOn (string sortDirection);
         Task DeleteAsync(int id);
-        Task<User> Login(string username, string password);
+   
     }
 }

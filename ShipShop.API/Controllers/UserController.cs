@@ -71,25 +71,9 @@ namespace ShipShop.API.Controllers
             }
             return Ok(users);
         }
-        /// <summary>
-        /// This Endpoint For login 
-        /// </summary>
+     
         
-        [HttpPost]
-        [Route("Login")]
-        public async Task<IActionResult> Login([FromBody] AuthenticationQuery model)
-        {
-            AuthenticationModel result = await _userService.Login(model);
 
-            if (result == null)
-            {
-                return BadRequest("Email Or Password is incorrect");
-            }
-            else
-            {
-                return Ok(result);
-            }
-        }
       
         [AllowAnonymous]
         [HttpPost]

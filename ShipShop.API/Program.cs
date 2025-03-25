@@ -29,7 +29,7 @@ builder.Services.AddSwaggerGen(options =>
     });
     options.OperationFilter<AllowAnonymousOperationFilter>();
 
-   
+
 });
 builder.Services.AddApplicationServices();
 builder.Services.AddAuthentication(options =>

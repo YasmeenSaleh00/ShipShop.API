@@ -70,15 +70,7 @@ namespace ShipShop.Infrastructure.Repositories
             return user;
         }
 
-        public async Task<User> Login(string username, string password)
-        {
-       
-                var user = await _context.Users.Include(x=>x.Role).FirstOrDefaultAsync(x => x.Email == username && x.Password == password);
-                return user;
-            
-
-        }
-
+    
     
 
         public async Task<List<User>> SortUserByCreateOn(string sortDirection)

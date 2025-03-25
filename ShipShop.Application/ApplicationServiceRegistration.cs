@@ -20,6 +20,7 @@ namespace ShipShop.Application
             services.AddScoped<UserService>();  
             services.AddScoped<CartService>();
             services.AddScoped<OrderService>(); 
+            services.AddScoped<AuthService>();  
            
 
         }
