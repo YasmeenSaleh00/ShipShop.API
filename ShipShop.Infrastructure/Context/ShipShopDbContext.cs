@@ -84,6 +84,11 @@ namespace ShipShop.Infrastructure.Context
              
 
                 });
+            modelBuilder.Entity<User>()
+        .HasDiscriminator<string>("Discriminator")
+        .HasValue<User>("Admin")
+        .HasValue<Customer>("Customer");
+    
             modelBuilder.Entity<Category>()
            .Property(e => e.CreatedOn)
            .HasDefaultValueSql("GETDATE()");

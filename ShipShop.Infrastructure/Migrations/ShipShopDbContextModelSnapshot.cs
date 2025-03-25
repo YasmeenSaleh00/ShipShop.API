@@ -635,7 +635,7 @@ namespace ShipShop.Infrastructure.Migrations
 
                     b.ToTable("Users");
 
-                    b.HasDiscriminator().HasValue("User");
+                    b.HasDiscriminator().HasValue("Admin");
 
                     b.UseTphMappingStrategy();
 

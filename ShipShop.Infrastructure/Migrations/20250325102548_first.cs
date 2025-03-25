@@ -362,7 +362,7 @@ namespace ShipShop.Infrastructure.Migrations
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "Discriminator", "Email", "FirstName", "IsActive", "LastName", "Password", "RoleId", "UpdatedOn" },
-                values: new object[] { 1, "User", "yasmeensaleh147@gmail.com", "Yasmeen", true, "Saleh", "yas12345", 1, null });
+                values: new object[] { 1, "Admin", "yasmeensaleh147@gmail.com", "Yasmeen", true, "Saleh", "yas12345", 1, null });
 
             migrationBuilder.CreateIndex(
                 name: "IX_CartItems_CartId",

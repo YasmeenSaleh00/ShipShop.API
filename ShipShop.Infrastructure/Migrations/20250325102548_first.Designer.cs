@@ -12,7 +12,7 @@ using ShipShop.Infrastructure.Context;
 namespace ShipShop.Infrastructure.Migrations
 {
     [DbContext(typeof(ShipShopDbContext))]
-    [Migration("20250325101632_first")]
+    [Migration("20250325102548_first")]
     partial class first
     {
         /// <inheritdoc />
@@ -638,7 +638,7 @@ namespace ShipShop.Infrastructure.Migrations
 
                     b.ToTable("Users");
 
-                    b.HasDiscriminator().HasValue("User");
+                    b.HasDiscriminator().HasValue("Admin");
 
                     b.UseTphMappingStrategy();
 
