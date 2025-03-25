@@ -24,6 +24,7 @@ namespace ShipShop.Infrastructure
             services.AddScoped<IAuthRepository, AuthRepository>();    
             services.AddScoped<ICartRepository, CartRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();    
+            services.AddScoped<IWishlistRepository,WishListRepository>();   
         }
     }
 }

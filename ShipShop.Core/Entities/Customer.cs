@@ -17,5 +17,6 @@ namespace ShipShop.Core.Entities
         public List<Cart> Carts { get; set; }
 
         public List<Order> Orders { get; set; }
+        public List<WishList> WishList { get; set; }    
     }
 }

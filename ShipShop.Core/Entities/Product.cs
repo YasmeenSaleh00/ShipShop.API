@@ -23,7 +23,8 @@ namespace ShipShop.Core.Entities
         public int BrandId { get; set; }
         public Brand Brand { get; set; }
         public List<OrderItem> Items { get; set; }
-        List<CartItem> CartItems { get; set; }
+       public List<CartItem> CartItems { get; set; }
+        public List<WishList> WishList { get; set; }    
 
     }
 }
