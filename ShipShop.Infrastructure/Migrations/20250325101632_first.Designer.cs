@@ -12,7 +12,7 @@ using ShipShop.Infrastructure.Context;
 namespace ShipShop.Infrastructure.Migrations
 {
     [DbContext(typeof(ShipShopDbContext))]
-    [Migration("20250324102814_first")]
+    [Migration("20250325101632_first")]
     partial class first
     {
         /// <inheritdoc />
@@ -74,6 +74,9 @@ namespace ShipShop.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -86,16 +89,13 @@ namespace ShipShop.Infrastructure.Migrations
                     b.Property<DateTime?>("UpdatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
 
                     b.HasIndex("ProductId");
 
                     b.HasIndex("StatusCartId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Carts");
                 });
@@ -385,6 +385,9 @@ namespace ShipShop.Infrastructure.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETDATE()");
 
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
                     b.Property<string>("CustomerName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -421,17 +424,14 @@ namespace ShipShop.Infrastructure.Migrations
                     b.Property<DateTime?>("UpdatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CartId")
                         .IsUnique();
 
-                    b.HasIndex("OrderStatusId");
+                    b.HasIndex("CustomerId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("OrderStatusId");
 
                     b.ToTable("Orders");
                 });
@@ -595,16 +595,15 @@ namespace ShipShop.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ConfirmPassword")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETDATE()");
 
-                    b.Property<int>("CustomerStatusId")
-                        .HasColumnType("int");
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(8)
+                        .HasColumnType("nvarchar(8)");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -635,18 +634,19 @@ namespace ShipShop.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CustomerStatusId");
-
                     b.HasIndex("RoleId");
 
                     b.ToTable("Users");
+
+                    b.HasDiscriminator().HasValue("User");
+
+                    b.UseTphMappingStrategy();
 
                     b.HasData(
                         new
                         {
                             Id = 1,
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CustomerStatusId = 3,
                             Email = "yasmeensaleh147@gmail.com",
                             FirstName = "Yasmeen",
                             IsActive = true,
@@ -656,8 +656,29 @@ namespace ShipShop.Infrastructure.Migrations
                         });
                 });
 
+            modelBuilder.Entity("ShipShop.Core.Entities.Customer", b =>
+                {
+                    b.HasBaseType("ShipShop.Core.Entities.User");
+
+                    b.Property<string>("ConfirmPassword")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CustomerStatusId")
+                        .HasColumnType("int");
+
+                    b.HasIndex("CustomerStatusId");
+
+                    b.HasDiscriminator().HasValue("Customer");
+                });
+
             modelBuilder.Entity("ShipShop.Core.Entities.Cart", b =>
                 {
+                    b.HasOne("ShipShop.Core.Entities.Customer", "Customer")
+                        .WithMany("Carts")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("ShipShop.Core.Entities.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
@@ -670,17 +691,11 @@ namespace ShipShop.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("ShipShop.Core.Entities.User", "User")
-                        .WithMany("Carts")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Customer");
 
                     b.Navigation("LookupItem");
 
                     b.Navigation("Product");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ShipShop.Core.Entities.CartItem", b =>
@@ -721,23 +736,23 @@ namespace ShipShop.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("ShipShop.Core.Entities.Customer", "Customer")
+                        .WithMany("Orders")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("ShipShop.Core.Entities.LookupItem", "LookupItem")
                         .WithMany("Orders")
                         .HasForeignKey("OrderStatusId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("ShipShop.Core.Entities.User", "User")
-                        .WithMany("Orders")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.Navigation("Cart");
 
-                    b.Navigation("LookupItem");
+                    b.Navigation("Customer");
 
-                    b.Navigation("User");
+                    b.Navigation("LookupItem");
                 });
 
             modelBuilder.Entity("ShipShop.Core.Entities.OrderItem", b =>
@@ -788,21 +803,24 @@ namespace ShipShop.Infrastructure.Migrations
 
             modelBuilder.Entity("ShipShop.Core.Entities.User", b =>
                 {
-                    b.HasOne("ShipShop.Core.Entities.LookupItem", "LookupItem")
-                        .WithMany("Users")
-                        .HasForeignKey("CustomerStatusId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
                     b.HasOne("ShipShop.Core.Entities.Role", "Role")
                         .WithMany("Users")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("LookupItem");
-
                     b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("ShipShop.Core.Entities.Customer", b =>
+                {
+                    b.HasOne("ShipShop.Core.Entities.LookupItem", "LookupItem")
+                        .WithMany("Customers")
+                        .HasForeignKey("CustomerStatusId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("LookupItem");
                 });
 
             modelBuilder.Entity("ShipShop.Core.Entities.Brand", b =>
@@ -827,11 +845,11 @@ namespace ShipShop.Infrastructure.Migrations
                 {
                     b.Navigation("Carts");
 
+                    b.Navigation("Customers");
+
                     b.Navigation("Orders");
 
                     b.Navigation("Products");
-
-                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("ShipShop.Core.Entities.LookupType", b =>
@@ -854,7 +872,7 @@ namespace ShipShop.Infrastructure.Migrations
                     b.Navigation("Users");
                 });
 
-            modelBuilder.Entity("ShipShop.Core.Entities.User", b =>
+            modelBuilder.Entity("ShipShop.Core.Entities.Customer", b =>
                 {
                     b.Navigation("Carts");
 

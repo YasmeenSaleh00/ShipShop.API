@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ShipShop.Application.Commands
 {
-    public class AddUserCommand
+    public class AddCustomerCommand
     {
 
         public string FirstName { get; set; }

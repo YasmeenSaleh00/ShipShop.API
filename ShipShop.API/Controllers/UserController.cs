@@ -45,19 +45,7 @@ namespace ShipShop.API.Controllers
             var user = await _userService.GetById(id);
             return Ok(user);
         }
-        /// <summary>
-        /// This EndPoint To get User Depend on role
-        /// </summary>
-        [HttpGet("filter-by-role/{roleName}")]
-        public async Task<IActionResult> FilterUserByRole(string roleName)
-        {
-            var users =await _userService.FilterUserByRole(roleName);
-            if(users.Count == 0 || users == null)
-            {
-                return NotFound();
-            }
-            return Ok(users);
-        }
+    
         /// <summary>
         /// This EndPoint To get User sorted  Depend on creation date
         /// </summary>
@@ -75,24 +63,7 @@ namespace ShipShop.API.Controllers
         
 
       
-        [AllowAnonymous]
-        [HttpPost]
-        [Route("[action]")]
-        public async Task<IActionResult> AddNewUser(AddUserCommand command)
-        {
-            await _userService.Singup(command);
-            return Ok("New User Successfully Added ");
-        }
-        /// <summary>
-        /// This EndPoint To update User password 
-        /// </summary>
-        [HttpPut]
-        [Route("[action]/{id}")]
-        public async Task<IActionResult> UpdatePassword(int id, ChangePasswordCommand command)
-        {
-            await _userService.UpdatePassword(id,command);
-            return Ok("Updated Successfully ");
-        }
+       
         /// <summary>
         /// This EndPoint to Delete User
         /// </summary>
@@ -103,19 +74,6 @@ namespace ShipShop.API.Controllers
             await _userService.DeleteAsync(id);
             return Ok($"User with the id {id} deleted Successfully ");
         }
-        [HttpPut]
-        [Route("[action]/{custId}")]
-        public async Task<IActionResult> BanCustomer(int custId)
-        {
-            await _userService.BanCustomer(custId);
-            return Ok("Banned Successfully");
-        }
-        [HttpPut]
-        [Route("[action]/{custId}")]
-        public async Task<IActionResult> ActivateCustomer(int custId)
-        {
-            await _userService.ActivateCustomer(custId);
-            return Ok("Activated Successfully");
-        }
+      
     }
 }

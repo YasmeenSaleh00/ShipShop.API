@@ -42,7 +42,7 @@ namespace ShipShop.Infrastructure.Repositories
         public async Task<List<Order>> GetAll()
         {
 
-            var orders = await _context.Orders .Include(x => x.User)
+            var orders = await _context.Orders .Include(x => x.Customer)
                                                .Include(x =>x.Items)
                                                .ThenInclude(x=>x.Product)
                                                .Include(x=>x.LookupItem)
@@ -52,7 +52,7 @@ namespace ShipShop.Infrastructure.Repositories
 
         public async Task<Order> GetById(int id)
         {
-            var order = await _context.Orders.Include(o => o.User)
+            var order = await _context.Orders.Include(o => o.Customer)
                                            .Include(o => o.Items)
                                            .ThenInclude(od => od.Product)
                                            .Include(od => od.LookupItem)

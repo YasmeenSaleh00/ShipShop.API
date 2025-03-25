@@ -11,8 +11,8 @@ namespace ShipShop.Core.Entities
     {
         public int ProductId { get; set; }
         public Product Product { get; set; }
-        public int UserId { get; set; }
-       public User User { get; set; }
+        public int CustomerId { get; set; }
+       public Customer Customer { get; set; }
         [ForeignKey("LookupItem")]
         public int StatusCartId { get; set; }
         public LookupItem LookupItem { get; set; }

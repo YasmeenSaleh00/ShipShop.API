@@ -30,7 +30,7 @@ namespace ShipShop.Infrastructure.Context
         public DbSet<Role> Roles { get; set; }
 
         public DbSet<User> Users { get; set; }  
-    
+    public DbSet<Customer> Customers { get; set; }
         public DbSet<Cart> Carts { get; set; }      
         public DbSet<CartItem> CartItems { get; set; }  
         public DbSet<Order> Orders { get; set; }    
@@ -81,7 +81,7 @@ namespace ShipShop.Infrastructure.Context
                     Email = "yasmeensaleh147@gmail.com",
                     Password = "yas12345",
                     RoleId = 1,
-                    CustomerStatusId=3
+             
 
                 });
             modelBuilder.Entity<Category>()
@@ -168,7 +168,13 @@ namespace ShipShop.Infrastructure.Context
             modelBuilder.Entity<OrderItem>()
            .Property(e => e.IsActive)
            .HasDefaultValue(true);
+            modelBuilder.Entity<Customer>()
+.Property(e => e.CreatedOn)
+.HasDefaultValueSql("GETDATE()");
 
+            modelBuilder.Entity<Customer>()
+           .Property(e => e.IsActive)
+           .HasDefaultValue(true);
             // fluent API Approach
 
             modelBuilder.Entity<Order>()
@@ -178,15 +184,15 @@ namespace ShipShop.Infrastructure.Context
                   .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Order>()
-                .HasOne(o => o.User)
+                .HasOne(o => o.Customer)
                 .WithMany(c => c.Orders)  
-                .HasForeignKey(o => o.UserId)
+                .HasForeignKey(o => o.CustomerId)
                 .OnDelete(DeleteBehavior.Restrict);  
 
          
-            modelBuilder.Entity<User>()
+            modelBuilder.Entity<Customer>()
                 .HasOne(c => c.LookupItem)
-                .WithMany(l => l.Users)
+                .WithMany(l => l.Customers)
                 .HasForeignKey(c => c.CustomerStatusId)
                 .OnDelete(DeleteBehavior.NoAction);
 
@@ -197,9 +203,9 @@ namespace ShipShop.Infrastructure.Context
       .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Cart>()
-                .HasOne(c => c.User)
+                .HasOne(c => c.Customer)
                 .WithMany(l=>l.Carts)
-                .HasForeignKey(c => c.UserId)
+                .HasForeignKey(c => c.CustomerId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Cart>()

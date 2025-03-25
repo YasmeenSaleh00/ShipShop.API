@@ -23,8 +23,8 @@ namespace ShipShop.Core.Entities
         public float TotalPrice { get; set; }
         public string Feedback { get; set; }
 
-        public int UserId { get; set; }
-        public User User { get; set; }
+        public int CustomerId { get; set; }
+        public Customer Customer { get; set; }
         public int CartId { get; set; }
         public Cart Cart { get; set; }  
         public List<OrderItem> Items { get; set; }

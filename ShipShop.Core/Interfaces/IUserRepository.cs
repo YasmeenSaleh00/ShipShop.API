@@ -11,11 +11,7 @@ namespace ShipShop.Core.Interfaces
     {
         Task<List<User>> GetAll();  
         Task<User> GetById(int id);
-        Task Singup(User user);
-        Task Update(User customer);
-        Task<User> GetUserByEmail(string email);    
-        Task UpdatePassword(User user);
-        Task<List<User>> FilterUserByRole(string roleName);
+        Task Update(User user);
         Task<List<User>> SortUserByCreateOn (string sortDirection);
         Task DeleteAsync(int id);
    

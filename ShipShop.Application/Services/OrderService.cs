@@ -25,7 +25,7 @@ namespace ShipShop.Application.Services
             result=orders.Select(x=>new OrderModel
             {
                 OrderNumber=x.Id,
-                CustomerName=x.User.FullName,
+                CustomerName=x.Customer.FullName,
                 ShippingAddress = x.ShippingAddress,
                 OrderDate =x.CreatedOn.ToShortDateString(),
                 DeliveryDate=x.DeliveryDate.ToString(), 
@@ -45,7 +45,7 @@ namespace ShipShop.Application.Services
                 return null;
             OrderModel result = new OrderModel();
            result.OrderNumber=id;
-            result.CustomerName=order.User.FullName;
+            result.CustomerName=order.CustomerName;
             result.CustomerPhone=order.Phone;
             result.OrderDate = order.CreatedOn.ToString();
             result.ShippingAddress=order.ShippingAddress;

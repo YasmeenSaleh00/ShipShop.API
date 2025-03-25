@@ -16,7 +16,7 @@ namespace ShipShop.Core.Entities
         public List<Product> Products { get; set; }
 
  
-        public List<User> Users { get; set; }
+        public List<Customer> Customers { get; set; }
 
     
         public List<Order> Orders { get; set; }

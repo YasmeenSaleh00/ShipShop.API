@@ -23,7 +23,7 @@ namespace ShipShop.Application.Services
         }
         public async Task CreateCart(CartCommand cart)
         {
-            var userId = accessor.HttpContext.User.Claims.Where(x => x.Type == ClaimTypes.NameIdentifier).FirstOrDefault().Value;
+            var customerId = accessor.HttpContext.User.Claims.Where(x => x.Type == ClaimTypes.NameIdentifier).FirstOrDefault().Value;
 
             // تحقق إذا كانت السلة موجودة بالفعل
             var existingCart = await _cartRepository.GetCartById(cart.CartId);
@@ -33,7 +33,7 @@ namespace ShipShop.Application.Services
                 Cart cart1 = new Cart()
                 {
                     StatusCartId = 9, // تأكد من أن هذا هو الوضع الصحيح
-                  UserId=int.Parse(userId),
+              CustomerId=int.Parse(customerId),
                     CartItems = new List<CartItem>(), // تأكد من تهيئة CartItems كمصفوفة فارغة
                 };
 

@@ -1,0 +1,21 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ShipShop.Core.Entities
+{
+    public class Customer:User
+    {
+        public string? ConfirmPassword { get; set; }
+
+        [ForeignKey("LookupItem")]
+        public int CustomerStatusId { get; set; }
+        public LookupItem LookupItem { get; set; }
+        public List<Cart> Carts { get; set; }
+
+        public List<Order> Orders { get; set; }
+    }
+}

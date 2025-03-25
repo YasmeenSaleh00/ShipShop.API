@@ -24,38 +24,11 @@ namespace ShipShop.Application.Services
            
         }
         
-        public async Task Singup(AddUserCommand user)
-        {
-           if (user == null)
-            {
-                throw new Exception("You must Add data");
-            }
-          
-            if (user.Password != user.ConfirmPassword)
-            {
-                throw new Exception("NOT THE SAME PASSWORD");
-            }
-            var existingUser = await _userRepository.GetUserByEmail(user.Email);
-            if (existingUser != null)
-            {
-                throw new Exception("Email is already in use.");
-            }
-
-            var newUser = new User()
-           {
-               FirstName = user.FirstName,
-               LastName = user.LastName,
-               Email = user.Email,
-               Password = user.Password,
-               ConfirmPassword = user.ConfirmPassword,
-               RoleId =2 ,
-               CustomerStatusId=3
-           };
-            await _userRepository.Singup(newUser);
+       
          
         
 
-        }
+        
         public async Task<List<UserModel>> GetAll()
         {
             var users = await _userRepository.GetAll();
@@ -69,7 +42,7 @@ namespace ShipShop.Application.Services
                 Id = x.Id,
                 FullName = x.FullName,
                 Email = x.Email,
-            CustomerStatus=x.LookupItem.Value,
+   
                 RoleName=x.Role.Name,
               
                 CreateOn=x.CreatedOn.ToShortDateString(),
@@ -96,7 +69,7 @@ namespace ShipShop.Application.Services
                 Id = id,
                 FullName = user.FullName,
                 Email = user.Email,
-                CustomerStatus = user.LookupItem.Value,
+           
                 RoleName = user.Role.Name,
          
                 CreateOn = user.CreatedOn.ToShortDateString(),
@@ -104,46 +77,8 @@ namespace ShipShop.Application.Services
             };
             return model;   
         }
-        public async Task UpdatePassword( int id , ChangePasswordCommand command)
-        {
-            var user = await _userRepository.GetById(id);
-            if (user == null) throw new Exception("User not found");
-
-            user.Password = command.NewPassword;
-                user.UpdatedOn = DateTime.Now;
-           
-          
-       
-
-            await _userRepository.UpdatePassword(user);
-        }
-        public async Task<List<UserModel>> FilterUserByRole(string roleName)
-        {
-           
-            if(roleName == null)
-            {
-                throw new Exception("Role name cant be Null");
-            }
-            var users = await _userRepository.FilterUserByRole(roleName);
-       
-            var model = users.Select(x => new UserModel
-            {
-                Id = x.Id,
-                FullName = x.FullName,
-                Email = x.Email,
-       
-                RoleName = x.Role.Name,
-           
-                CreateOn = x.CreatedOn.ToShortDateString(),
-                UpdateOn=x.UpdatedOn.ToString(),
-                
-                
-            }).ToList();
-
-            return model;
-
-
-        }
+ 
+    
         public async Task<List<UserModel>> SortUserByCreateOn(string sortDirection)
         {
               var user = await _userRepository.SortUserByCreateOn(sortDirection);
@@ -168,29 +103,6 @@ namespace ShipShop.Application.Services
                 throw new Exception("User not found");
             await _userRepository.DeleteAsync(id);
         }
-        public async Task ActivateCustomer(int custId)
-        {
-            var customer = await _userRepository.GetById(custId);
-            if (customer == null)
-            {
-                throw new Exception("Customer not found");
-            }
-
-            customer.CustomerStatusId = 3;
-
-            await _userRepository.Update(customer);
-        }
-        public async Task BanCustomer(int custId)
-        {
-            var customer = await _userRepository.GetById(custId);
-            if (customer == null)
-            {
-                throw new Exception("Customer not found");
-            }
-
-            customer.CustomerStatusId = 4;
-
-            await _userRepository.Update(customer);
-        }
+        
     }
 }

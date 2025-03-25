@@ -19,11 +19,7 @@ namespace ShipShop.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task Singup(User user)
-        {
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-        }
+       
 
         public async Task DeleteAsync(int id)
         {
@@ -33,28 +29,11 @@ namespace ShipShop.Infrastructure.Repositories
      
         }
 
-        public async Task<List<User>> FilterUserByRole(string roleName)
-        {
-            if (roleName == null) throw new ArgumentNullException(nameof(roleName));
-
-            
-
-            var users = await _context.Users
-                .Include(x => x.Role)
-                .Where(x => x.Role.Name.ToLower().Contains(roleName.ToLower())) 
-                .AsNoTracking()
-                .ToListAsync();
-       
-
-            return users;
-        }
 
         public async Task<List<User>> GetAll()
         {
             var users = await _context.Users
                .Include(x => x.Role)
-                .Include(x => x.LookupItem)
-            
                .ToListAsync();
             return users;
 
@@ -64,8 +43,6 @@ namespace ShipShop.Infrastructure.Repositories
         {
             var user = await _context.Users
                 .Include(x => x.Role)
-                .Include(x=>x.LookupItem)
-          
                 .FirstOrDefaultAsync(x => x.Id == id);
             return user;
         }
@@ -87,22 +64,13 @@ namespace ShipShop.Infrastructure.Repositories
             return user;
         }
 
-        public async Task UpdatePassword(User user)
-        {
-            _context.Update(user);
-            await _context.SaveChangesAsync();  
-
-        }
+  
         public async Task Update(User customer)
         {
             _context.Users.Update(customer);
             await _context.SaveChangesAsync();
         }
 
-        public async Task<User> GetUserByEmail(string email)
-        {
-            var user = await _context.Users.Include(X=>X.Role).FirstOrDefaultAsync(x=>x.Email == email);
-            return user;
-        }
+      
     }
 }

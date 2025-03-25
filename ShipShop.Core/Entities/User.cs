@@ -16,14 +16,7 @@ namespace ShipShop.Core.Entities
         public string Password { get; set; }
         public int RoleId { get; set; }
         public Role Role { get; set; }
-        public string? ConfirmPassword { get; set; }
-
-        [ForeignKey("LookupItem")]
-        public int CustomerStatusId { get; set; }
-        public LookupItem LookupItem { get; set; }
-        public List<Cart> Carts { get; set; }
-    
-        public List<Order> Orders { get; set; }
+        
         [NotMapped]
         public string FullName { get => FirstName + " "+ LastName; }
     }
