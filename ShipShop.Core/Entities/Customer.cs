@@ -9,7 +9,7 @@ namespace ShipShop.Core.Entities
 {
     public class Customer:User
     {
-        public string? ConfirmPassword { get; set; }
+        
 
         [ForeignKey("LookupItem")]
         public int CustomerStatusId { get; set; }

@@ -27,7 +27,7 @@ namespace ShipShop.Infrastructure.Repositories
 
         public async Task<List<LookupItem>> GetLookupItemValueByType(int LookupTypeId)
         {
-            var lookups = await _dbContext.LookupItems.Include(x=>x.LookupType).AsNoTracking().ToListAsync();  
+            var lookups = await _dbContext.LookupItems.Include(x=>x.LookupType).Where(x=>x.LookupTypeId==LookupTypeId).AsNoTracking().ToListAsync();  
             return lookups;
         }
 

@@ -27,7 +27,7 @@ builder.Services.AddSwaggerGen(options =>
         BearerFormat = "JWT",
         Scheme = JwtBearerDefaults.AuthenticationScheme
     });
-    options.OperationFilter<AllowAnonymousOperationFilter>();
+    //options.OperationFilter<AllowAnonymousOperationFilter>();
 
 
 });

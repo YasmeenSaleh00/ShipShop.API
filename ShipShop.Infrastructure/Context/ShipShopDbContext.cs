@@ -66,25 +66,35 @@ namespace ShipShop.Infrastructure.Context
                 new Role
                 {
                     Id = 1,
-                    Name = "Admin"
+                    Name = "Create"
                 }
                 , new Role {
                     Id = 2, 
-                    Name = "Customer" 
+                    Name = "Edit" 
                 }
+                  , new Role
+                  {
+                      Id = 3,
+                      Name = "Delete"
+                  }
+                  , new Role
+                  {
+                      Id=4,
+                      Name= "Read"
+                  }
             );
-            modelBuilder.Entity<User>().HasData(
-                new User
-                {
-                    Id = 1,
-                    FirstName = "Yasmeen",
-                    LastName = "Saleh",
-                    Email = "yasmeensaleh147@gmail.com",
-                    Password = "yas12345",
-                    RoleId = 1,
+            //modelBuilder.Entity<User>().HasData(
+            //    new User
+            //    {
+            //        Id = 1,
+            //        FirstName = "Yasmeen",
+            //        LastName = "Saleh",
+            //        Email = "yasmeensaleh147@gmail.com",
+            //        Password = "yas12345",
+            //        RoleId = 1,
              
 
-                });
+            //    });
             modelBuilder.Entity<User>()
         .HasDiscriminator<string>("Discriminator")
         .HasValue<User>("Admin")

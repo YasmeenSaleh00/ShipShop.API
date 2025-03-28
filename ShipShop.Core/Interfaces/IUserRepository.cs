@@ -14,6 +14,7 @@ namespace ShipShop.Core.Interfaces
         Task Update(User user);
         Task<List<User>> SortUserByCreateOn (string sortDirection);
         Task DeleteAsync(int id);
+        Task CreateNewUser (User user);
    
     }
 }

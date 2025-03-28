@@ -23,12 +23,27 @@ namespace ShipShop.Application.Services
             _userRepository = userRepository;
            
         }
-        
-       
-         
-        
 
-        
+
+
+
+        public async Task CreateNewUser(AddUserCommand user)
+        {
+            var person = new User()
+            {
+                FirstName = user.FirstName,
+                LastName= user.LastName,    
+                Email = user.Email,
+                Password = user.Password,
+                ConfirmPassword = user.ConfirmPassword,
+                RoleId = user.RoleId,
+               
+            };
+            await _userRepository.CreateNewUser(person);
+
+        }
+
+
         public async Task<List<UserModel>> GetAll()
         {
             var users = await _userRepository.GetAll();

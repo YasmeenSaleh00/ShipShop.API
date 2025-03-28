@@ -59,15 +59,23 @@ namespace ShipShop.API.Controllers
             }
             return Ok(users);
         }
-     
-        
 
-      
-       
+
+        /// <summary>
+        /// This EndPoint to Add new  User
+        /// </summary>
+        [HttpPost]
+        public async Task<IActionResult> CreateNewUser(AddUserCommand command)
+        {
+           await _userService.CreateNewUser(command);   
+            return Ok("New User Added Successfully");
+
+        }
+
         /// <summary>
         /// This EndPoint to Delete User
         /// </summary>
-      
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
