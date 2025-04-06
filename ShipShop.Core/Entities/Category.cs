@@ -15,7 +15,7 @@ namespace ShipShop.Core.Entities
         public string? NameAr {  get; set; }
         public string Description { get; set; }
         public string? DescriptionAr { get; set; }
-        public string? ImagePath { get; set; }
+       
         public List<Product> Products { get; set; }
     }
 }

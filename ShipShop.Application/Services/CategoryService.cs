@@ -31,7 +31,7 @@ namespace ShipShop.Application.Services
                 Name = command.Name,
                 NameAr=command.NameAr,
                 DescriptionAr=command.DescriptionAr,
-                ImagePath=command.ImagePath,
+              
                 Description = command.Description,
               
             };
@@ -51,7 +51,10 @@ namespace ShipShop.Application.Services
                 Description = x.Description,
                 CreatedOn = x.CreatedOn.ToShortDateString(),
                 UpdatedOn = x.UpdatedOn.ToString(),
-                
+                NameAr = x.NameAr,
+                DescriptionAr=x.DescriptionAr,
+
+
                 IsActive = x.IsActive
             }).ToList();
 
@@ -67,6 +70,8 @@ namespace ShipShop.Application.Services
             result.Id = category.Id;
             result.Name = category.Name;
             result.Description = category.Description;
+            result.NameAr = category.NameAr;
+            result.DescriptionAr = category.DescriptionAr;
             result.CreatedOn = category.CreatedOn.ToShortDateString();
             result.UpdatedOn = category.UpdatedOn.ToString()   ;
             result.IsActive = category.IsActive;    
@@ -85,7 +90,7 @@ namespace ShipShop.Application.Services
                DescriptionAr=command.DescriptionAr,
                NameAr=command.NameAr,
                IsActive=command.IsActive,
-               ImagePath=command.ImagePath,
+        
                 UpdatedOn = DateTime.Now,
 
             };

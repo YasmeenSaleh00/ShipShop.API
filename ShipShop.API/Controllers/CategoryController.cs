@@ -58,7 +58,7 @@ namespace ShipShop.API.Controllers
         public async Task<IActionResult> AddCategory([FromBody] CategoryCommand command)
         {
             var id = await _categoryService.AddCategory(command);
-            return Ok($"Category with Id {id} was added successfully");
+            return Ok();
         }
         /// <summary>
         /// This EndPoint To update Category info
@@ -76,7 +76,7 @@ namespace ShipShop.API.Controllers
                 return NotFound();
             await _categoryService.UpdateCategory(id, command);
 
-            return Ok($"Category with Id {id} was updated successfully");
+            return Ok();
         }
         /// <summary>
         /// This EndPoint To delete Category 
@@ -90,7 +90,7 @@ namespace ShipShop.API.Controllers
                 return BadRequest();
             }
             await _categoryService.DeleteCategory(id);
-            return Ok($"Category with Id {id} was deleted successfully");
+            return Ok();
         }
 
     }
