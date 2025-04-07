@@ -25,7 +25,7 @@ namespace ShipShop.Application.Services
                 Name = command.Name,
                 NameAr = command.NameAr,
                 ImagePath = command.ImagePath,
-                CreatedOn=DateTime.Now,
+            
             };
             return await _brandRepository.Add(brand);
         }

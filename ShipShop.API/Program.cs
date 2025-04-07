@@ -80,10 +80,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseCors("AllowAll");
-
-app.UseAuthorization();
-app.MapControllers();
 //configure files 
 app.UseStaticFiles();
 // Add custom static files middleware
@@ -93,6 +89,11 @@ app.UseStaticFiles(new StaticFileOptions
     FileProvider = new PhysicalFileProvider(imagesDirectory),
     RequestPath = "/Images"
 });
+app.UseCors("AllowAll");
+
+app.UseAuthorization();
+app.MapControllers();
+
 
 
 app.MapControllers();

@@ -41,7 +41,7 @@ namespace ShipShop.API.Controllers
         public async Task<IActionResult> AddNewRole (RoleCommand command)
         {
           var id=  await _roleService.Add(command);
-            return Ok($"New Role with Id {id} Successfully Added ");
+            return Ok();
         }
     
         [HttpPut("{id}")]
@@ -49,7 +49,7 @@ namespace ShipShop.API.Controllers
         {
           
             await _roleService.Update(command, id);
-            return Ok($"Role with Id {id} was updated successfully");
+            return Ok();
 
         }
         [HttpDelete("{id}")]
@@ -60,7 +60,7 @@ namespace ShipShop.API.Controllers
                 return BadRequest();    
             }
           await  _roleService.Delete(id);
-            return Ok("Role  Successfully Deleted");
+            return Ok();
         }
    
     }

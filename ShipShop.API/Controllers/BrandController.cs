@@ -52,7 +52,7 @@ namespace ShipShop.API.Controllers
                 return BadRequest();
             }
          var id=   await _brandService.AddNewBrand(command);
-            return Ok($"Brand with Id {id} was added successfully");
+            return Ok();
         }
         /// <summary>
         /// This EndPoint To update Brand info
@@ -66,7 +66,7 @@ namespace ShipShop.API.Controllers
                 return NotFound();
             }
             await _brandService.UpdateBrand(id,command);
-            return Ok($"Brand with Id {id} was updated successfully");
+            return Ok();
 
         }
         /// <summary>
@@ -81,7 +81,7 @@ namespace ShipShop.API.Controllers
                 return NotFound();
             }
             await _brandService.DeleteBrand(id);
-            return Ok($"Brand with Id {id} was deleted successfully");
+            return Ok();
         }
     }
 }
