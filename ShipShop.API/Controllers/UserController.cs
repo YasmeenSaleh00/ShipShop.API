@@ -5,6 +5,7 @@ using ShipShop.Application.Commands;
 using ShipShop.Application.Models;
 using ShipShop.Application.Queries;
 using ShipShop.Application.Services;
+using ShipShop.Core.Entities;
 
 namespace ShipShop.API.Controllers
 {
@@ -23,13 +24,16 @@ namespace ShipShop.API.Controllers
         /// This EndPoint To Show All Users
         /// </summary>
         [HttpGet]   
-        public async Task<IActionResult> GetAllUser()
+        public async Task<IActionResult> GetAllUser()  
         {
             var users = await _userService.GetAll();
-            if(users == null || users.Count == 0)
+
+            if (users == null || users.Count == 0)
             {
-                return NotFound();
+                return NotFound("No users found.");
             }
+
+
             return Ok(users);
         }
         /// <summary>
@@ -67,11 +71,21 @@ namespace ShipShop.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateNewUser(AddUserCommand command)
         {
-           await _userService.CreateNewUser(command);   
-            return Ok("New User Added Successfully");
+           await _userService.CreateNewUser(command);
+            return Ok();
 
         }
-
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdatePassword(int id, UpdatePasswordCommand command)
+        {
+            var user = await _userService.GetById(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            await _userService.UpdateUserPassword(id, command);
+            return Ok();
+        }
         /// <summary>
         /// This EndPoint to Delete User
         /// </summary>
@@ -80,7 +94,7 @@ namespace ShipShop.API.Controllers
         public async Task<IActionResult> DeleteUser(int id)
         {
             await _userService.DeleteAsync(id);
-            return Ok($"User with the id {id} deleted Successfully ");
+            return Ok();
         }
       
     }

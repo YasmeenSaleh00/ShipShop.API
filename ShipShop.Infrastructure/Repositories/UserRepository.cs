@@ -36,12 +36,22 @@ namespace ShipShop.Infrastructure.Repositories
 
         public async Task<List<User>> GetAll()
         {
+
+          
+
             var users = await _context.Users
-               .Include(x => x.Role)
-               .ToListAsync();
+                                      .Where(x => !(x is Customer))
+                                      .Include(x => x.Role)
+                                      
+                                      .ToListAsync();
+
+          
+
+
             return users;
 
         }
+    
 
         public async Task<User> GetById(int id)
         {
@@ -56,7 +66,7 @@ namespace ShipShop.Infrastructure.Repositories
 
         public async Task<List<User>> SortUserByCreateOn(string sortDirection)
         {
-            var user = await _context.Users.Include(x => x.Role).AsNoTracking().ToListAsync();
+            var user = await _context.Users.Include(x => x.Role).ToListAsync();
             if (sortDirection == "asc")
             {
                 user = user.OrderBy(x => x.CreatedOn).ToList();
