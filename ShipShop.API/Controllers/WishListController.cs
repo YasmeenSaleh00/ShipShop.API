@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using ShipShop.Application.Commands;
 using ShipShop.Application.Services;
 
 namespace ShipShop.API.Controllers
@@ -14,32 +16,63 @@ namespace ShipShop.API.Controllers
         {
             _wishListService = wishListService;
         }
-        [HttpGet]
-        [Route("[action]/{customerId}")]
-        public async Task<IActionResult> GetWishlistItems(int customerId)
-        {
-            var items = await _wishListService.GetWishlistItems(customerId);
-            if (items == null || items.Count == 0)
-            {
-                return NotFound();
-            }
-            return Ok(items);
-        }
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetWishList(int id)
+        public async Task<IActionResult> GetWishById(int id)
         {
-            var wishlist = await _wishListService.GetWishList(id);
-            if (wishlist == null)
+            var wishList = await _wishListService.GetWishList(id);
+            if (wishList == null)
             {
+
                 return NotFound();
+
+
             }
-            return Ok(wishlist);
+            return Ok(wishList);
         }
-        [HttpDelete("{wishlistId}/{productId}")]
-        public async Task<IActionResult> RemoveFromWishlist(int wishlistId, int productId)
+        [HttpGet]
+        [Route("get-by-customer/{customerId}")]
+        public async Task<IActionResult> GetWishByCustomerId(int customerId)
         {
-            await _wishListService.RemoveFromWishlist(wishlistId, productId);
-            return Ok("Deleted Successfully");
+            var wishList = await _wishListService.GetWishtByCustomerId(customerId);
+            if (wishList == null)
+            {
+
+                return NotFound();
+
+
+            }
+            return Ok(wishList);
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddToWishList([FromBody] WishListCommand dto)
+        {
+            try
+            {
+                await _wishListService.AddProductToWishAsync1(dto.CustomerId, dto.ProductId);
+                return Ok();
+            }
+            catch (DbUpdateException ex)
+            {
+                return BadRequest($"Database error: {ex.InnerException?.Message}");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error: {ex.Message}");
+            }
+        }
+
+        [HttpDelete("{wishId}/{productId}")]
+        public async Task<IActionResult> RemoveProductFromWish(int wishId, int productId)
+        {
+            try
+            {
+                await _wishListService.RemoveProductFromWishlistAsync(wishId, productId);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error: {ex.Message}");
+            }
         }
     }
 }

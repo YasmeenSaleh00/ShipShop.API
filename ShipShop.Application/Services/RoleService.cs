@@ -70,6 +70,80 @@ namespace ShipShop.Application.Services
 
            
         }
+        public async Task<List<RoleModel>> SortCRoleByCreatedOn(string sortDirection)
+        {
+
+            if (string.IsNullOrEmpty(sortDirection) || (sortDirection.ToLower() != "asc" && sortDirection.ToLower() != "desc"))
+            {
+                throw new ArgumentException("Invalid sort direction. Use 'asc' or 'desc'.", nameof(sortDirection));
+            }
+
+
+            var customers = await _roleRepository.SortByCreationDate(sortDirection);
+
+
+            List<RoleModel> userModels = customers.Select(x => new RoleModel
+            {
+                Id = x.Id,
+               Name = x.Name,
+                IsActive = x.IsActive,
+                CreatedOn = x.CreatedOn.ToShortDateString(),
+            
+            }).ToList();
+
+            return userModels;
+
+        }
+
+        public async Task<List<RoleModel>> SortCRoleById(string sortDirection)
+        {
+
+            if (string.IsNullOrEmpty(sortDirection) || (sortDirection.ToLower() != "asc" && sortDirection.ToLower() != "desc"))
+            {
+                throw new ArgumentException("Invalid sort direction. Use 'asc' or 'desc'.", nameof(sortDirection));
+            }
+
+
+            var customers = await _roleRepository.SortById(sortDirection);
+
+
+            List<RoleModel> userModels = customers.Select(x => new RoleModel
+            {
+                Id = x.Id,
+                Name = x.Name,
+                IsActive = x.IsActive,
+                CreatedOn = x.CreatedOn.ToShortDateString(),
+
+            }).ToList();
+
+            return userModels;
+
+        }
+
+        public async Task<List<RoleModel>> SortCRoleByName(string sortDirection)
+        {
+
+            if (string.IsNullOrEmpty(sortDirection) || (sortDirection.ToLower() != "asc" && sortDirection.ToLower() != "desc"))
+            {
+                throw new ArgumentException("Invalid sort direction. Use 'asc' or 'desc'.", nameof(sortDirection));
+            }
+
+
+            var customers = await _roleRepository.SortByName(sortDirection);
+
+
+            List<RoleModel> userModels = customers.Select(x => new RoleModel
+            {
+                Id = x.Id,
+                Name = x.Name,
+                IsActive = x.IsActive,
+                CreatedOn = x.CreatedOn.ToShortDateString(),
+
+            }).ToList();
+
+            return userModels;
+
+        }
         public async Task Update(RoleCommand input,int id)
         {
             var role = new Role

@@ -12,5 +12,7 @@ namespace ShipShop.Core.Interfaces
         Task<List<Product>> GetProductsByFilters(string? productName, string? categoryName);
         Task<List<Product>> SortByName(string sortDirection);
         Task<List<Product>> SortByPrice(string sortDirection);
+        Task<List<Product>> SortById(string sortDirection);
+        Task<List<Product>> SortByCreationDate(string sortDirection);
     }
 }

@@ -42,7 +42,7 @@ namespace ShipShop.Application.Services
                 Email = user.Email,
                 Password = user.Password,
                 ConfirmPassword = user.ConfirmPassword,
-                RoleId = 2,
+       
                 CustomerStatusId = 3
             };
             await _customerRepository.Singup(newUser);
@@ -58,13 +58,13 @@ namespace ShipShop.Application.Services
             userModels = users.Select(x => new CustomerModel
             {
                 Id = x.Id,
-                CustomerName = x.FullName,
+                FirstName = x.FirstName,
+                LastName= x.LastName,
                 Email = x.Email,
                 CustomerStatus = x.LookupItem.Value,
-                Role = x.Role.Name,
-
                 CreateOn = x.CreatedOn.ToShortDateString(),
-                UpdateOn = x.UpdatedOn.ToString()
+                UpdateOn = x.UpdatedOn.ToString(),
+                IsActive=x.IsActive
 
             }).ToList();
             return userModels;
@@ -82,11 +82,11 @@ namespace ShipShop.Application.Services
             CustomerModel model = new CustomerModel()
             {
                 Id = id,
-                CustomerName = user.FullName,
+                FirstName = user.FirstName,
+                LastName=user.LastName,
                 Email = user.Email,
                 CustomerStatus = user.LookupItem.Value,
-                Role = user.Role.Name,
-
+                IsActive=user.IsActive,
                 CreateOn = user.CreatedOn.ToShortDateString(),
                 UpdateOn = user.UpdatedOn.ToString()
             };
@@ -105,22 +105,125 @@ namespace ShipShop.Application.Services
 
             await _customerRepository.UpdatePassword(user);
         }
+        public async Task UpdateCustomer(int id, UpdateCustomerCommand command)
+        {
+            var user = await _customerRepository.GetById(id);
+            if (user == null) throw new Exception("User not found");
+
+          user.FirstName = command.FirstName;
+            user.LastName = command.LastName;
+            user.Email = command.Email;
+            user.UpdatedOn=DateTime.Now;
+
+
+
+
+            await _customerRepository.Update(user);
+        }
         public async Task<List<CustomerModel>> SortCustomerByCreateOn(string sortDirection)
         {
-            var user = await _customerRepository.SortCustomerByCreateOn(sortDirection);
-            List<CustomerModel> userModels = user.Select(x => new CustomerModel
+            
+            if (string.IsNullOrEmpty(sortDirection) || (sortDirection.ToLower() != "asc" && sortDirection.ToLower() != "desc"))
+            {
+                throw new ArgumentException("Invalid sort direction. Use 'asc' or 'desc'.", nameof(sortDirection));
+            }
+
+           
+            var customers = await _customerRepository.SortCustomerByCreateOn(sortDirection);
+
+          
+            List<CustomerModel> userModels = customers.Select(x => new CustomerModel
             {
                 Id = x.Id,
-                CustomerName = x.FullName,
+                FirstName = x.FirstName,
+                LastName = x.LastName,
                 Email = x.Email,
-
-                Role = x.Role.Name,
-                CustomerStatus=x.LookupItem.Value,
+                IsActive = x.IsActive,
+                CustomerStatus = x.LookupItem.Value,
                 CreateOn = x.CreatedOn.ToShortDateString(),
                 UpdateOn = x.UpdatedOn.ToString()
-
             }).ToList();
+
             return userModels;
+        }
+        public async Task<List<CustomerModel>> SortCustomerByName(string sortDirection)
+        {
+
+            if (string.IsNullOrEmpty(sortDirection) || (sortDirection.ToLower() != "asc" && sortDirection.ToLower() != "desc"))
+            {
+                throw new ArgumentException("Invalid sort direction. Use 'asc' or 'desc'.", nameof(sortDirection));
+            }
+
+
+            var customers = await _customerRepository.SortCustomerByName(sortDirection);
+
+
+            List<CustomerModel> userModels = customers.Select(x => new CustomerModel
+            {
+                Id = x.Id,
+                FirstName = x.FirstName,
+                LastName = x.LastName,
+                Email = x.Email,
+                IsActive = x.IsActive,
+                CustomerStatus = x.LookupItem.Value,
+                CreateOn = x.CreatedOn.ToShortDateString(),
+                UpdateOn = x.UpdatedOn.ToString()
+            }).ToList();
+
+            return userModels;
+
+        }
+        public async Task<List<CustomerModel>> SortCustomerByEmail(string sortDirection)
+        {
+
+            if (string.IsNullOrEmpty(sortDirection) || (sortDirection.ToLower() != "asc" && sortDirection.ToLower() != "desc"))
+            {
+                throw new ArgumentException("Invalid sort direction. Use 'asc' or 'desc'.", nameof(sortDirection));
+            }
+
+
+            var customers = await _customerRepository.SortCustomerByEmail(sortDirection);
+
+
+            List<CustomerModel> userModels = customers.Select(x => new CustomerModel
+            {
+                Id = x.Id,
+                FirstName = x.FirstName,
+                LastName = x.LastName,
+                Email = x.Email,
+                IsActive = x.IsActive,
+                CustomerStatus = x.LookupItem.Value,
+                CreateOn = x.CreatedOn.ToShortDateString(),
+                UpdateOn = x.UpdatedOn.ToString()
+            }).ToList();
+
+            return userModels;
+        }
+        public async Task<List<CustomerModel>> SortCustomerById(string sortDirection)
+        {
+            if (string.IsNullOrEmpty(sortDirection) || (sortDirection.ToLower() != "asc" && sortDirection.ToLower() != "desc"))
+            {
+                throw new ArgumentException("Invalid sort direction. Use 'asc' or 'desc'.", nameof(sortDirection));
+            }
+
+
+            var customers = await _customerRepository.SortCustomerById(sortDirection);
+
+
+            List<CustomerModel> userModels = customers.Select(x => new CustomerModel
+            {
+                Id = x.Id,
+                FirstName = x.FirstName,
+                LastName = x.LastName,
+                Email = x.Email,
+                IsActive = x.IsActive,
+                CustomerStatus = x.LookupItem.Value,
+                CreateOn = x.CreatedOn.ToShortDateString(),
+                UpdateOn = x.UpdatedOn.ToString()
+            }).ToList();
+
+            return userModels;
+
         }
         public async Task ActivateCustomer(int custId)
         {
@@ -131,6 +234,7 @@ namespace ShipShop.Application.Services
             }
 
             customer.CustomerStatusId = 3;
+            customer.IsActive= true;
 
             await _customerRepository.Update(customer);
         }
@@ -143,6 +247,7 @@ namespace ShipShop.Application.Services
             }
 
             customer.CustomerStatusId = 4;
+            customer.IsActive = false;
 
             await _customerRepository.Update(customer);
         }

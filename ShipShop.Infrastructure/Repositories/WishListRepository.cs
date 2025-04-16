@@ -19,34 +19,59 @@ namespace ShipShop.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task AddToWishlist(WishList list)
+        public async Task Add(WishList wishList)
         {
-          _context.Add(list);
+            _context.Add(wishList);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task AddingProductToWishList(WishListItem item)
+        {
+            await _context.WishListItems.AddAsync(item);
+            await _context.SaveChangesAsync();
+           
+        }
+
+    
+
+        public async Task<List<WishListItem>> GetWishItemById(int wishlistId)
+        {
+            var wish = await _context.WishListItems
+                .Include(x=>x.Product).ThenInclude(x => x.LookupItem).Where(x=>x.WishListId == wishlistId ).ToListAsync();    
+            return wish;
         }
 
         public async Task<WishList> GetWishList(int id)
         {
-           var wishlist = await _context.WishLists.Include(x=>x.Product).FirstOrDefaultAsync(x=>x.Id == id);
-            return wishlist;
+            var wish = await _context.WishLists
+                   .Include(x => x.WishListItems).ThenInclude(x => x.Product).ThenInclude(x=>x.LookupItem).FirstOrDefaultAsync(x => x.Id == id);
+            return wish;
         }
 
-        public async Task<List<Product>> GetWishlistItems(int customerId)
+        public async Task<WishList> GetWishtByCustomerAsync(int customerId)
         {
-            var products = await _context.WishLists
-                             .Where(w => w.CustomerId == customerId)
-                             .Select(w => w.Product) 
-                             .ToListAsync();
-            return products;
+            var wish = await _context.WishLists
+          .Include(c => c.WishListItems)
+              .ThenInclude(ci => ci.Product)
+          .Include(c => c.Customer)
+          .FirstOrDefaultAsync(c => c.CustomerId == customerId);
+            return wish;
+        }
+
+        public async Task<WishListItem> IsProductInWishAsync(int productId, int wishId)
+        {
+
+            var existing = await _context.WishListItems
+                 .FirstOrDefaultAsync(x => x.ProductId == productId && x.WishListId == wishId);
+            return existing;
         }
 
         public async Task RemoveFromWishlist(int wishlistId, int productId)
         {
-            var item = await _context.WishLists
-                                    .FirstOrDefaultAsync(w => w.Id == wishlistId && w.ProductId == productId);
-
-            _context.WishLists.Remove(item);
-            await _context.SaveChangesAsync();
+            var wishlist= await _context.WishListItems.FirstOrDefaultAsync(x=>x.WishListId==wishlistId && x.ProductId == productId);
+            _context.WishListItems.Remove(wishlist);
+            await _context.SaveChangesAsync();  
+        
         }
     }
 }

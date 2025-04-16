@@ -31,6 +31,34 @@ namespace ShipShop.API.Controllers
             } 
             return Ok(categories);
         }
+        [HttpGet]
+        [Route("sort-by-name/{sortDirection}")]
+
+        public async Task<IActionResult> SortByName(string sortDirection)
+        {
+            var products = await _categoryService.SortByName(sortDirection);
+            if (products == null || products.Count == 0)
+            {
+                return NotFound();
+            }
+            return Ok(products);
+        }
+        [HttpGet]
+        [Route("sort-by-id/{sortDirection}")]
+        public async Task<IActionResult> SortById(string sortDirection)
+        {
+            var product = await _categoryService.SortById(sortDirection);
+            return Ok(product);
+
+        }
+        [HttpGet]
+        [Route("sort-by-creation-date/{sortDirection}")]
+        public async Task<IActionResult> SortByCreationDate(string sortDirection)
+        {
+            var product = await _categoryService.SortByCreationDate(sortDirection);
+            return Ok(product);
+
+        }
         /// <summary>
         /// This EndPoint To get Category info
         /// </summary>

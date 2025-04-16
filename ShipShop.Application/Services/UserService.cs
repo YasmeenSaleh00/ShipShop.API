@@ -98,25 +98,126 @@ namespace ShipShop.Application.Services
         }
  
     
-        public async Task<List<UserModel>> SortUserByCreateOn(string sortDirection)
+      
+        public async Task<List<UserModel>> SortUserById(string sortDirection)
         {
-              var user = await _userRepository.SortUserByCreateOn(sortDirection);
-            List<UserModel> userModels = user.Select(x => new UserModel
+            if (string.IsNullOrEmpty(sortDirection) || (sortDirection.ToLower() != "asc" && sortDirection.ToLower() != "desc"))
             {
-                Id=x.Id,
+                throw new ArgumentException("Invalid sort direction. Use 'asc' or 'desc'.", nameof(sortDirection));
+            }
+
+
+            var customers = await _userRepository.SortUserById(sortDirection);
+
+
+            List<UserModel> userModels = customers.Select(x => new UserModel
+            {
+
+                Id = x.Id,
                 FirstName = x.FirstName,
-                LastName=x.LastName,
+                LastName = x.LastName,
                 Email = x.Email,
-            
-                RoleName=x.Role.Name,   
+
+                RoleName = x.Role.Name,
                 IsActive = x.IsActive,
 
                 CreatedOn = x.CreatedOn.ToShortDateString(),
-                UpdateOn=x.UpdatedOn.ToString(),
-               
+                UpdateOn = x.UpdatedOn.ToString(),
 
             }).ToList();
+
             return userModels;
+
+        }
+        public async Task<List<UserModel>> SortUserByName(string sortDirection)
+        {
+            if (string.IsNullOrEmpty(sortDirection) || (sortDirection.ToLower() != "asc" && sortDirection.ToLower() != "desc"))
+            {
+                throw new ArgumentException("Invalid sort direction. Use 'asc' or 'desc'.", nameof(sortDirection));
+            }
+
+
+            var customers = await _userRepository.SortUserByName(sortDirection);
+
+
+            List<UserModel> userModels = customers.Select(x => new UserModel
+            {
+
+                Id = x.Id,
+                FirstName = x.FirstName,
+                LastName = x.LastName,
+                Email = x.Email,
+
+                RoleName = x.Role.Name,
+                IsActive = x.IsActive,
+
+                CreatedOn = x.CreatedOn.ToShortDateString(),
+                UpdateOn = x.UpdatedOn.ToString(),
+
+            }).ToList();
+
+            return userModels;
+
+        }
+        public async Task<List<UserModel>> SortUserByEmail(string sortDirection)
+        {
+            if (string.IsNullOrEmpty(sortDirection) || (sortDirection.ToLower() != "asc" && sortDirection.ToLower() != "desc"))
+            {
+                throw new ArgumentException("Invalid sort direction. Use 'asc' or 'desc'.", nameof(sortDirection));
+            }
+
+
+            var customers = await _userRepository.SortUserByEmail(sortDirection);
+
+
+            List<UserModel> userModels = customers.Select(x => new UserModel
+            {
+
+                Id = x.Id,
+                FirstName = x.FirstName,
+                LastName = x.LastName,
+                Email = x.Email,
+
+                RoleName = x.Role.Name,
+                IsActive = x.IsActive,
+
+                CreatedOn = x.CreatedOn.ToShortDateString(),
+                UpdateOn = x.UpdatedOn.ToString(),
+
+            }).ToList();
+
+            return userModels;
+
+        }
+        public async Task<List<UserModel>> SortUserByCreation(string sortDirection)
+        {
+            if (string.IsNullOrEmpty(sortDirection) || (sortDirection.ToLower() != "asc" && sortDirection.ToLower() != "desc"))
+            {
+                throw new ArgumentException("Invalid sort direction. Use 'asc' or 'desc'.", nameof(sortDirection));
+            }
+
+
+            var customers = await _userRepository.SortUserByCreateOn(sortDirection);
+
+
+            List<UserModel> userModels = customers.Select(x => new UserModel
+            {
+
+                Id = x.Id,
+                FirstName = x.FirstName,
+                LastName = x.LastName,
+                Email = x.Email,
+
+                RoleName = x.Role.Name,
+                IsActive = x.IsActive,
+
+                CreatedOn = x.CreatedOn.ToShortDateString(),
+                UpdateOn = x.UpdatedOn.ToString(),
+
+            }).ToList();
+
+            return userModels;
+
         }
         public async Task DeleteAsync(int id)
         {

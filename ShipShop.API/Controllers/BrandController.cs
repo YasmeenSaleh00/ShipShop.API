@@ -28,6 +28,34 @@ namespace ShipShop.API.Controllers
             }
             return Ok(brands);
         }
+        [HttpGet]
+        [Route("sort-by-id/{sortDirection}")]
+        public async Task<IActionResult> SortById(string sortDirection)
+        {
+            var brand = await _brandService.SortById(sortDirection);
+            return Ok(brand);
+
+        }
+        [HttpGet]
+        [Route("sort-by-creation-date/{sortDirection}")]
+        public async Task<IActionResult> SortByCreationDate(string sortDirection)
+        {
+            var brand = await _brandService.SortByCreationDate(sortDirection);
+            return Ok(brand);
+
+        }
+        [HttpGet]
+        [Route("sort-by-name/{sortDirection}")]
+
+        public async Task<IActionResult> SortByName(string sortDirection)
+        {
+            var brand = await _brandService.SortByName(sortDirection);
+            if (brand == null || brand.Count == 0)
+            {
+                return NotFound();
+            }
+            return Ok(brand);
+        }
         /// <summary>
         /// This EndPoint To Show  Brand depend on Id
         /// </summary>

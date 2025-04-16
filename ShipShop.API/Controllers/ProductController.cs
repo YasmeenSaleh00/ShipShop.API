@@ -52,7 +52,7 @@ namespace ShipShop.API.Controllers
             return Ok(products);
         }
         [HttpGet]
-        [Route("SortByName")]
+        [Route("sort-by-name/{sortDirection}")]
 
         public async Task<IActionResult> SortByName(string sortDirection)
         {
@@ -64,10 +64,26 @@ namespace ShipShop.API.Controllers
             return Ok(products);
         }
         [HttpGet]
-        [Route("SortByPrice")]
+        [Route("sort-by-price/{sortDirection}")]
         public async Task<IActionResult> SortByPrice(string sortDirection)
         {
             var product = await _productService.SortByPrice(sortDirection);
+            return Ok(product);
+
+        }
+        [HttpGet]
+        [Route("sort-by-id/{sortDirection}")]
+        public async Task<IActionResult> SortById(string sortDirection)
+        {
+            var product = await _productService.SortById(sortDirection);
+            return Ok(product);
+
+        }
+        [HttpGet]
+        [Route("sort-by-creation-date/{sortDirection}")]
+        public async Task<IActionResult> SortByCreationDate(string sortDirection)
+        {
+            var product = await _productService.SortByCreationDate(sortDirection);
             return Ok(product);
 
         }

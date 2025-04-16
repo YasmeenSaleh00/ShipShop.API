@@ -9,7 +9,10 @@ namespace ShipShop.Core.Interfaces
 {
     public interface IRoleRepository:IRepository<Role>
     {
-     
+
+       
+
+
 
     }
 }

@@ -51,7 +51,61 @@ namespace ShipShop.Infrastructure.Repositories
             return role;
         }
 
-   
+        public async Task<List<Role>> SortByCreationDate(string sortDirection)
+        {
+            IQueryable<Role> query = _context.Roles;
+
+
+            if (sortDirection.ToLower() == "desc")
+            {
+                query = query.OrderByDescending(x => x.CreatedOn);
+            }
+            if (sortDirection.ToLower() == "asc")
+            {
+                query = query.OrderBy(x => x.CreatedOn);
+            }
+
+            return await query.ToListAsync();
+        }
+
+        public async Task<List<Role>> SortById(string sortDirection)
+        {
+            IQueryable<Role> query = _context.Roles;
+
+
+            if (sortDirection.ToLower() == "desc")
+            {
+                query = query.OrderByDescending(x => x.Id);
+            }
+            if (sortDirection.ToLower() == "asc")
+            {
+                query = query.OrderBy(x => x.Id);
+            }
+
+            return await query.ToListAsync();
+        }
+
+        public async Task<List<Role>> SortByName(string sortDirection)
+        {
+
+            IQueryable<Role> query = _context.Roles;
+
+
+            if (sortDirection.ToLower() == "desc")
+            {
+                query = query.OrderByDescending(x => x.Name);
+            }
+            if (sortDirection.ToLower() == "asc")
+            {
+                query = query.OrderBy(x => x.Name);
+            }
+
+            return await query.ToListAsync();
+        }
+
+     
+
+     
 
         public async Task Update(Role input)
         {

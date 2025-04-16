@@ -10,13 +10,15 @@ namespace ShipShop.Core.Interfaces
     public interface ICartRepository
     {
         Task<Cart> GetCartById(int cartId);
-        Task<Product> GetProductById(int productId);
+        Task<List<CartItem>> GetCartItemById(int cartId);
         Task<CartItem> IsProductInCartAsync(int productId, int cartId);
         Task UpdateCartItem(CartItem item);
+        Task UpdateCartItemQuantityAsync(int cartItemId, int newQuantity);
         Task Add(Cart cart);
         Task RemoveFromCartAsync(int cartId,int productId);
         Task<Cart> GetCartByCustomerAsync(int customerId);
         Task AddingProductToCart(CartItem item);
-      
+        Task ClearCartAsync(int cartId);
+
     }
 }

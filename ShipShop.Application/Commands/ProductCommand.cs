@@ -11,6 +11,7 @@ namespace ShipShop.Application.Commands
     {
         public string Name { get; set; }
         public string NameAr { get; set; }
+     
         public string Description { get; set; }
         public string DescriptionAr { get; set; }
         public float Price { get; set; }
@@ -18,7 +19,7 @@ namespace ShipShop.Application.Commands
      
 
         public int CategoryId { get; set; }
-     
+        public string ImageUrl { get; set; }
         public int BrandId { get; set; }
     
     }

@@ -56,37 +56,73 @@ namespace ShipShop.API.Controllers
             }
             return Ok(users);
         }
+        [HttpGet("sort-by-Name/{sortDirection}")]
+        public async Task<IActionResult> SortUserByName(string sortDirection)
+        {
+            var users = await _customerService.SortCustomerByName(sortDirection);
+            if (users.Count == 0 || users == null)
+            {
+                return NotFound();
+            }
+            return Ok(users);
+        }
+        [HttpGet("sort-by-Email/{sortDirection}")]
+        public async Task<IActionResult> SortUserByEmail(string sortDirection)
+        {
+            var users = await _customerService.SortCustomerByEmail(sortDirection);
+            if (users.Count == 0 || users == null)
+            {
+                return NotFound();
+            }
+            return Ok(users);
+        }
 
+        [HttpGet("sort-by-Id/{sortDirection}")]
+        public async Task<IActionResult> SortCustomerById(string sortDirection)
+        {
+            var users = await _customerService.SortCustomerById(sortDirection);
+            if (users.Count == 0 || users == null)
+            {
+                return NotFound();
+            }
+            return Ok(users);
+        }
         [AllowAnonymous]
         [HttpPost]
-        [Route("[action]")]
+     
         public async Task<IActionResult> Registertion(AddCustomerCommand command)
         {
             await _customerService.Singup(command);
-            return Ok("New User Successfully Added ");
+            return Ok();
         }
 
 
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateCustomer(int id, UpdateCustomerCommand command)
+        {
+              await _customerService.UpdateCustomer(id, command);
+            return Ok();
 
+        }
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
             await _customerService.DeleteAsync(id); 
-            return Ok($"Customer with the id {id} deleted Successfully ");
+            return Ok();
         }
         [HttpPut]
         [Route("[action]/{custId}")]
         public async Task<IActionResult> BanCustomer(int custId)
         {
             await _customerService.BanCustomer(custId);
-            return Ok("Banned Successfully");
+            return Ok();
         }
         [HttpPut]
         [Route("[action]/{custId}")]
         public async Task<IActionResult> ActivateCustomer(int custId)
         {
             await _customerService.ActivateCustomer(custId);    
-            return Ok("Activated Successfully");
+            return Ok();
         }
     }
 }

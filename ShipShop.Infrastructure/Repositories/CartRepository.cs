@@ -22,16 +22,11 @@ namespace ShipShop.Infrastructure.Repositories
 
         public async Task<Cart> GetCartById(int cartId)
         {
-          var cart= await _context.Carts.FirstOrDefaultAsync(c => c.Id == cartId);
+          var cart= await _context.Carts.Include(x=>x.CartItems).ThenInclude(x=>x.Product).FirstOrDefaultAsync(c => c.Id == cartId);
             return cart;
         }
 
-        public async Task<Product> GetProductById(int productId)
-        {
 
-            var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == productId);
-            return product;
-        }
 
         public async Task<CartItem> IsProductInCartAsync(int productId, int cartId)
         {
@@ -40,6 +35,12 @@ namespace ShipShop.Infrastructure.Repositories
             return sh;
         }
 
+        public async Task UpdateCartItemQuantityAsync(int cartItemId, int newQuantity)
+        {
+            var cartItem = await _context.CartItems.FindAsync(cartItemId);
+            _context.Update(cartItem);
+            await _context.SaveChangesAsync();
+        }
         public async Task UpdateCartItem(CartItem item)
         {
             _context.CartItems.Update(item);
@@ -52,20 +53,51 @@ namespace ShipShop.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public Task RemoveFromCartAsync(int cartId, int productId)
+        public async Task RemoveFromCartAsync(int cartId, int productId)
         {
-            throw new NotImplementedException();
+            var cartItem = await _context.CartItems
+        .FirstOrDefaultAsync(ci => ci.CartId == cartId && ci.ProductId == productId);
+            _context.CartItems.Remove(cartItem);
+            await _context.SaveChangesAsync();
+
         }
 
-        public Task<Cart> GetCartByCustomerAsync(int customerId)
+        public async Task<Cart> GetCartByCustomerAsync(int customerId)
         {
-            throw new NotImplementedException();
+            var cart = await _context.Carts
+        .Include(c => c.CartItems)
+            .ThenInclude(ci => ci.Product)
+        .Include(c => c.Customer)
+        .FirstOrDefaultAsync(c => c.CustomerId == customerId);
+            return cart;
         }
 
         public async Task Add(Cart cart)
         {
            _context.Add(cart);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<List<CartItem>> GetCartItemById(int cartId)
+        {
+            var cartItems = await _context.CartItems
+        .Include(x => x.Product) 
+        .Where(x => x.CartId == cartId)
+        .ToListAsync();
+            return cartItems;
+        }
+
+    
+
+        public async Task ClearCartAsync(int cartId)
+        {
+            var cartItems = await _context.CartItems
+         .Where(ci => ci.CartId == cartId)
+         .ToListAsync();
+            _context.CartItems.RemoveRange(cartItems);
+            await _context.SaveChangesAsync();
+
+
         }
     }
 }

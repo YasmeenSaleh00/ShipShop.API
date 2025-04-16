@@ -14,6 +14,10 @@ namespace ShipShop.Core.Interfaces
        Task<int> Add(T input);
         Task Update(T input);
         Task Delete(int id);
-     
+        Task<List<T>> SortByName(string sortDirection);
+   
+        Task<List<T>> SortById(string sortDirection);
+        Task<List<T>> SortByCreationDate(string sortDirection);
+
     }
 }

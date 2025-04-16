@@ -17,5 +17,8 @@ namespace ShipShop.Core.Interfaces
         Task UpdatePassword(Customer user);
         Task DeleteAsync(int id);
         Task<List<Customer>> SortCustomerByCreateOn(string sortDirection);
+        Task<List<Customer>> SortCustomerByName(string sortDirection);
+        Task<List<Customer>> SortCustomerByEmail(string sortDirection);
+        Task<List<Customer>> SortCustomerById(string sortDirection);
     }
 }

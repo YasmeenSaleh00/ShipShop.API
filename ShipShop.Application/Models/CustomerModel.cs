@@ -9,12 +9,14 @@ namespace ShipShop.Application.Models
     public class CustomerModel
     {
         public int Id { get; set; }
-        public string CustomerName { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
         public string Email { get; set; }
         public string CustomerStatus { get; set; }
-        public string Role { get; set; }
+      
         public string CreateOn { get; set; }
         public string UpdateOn { get; set; }
+        public bool IsActive { get; set; }
 
 
     }

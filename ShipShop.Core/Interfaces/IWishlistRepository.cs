@@ -9,10 +9,14 @@ namespace ShipShop.Core.Interfaces
 {
     public interface IWishlistRepository
     {
-        Task AddToWishlist(WishList list);
-        Task<List<Product>> GetWishlistItems(int customerId);
-        Task RemoveFromWishlist(int customerId, int productId);
-        Task<WishList> GetWishList(int id);     
+
+        Task<WishList> GetWishtByCustomerAsync(int customerId);
+        Task RemoveFromWishlist(int wishlistId, int productId);
+        Task<WishList> GetWishList(int id);
+        Task AddingProductToWishList(WishListItem item);
+        Task Add(WishList wishList);
+        Task<WishListItem> IsProductInWishAsync(int productId, int wishId);
+        Task<List<WishListItem>> GetWishItemById(int wishlistId);
 
     }
 }

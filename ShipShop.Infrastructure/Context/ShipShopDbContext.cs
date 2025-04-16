@@ -34,6 +34,7 @@ namespace ShipShop.Infrastructure.Context
         public DbSet<Cart> Carts { get; set; }      
         public DbSet<CartItem> CartItems { get; set; }  
         public DbSet<WishList> WishLists { get; set; }   
+        public DbSet<WishListItem> WishListItems { get; set; }
         public DbSet<Order> Orders { get; set; }    
         public DbSet<OrderItem> OrderItems { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -83,18 +84,7 @@ namespace ShipShop.Infrastructure.Context
                       Name= "Read"
                   }
             );
-            //modelBuilder.Entity<User>().HasData(
-            //    new User
-            //    {
-            //        Id = 1,
-            //        FirstName = "Yasmeen",
-            //        LastName = "Saleh",
-            //        Email = "yasmeensaleh147@gmail.com",
-            //        Password = "yas12345",
-            //        RoleId = 1,
-             
-
-            //    });
+  
             modelBuilder.Entity<User>()
         .HasDiscriminator<string>("Discriminator")
         .HasValue<User>("Admin")
@@ -158,7 +148,13 @@ namespace ShipShop.Infrastructure.Context
            .Property(e => e.IsActive)
            .HasDefaultValue(true);
 
+            modelBuilder.Entity<Cart>()
+.Property(e => e.CreatedOn)
+.HasDefaultValueSql("GETDATE()");
 
+            modelBuilder.Entity<Cart>()
+           .Property(e => e.IsActive)
+           .HasDefaultValue(true);
 
             modelBuilder.Entity<CartItem>()
  .Property(e => e.CreatedOn)
@@ -198,6 +194,15 @@ namespace ShipShop.Infrastructure.Context
 .HasDefaultValueSql("GETDATE()");
 
             modelBuilder.Entity<WishList>()
+           .Property(e => e.IsActive)
+           .HasDefaultValue(true);
+
+
+            modelBuilder.Entity<WishListItem>()
+.Property(e => e.CreatedOn)
+.HasDefaultValueSql("GETDATE()");
+
+            modelBuilder.Entity<WishListItem>()
            .Property(e => e.IsActive)
            .HasDefaultValue(true);
             // fluent API Approach
@@ -221,11 +226,11 @@ namespace ShipShop.Infrastructure.Context
                 .HasForeignKey(c => c.CustomerStatusId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            modelBuilder.Entity<Cart>()
-      .HasOne(c => c.Product)
-      .WithMany()
-      .HasForeignKey(c => c.ProductId)
-      .OnDelete(DeleteBehavior.Restrict);
+      //      modelBuilder.Entity<Cart>()
+      //.HasOne(c => c.Product)
+      //.WithMany()
+      //.HasForeignKey(c => c.ProductId)
+      //.OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Cart>()
                 .HasOne(c => c.Customer)

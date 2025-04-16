@@ -61,24 +61,75 @@ namespace ShipShop.Infrastructure.Repositories
             return user;
         }
 
-    
-    
-
         public async Task<List<User>> SortUserByCreateOn(string sortDirection)
         {
-            var user = await _context.Users.Include(x => x.Role).ToListAsync();
-            if (sortDirection == "asc")
+            IQueryable<User> query = _context.Users.Include(x => x.Role);
+
+
+            if (sortDirection.ToLower() == "desc")
             {
-                user = user.OrderBy(x => x.CreatedOn).ToList();
+                query = query.OrderByDescending(x => x.CreatedOn);
             }
-            if(sortDirection == "desc")
+            if (sortDirection.ToLower() == "asc")
             {
-                user = user.OrderByDescending(x => x.CreatedOn).ToList();
+                query = query.OrderBy(x => x.CreatedOn);
             }
-            return user;
+
+            return await query.ToListAsync();
         }
 
-  
+        public async Task<List<User>> SortUserByEmail(string sortDirection)
+        {
+            IQueryable<User> query = _context.Users.Include(x => x.Role);
+
+
+            if (sortDirection.ToLower() == "desc")
+            {
+                query = query.OrderByDescending(x => x.Email);
+            }
+            if (sortDirection.ToLower() == "asc")
+            {
+                query = query.OrderBy(x => x.Email);
+            }
+
+            return await query.ToListAsync();
+        }
+
+        public async Task<List<User>> SortUserById(string sortDirection)
+        {
+         
+            IQueryable<User> query = _context.Users.Include(x => x.Role);
+
+
+            if (sortDirection.ToLower() == "desc")
+            {
+                query = query.OrderByDescending(x => x.Id);
+            }
+            if (sortDirection.ToLower() == "asc")
+            {
+                query = query.OrderBy(x => x.Id);
+            }
+
+            return await query.ToListAsync();
+        }
+
+        public async Task<List<User>> SortUserByName(string sortDirection)
+        {
+            IQueryable<User> query = _context.Users.Include(x => x.Role);
+
+
+            if (sortDirection.ToLower() == "desc")
+            {
+                query = query.OrderByDescending(x => x.FirstName);
+            }
+            if (sortDirection.ToLower() == "asc")
+            {
+                query = query.OrderBy(x => x.FirstName);
+            }
+
+            return await query.ToListAsync();
+        }
+
         public async Task Update(User customer)
         {
             _context.Users.Update(customer);

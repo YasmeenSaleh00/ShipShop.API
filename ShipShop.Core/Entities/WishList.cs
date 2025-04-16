@@ -9,9 +9,9 @@ namespace ShipShop.Core.Entities
     public class WishList:MainEntity
     {
         public int CustomerId { get; set; }
-        public Customer Customer { get; set; }  
-        public int ProductId { get; set; }
-        public Product Product { get; set; }                
+        public Customer Customer { get; set; }
+        public List<WishListItem> WishListItems { get; set; }
+                   
 
     }
 }

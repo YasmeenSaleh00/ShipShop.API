@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using ShipShop.Application.Commands;
+using ShipShop.Application.Models;
 using ShipShop.Core.Entities;
 using ShipShop.Core.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
@@ -21,83 +23,106 @@ namespace ShipShop.Application.Services
             _cartRepository = cartRepository;
             this.accessor = accessor;
         }
-        public async Task CreateCart(CartCommand cart)
+
+
+        public async Task<CartModel> GetCartById(int cartId)
         {
-            var customerId = accessor.HttpContext.User.Claims.Where(x => x.Type == ClaimTypes.NameIdentifier).FirstOrDefault().Value;
+            var cart = await _cartRepository.GetCartById(cartId);
 
-            // تحقق إذا كانت السلة موجودة بالفعل
-            var existingCart = await _cartRepository.GetCartById(cart.CartId);
-            if (existingCart == null)
+            if (cart == null)
+                return null;
+
+            var cartItems = await _cartRepository.GetCartItemById(cartId);
+
+            var model = new CartModel
             {
-                // إذا السلة غير موجودة، أنشئ واحدة جديدة
-                Cart cart1 = new Cart()
+                Id = cart.Id,
+                Items = cartItems.Select(item => new CartItemModel
                 {
-                    StatusCartId = 9, // تأكد من أن هذا هو الوضع الصحيح
-              CustomerId=int.Parse(customerId),
-                    CartItems = new List<CartItem>(), // تأكد من تهيئة CartItems كمصفوفة فارغة
-                };
+                    ProductName = item.Product.Name,
+                    ImageUrl = $"https://localhost:7057/Images/{item.Product.ImageUrl}",
 
-                // إذا كان لديك منتج لاضافته، قم بإضافته إلى CartItems
-                if (cart.ProductId > 0)
+                    Price = item.Product.Price,
+                    Quantity = item.Quantity
+                }).ToList()
+            };
+
+            return model;
+
+        }
+        public async Task<CartModel> GetCartByCustomerId(int customerId)
+        {
+            var cart=await _cartRepository.GetCartByCustomerAsync(customerId);
+            if (cart == null)
+                return null;
+
+
+            var cartItems = await _cartRepository.GetCartItemById(cart.Id);
+
+            var model = new CartModel
+            {
+                Id = cart.Id,
+                Items = cartItems.Select(item => new CartItemModel
                 {
-                    var product = await _cartRepository.GetProductById(cart.ProductId);
-                    if (product != null && product.ProductStatusId == 1) // تحقق من حالة المنتج
-                    {
-                        var newItem = new CartItem()
-                        {
-                            ProductId = cart.ProductId,
-                            Quantity = cart.Quantity
-                        };
-                        cart1.CartItems.Add(newItem); // أضف العنصر الجديد إلى CartItems
-                    }
-                }
+                    ProductName = item.Product.Name,
+                    ImageUrl = $"https://localhost:7057/Images/{item.Product.ImageUrl}",
 
-                // إضافة السلة إلى قاعدة البيانات
-                await _cartRepository.Add(cart1);
-            }
+                    Price = item.Product.Price,
+                    Quantity = item.Quantity
+                }).ToList()
+            };
+
+            return model;
         }
 
-        public async Task AddingProductToCart(CartCommand input)
+        
+        public async Task RemoveProductFromCartAsync(int cartId, int productId)
         {
-            // تحقق من صحة البيانات
-            if (input.ProductId <= 0 || input.Quantity <= 0)
-                throw new Exception("ProductId and Quantity must be greater than zero.");
+            await _cartRepository.RemoveFromCartAsync(cartId, productId);
+        }
+        public async Task ClearCartAsync(int cartId)
+        {
+            await _cartRepository.ClearCartAsync(cartId);
+        }
 
-            // تحقق من السلة الموجودة
-            var cart = await _cartRepository.GetCartById(input.CartId);
+
+        public async Task AddProductToCartAsync1(int customerId, int productId, int quantity)
+        {
+            var cart = await _cartRepository.GetCartByCustomerAsync(customerId);
+
             if (cart == null)
             {
-             
-                await _cartRepository.Add(cart);
+                cart = new Cart
+                {
+                    CustomerId = customerId,
+                    CreatedOn = DateTime.UtcNow,
+                    StatusCartId=9
+                };
+
+                await _cartRepository.Add(cart); 
             }
 
-            // تحقق من وجود المنتج
-            var product = await _cartRepository.GetProductById(input.ProductId);
-            if (product == null || product.ProductStatusId != 1)
-                throw new Exception("Product not found or out of stock.");
-
-            // تحقق من وجود المنتج في السلة
-            var existingItem = await _cartRepository.IsProductInCartAsync(input.ProductId, cart.Id);
+            var existingItem = await _cartRepository.IsProductInCartAsync(productId, cart.Id);
 
             if (existingItem != null)
             {
-                // إذا كان المنتج موجودًا، قم بتحديث الكمية
-                existingItem.Quantity += input.Quantity;
+                existingItem.Quantity += quantity;
                 await _cartRepository.UpdateCartItem(existingItem);
             }
             else
             {
-                // إضافة منتج جديد للسلة
                 var newItem = new CartItem
                 {
-                    ProductId = input.ProductId,
-                    Quantity = input.Quantity
+                    CartId = cart.Id,
+                    ProductId = productId,
+                    Quantity = quantity
                 };
 
-                // إضافة المنتج للسلة
                 await _cartRepository.AddingProductToCart(newItem);
             }
         }
+
+
 
     }
 }

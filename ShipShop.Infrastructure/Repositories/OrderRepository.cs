@@ -60,6 +60,21 @@ namespace ShipShop.Infrastructure.Repositories
             return order;
         }
 
+        public Task<List<Order>> SortByCreationDate(string sortDirection)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<Order>> SortById(string sortDirection)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<Order>> SortByName(string sortDirection)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task Update(Order input)
         {
           _context.Orders.Update(input);    

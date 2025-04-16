@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ShipShop.Core.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,11 +10,7 @@ namespace ShipShop.Application.Models
     public class WishListModel
     {
         public int Id { get; set; }
-        public string PrpductName { get; set; }
-        public float UnitPrice { get; set; }
-        public string ProductStatus { get; set; }
-
-        public string CreatedOn { get; set; }
+        public List<WishListItemModel> WishListItems { get; set; } 
 
 
 

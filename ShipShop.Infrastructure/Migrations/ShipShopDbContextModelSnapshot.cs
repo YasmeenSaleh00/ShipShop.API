@@ -69,16 +69,17 @@ namespace ShipShop.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
 
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
 
                     b.Property<int>("StatusCartId")
                         .HasColumnType("int");
@@ -89,8 +90,6 @@ namespace ShipShop.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
-
-                    b.HasIndex("ProductId");
 
                     b.HasIndex("StatusCartId");
 
@@ -499,6 +498,10 @@ namespace ShipShop.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
@@ -638,7 +641,7 @@ namespace ShipShop.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("RoleId")
+                    b.Property<int?>("RoleId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedOn")
@@ -676,9 +679,6 @@ namespace ShipShop.Infrastructure.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
 
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime?>("UpdatedOn")
                         .HasColumnType("datetime2");
 
@@ -686,9 +686,43 @@ namespace ShipShop.Infrastructure.Migrations
 
                     b.HasIndex("CustomerId");
 
+                    b.ToTable("WishLists");
+                });
+
+            modelBuilder.Entity("ShipShop.Core.Entities.WishListItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedOn")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("WishListId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
                     b.HasIndex("ProductId");
 
-                    b.ToTable("WishLists");
+                    b.HasIndex("WishListId");
+
+                    b.ToTable("WishListItems");
                 });
 
             modelBuilder.Entity("ShipShop.Core.Entities.Customer", b =>
@@ -711,12 +745,6 @@ namespace ShipShop.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ShipShop.Core.Entities.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("ShipShop.Core.Entities.LookupItem", "LookupItem")
                         .WithMany("Carts")
                         .HasForeignKey("StatusCartId")
@@ -726,8 +754,6 @@ namespace ShipShop.Infrastructure.Migrations
                     b.Navigation("Customer");
 
                     b.Navigation("LookupItem");
-
-                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("ShipShop.Core.Entities.CartItem", b =>
@@ -837,9 +863,7 @@ namespace ShipShop.Infrastructure.Migrations
                 {
                     b.HasOne("ShipShop.Core.Entities.Role", "Role")
                         .WithMany("Users")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("RoleId");
 
                     b.Navigation("Role");
                 });
@@ -852,15 +876,26 @@ namespace ShipShop.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("ShipShop.Core.Entities.WishListItem", b =>
+                {
                     b.HasOne("ShipShop.Core.Entities.Product", "Product")
-                        .WithMany("WishList")
+                        .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Customer");
+                    b.HasOne("ShipShop.Core.Entities.WishList", "WishList")
+                        .WithMany()
+                        .HasForeignKey("WishListId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Product");
+
+                    b.Navigation("WishList");
                 });
 
             modelBuilder.Entity("ShipShop.Core.Entities.Customer", b =>
@@ -918,8 +953,6 @@ namespace ShipShop.Infrastructure.Migrations
                     b.Navigation("CartItems");
 
                     b.Navigation("Items");
-
-                    b.Navigation("WishList");
                 });
 
             modelBuilder.Entity("ShipShop.Core.Entities.Role", b =>

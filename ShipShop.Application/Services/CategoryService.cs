@@ -61,6 +61,69 @@ namespace ShipShop.Application.Services
             return result;
 
         }
+        public async Task<List<CategoryModel>> SortByCreationDate(string sortDirection)
+        {
+            var category = await _repository.SortByCreationDate(sortDirection);
+            List<CategoryModel> productModels = category.Select(x => new CategoryModel
+            {
+                Id = x.Id,
+                Name = x.Name,
+                NameAr = x.NameAr,
+                Description = x.Description,
+                DescriptionAr = x.DescriptionAr,
+             
+           
+                CreatedOn = x.CreatedOn.ToShortDateString(),
+                UpdatedOn = x.UpdatedOn.ToString(),
+              
+                IsActive = x.IsActive,
+            
+            }).ToList();
+            return productModels;
+
+        }
+        public async Task<List<CategoryModel>> SortByName(string sortDirection)
+        {
+            var category = await _repository.SortByName(sortDirection);
+            List<CategoryModel> productModels = category.Select(x => new CategoryModel
+            {
+                Id = x.Id,
+                Name = x.Name,
+                NameAr = x.NameAr,
+                Description = x.Description,
+                DescriptionAr = x.DescriptionAr,
+
+
+                CreatedOn = x.CreatedOn.ToShortDateString(),
+                UpdatedOn = x.UpdatedOn.ToString(),
+
+                IsActive = x.IsActive,
+
+            }).ToList();
+            return productModels;
+
+        }
+        public async Task<List<CategoryModel>> SortById(string sortDirection)
+        {
+            var category = await _repository.SortById(sortDirection);
+            List<CategoryModel> productModels = category.Select(x => new CategoryModel
+            {
+                Id = x.Id,
+                Name = x.Name,
+                NameAr = x.NameAr,
+                Description = x.Description,
+                DescriptionAr = x.DescriptionAr,
+
+
+                CreatedOn = x.CreatedOn.ToShortDateString(),
+                UpdatedOn = x.UpdatedOn.ToString(),
+
+                IsActive = x.IsActive,
+
+            }).ToList();
+            return productModels;
+
+        }
         public async Task<CategoryModel> GetById(int id)
         {
             var category = await _repository.GetById(id);

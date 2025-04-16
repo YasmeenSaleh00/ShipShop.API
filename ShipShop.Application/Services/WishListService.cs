@@ -24,45 +24,91 @@ namespace ShipShop.Application.Services
 
         public async Task<WishListModel> GetWishList(int id)
         {
-            var wishList = await _wishlistRepository.GetWishList(id);
-            if(wishList == null)
-            {
+            var wish = await _wishlistRepository.GetWishList(id);
+
+            if (wish == null)
                 return null;
-            }
-            WishListModel wishListModel = new WishListModel();
-            wishListModel.Id = id;
-            wishListModel.PrpductName = wishList.Product.Name;
-            wishListModel.UnitPrice=wishList.Product.Price;
-            wishListModel.ProductStatus=wishList.Product.LookupItem.Value;  
-            wishListModel.CreatedOn=wishList.CreatedOn.ToShortDateString();
 
-            return wishListModel;
+            var wishitem = await _wishlistRepository.GetWishItemById(id);
 
-        }
-        public async Task<List<WishListModel>> GetWishlistItems(int customerId)
-        {
-            //var customerId =int.Parse( accessor.HttpContext.User.Claims.Where(x => x.Type == ClaimTypes.NameIdentifier).FirstOrDefault().Value);
-
-         
-            var products = await _wishlistRepository.GetWishlistItems(customerId);
-            List < WishListModel> wishListModel = new List<WishListModel> ();
-            wishListModel = products.Select(x => new WishListModel
+            var model = new WishListModel
             {
-                Id=x.Id,
-                PrpductName=x.Name,
-                UnitPrice=x.Price,
-                ProductStatus=x.LookupItem.Value,   
-                CreatedOn=x.CreatedOn.ToShortDateString(),  
+                Id = wish.Id,
+                WishListItems = wishitem.Select(item => new WishListItemModel
+                {
+                    ProductName = item.Product.Name,
+                    ImageUrl = $"https://localhost:7057/Images/{item.Product.ImageUrl}",
 
-            }).ToList();  
-            return wishListModel;   
-          
+                    Price = item.Product.Price,
+                   ProductStatus=item.Product.LookupItem.Value
+
+                }).ToList()
+            };
+
+            return model;
         }
-        public async Task RemoveFromWishlist(int wishlistId, int productId)
+
+        public async Task RemoveProductFromWishlistAsync(int WishId, int productId)
         {
-            _wishlistRepository.RemoveFromWishlist(wishlistId, productId);  
+            await _wishlistRepository.RemoveFromWishlist(WishId, productId);
         }
+        public async Task AddProductToWishAsync1(int customerId, int productId)
+        {
+            var wish = await _wishlistRepository.GetWishtByCustomerAsync(customerId);
+
+            if (wish == null)
+            {
+                wish = new WishList
+                {
+                    CustomerId = customerId,
+                    CreatedOn = DateTime.UtcNow,
+
+                };
+
+                await _wishlistRepository.Add(wish);
+            }
+            var existingItem = await _wishlistRepository.IsProductInWishAsync(productId, wish.Id);
+            if (existingItem != null)
+            {
+                throw new Exception("product already exist");
+            }
+            else
+            {
+                var newItem = new WishListItem
+                {
+                    WishListId = wish.Id,
+                    ProductId = productId,
 
 
+                };
+                await _wishlistRepository.AddingProductToWishList(newItem); 
+            }
+
+        }
+        public async Task<WishListModel> GetWishtByCustomerId(int customerId)
+        {
+            var wishList = await _wishlistRepository.GetWishtByCustomerAsync(customerId);
+            if (wishList == null)
+                return null;
+
+
+            var wishItems = await _wishlistRepository.GetWishItemById(wishList.Id);
+
+            var model = new WishListModel
+            {
+                Id = wishList.Id,
+                WishListItems = wishItems.Select(item => new WishListItemModel
+                {
+                    ProductName = item.Product.Name,
+                    ImageUrl = $"https://localhost:7057/Images/{item.Product.ImageUrl}",
+
+                    Price = item.Product.Price,
+                    ProductStatus = item.Product.LookupItem.Value
+
+                }).ToList()
+            };
+
+            return model;
+        }
     }
 }

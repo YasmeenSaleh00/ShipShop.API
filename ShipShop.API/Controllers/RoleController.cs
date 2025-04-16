@@ -43,7 +43,38 @@ namespace ShipShop.API.Controllers
           var id=  await _roleService.Add(command);
             return Ok();
         }
-    
+        [HttpGet("sort-by-creation date/{sortDirection}")]
+        public async Task<IActionResult> SortRoleByCreateOn(string sortDirection)
+        {
+            var users = await _roleService.SortCRoleByCreatedOn(sortDirection);
+            if (users.Count == 0 || users == null)
+            {
+                return NotFound();
+            }
+            return Ok(users);
+        }
+        [HttpGet("sort-by-Name/{sortDirection}")]
+        public async Task<IActionResult> SortRoleByName(string sortDirection)
+        {
+            var users = await _roleService.SortCRoleByName(sortDirection);
+            if (users.Count == 0 || users == null)
+            {
+                return NotFound();
+            }
+            return Ok(users);
+        }
+      
+
+        [HttpGet("sort-by-Id/{sortDirection}")]
+        public async Task<IActionResult> SortRoleById(string sortDirection)
+        {
+            var users = await _roleService.SortCRoleById(sortDirection);
+            if (users.Count == 0 || users == null)
+            {
+                return NotFound();
+            }
+            return Ok(users);
+        }
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateRole(RoleCommand command , int id)
         {

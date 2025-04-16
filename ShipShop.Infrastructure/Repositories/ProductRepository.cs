@@ -67,10 +67,41 @@ namespace ShipShop.Infrastructure.Repositories
 
         }
 
+        public async Task<List<Product>> SortByCreationDate(string sortDirection)
+        {
+            IQueryable<Product> query = _context.Products.Include(x=>x.Brand).Include(x=>x.LookupItem).Include(x=>x.Category);
+            if (sortDirection == "desc")
+            {
+                query = query.OrderByDescending(x => x.CreatedOn);
+            }
+            if (sortDirection == "asc")
+            {
+                query = query.OrderBy(x => x.CreatedOn);
+            }
+
+            return await query.ToListAsync();
+
+        }
+
+        public async Task<List<Product>> SortById(string sortDirection)
+        {
+            IQueryable<Product> query = _context.Products.Include(x => x.Brand).Include(x => x.LookupItem).Include(x => x.Category);
+            if (sortDirection == "desc")
+            {
+                query = query.OrderByDescending(x => x.Id);
+            }
+            if (sortDirection == "asc")
+            {
+                query = query.OrderBy(x => x.Id);
+            }
+
+            return await query.ToListAsync();
+        }
+
         public async Task<List<Product>> SortByName(string sortDirection)
         {
-            IQueryable<Product> query = _context.Products;
-            if(sortDirection == "desc")
+            IQueryable<Product> query = _context.Products.Include(x => x.Brand).Include(x => x.LookupItem).Include(x => x.Category);
+            if (sortDirection == "desc")
             {
                 query = query.OrderByDescending(x => x.Name);
             }
@@ -84,7 +115,7 @@ namespace ShipShop.Infrastructure.Repositories
 
         public async Task<List<Product>> SortByPrice(string sortDirection)
         {
-            IQueryable<Product> query = _context.Products;
+            IQueryable<Product> query = _context.Products.Include(x => x.Brand).Include(x => x.LookupItem).Include(x => x.Category);
 
             if (sortDirection.ToLower() == "desc")
             {

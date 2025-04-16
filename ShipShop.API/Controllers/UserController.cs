@@ -49,14 +49,31 @@ namespace ShipShop.API.Controllers
             var user = await _userService.GetById(id);
             return Ok(user);
         }
-    
-        /// <summary>
-        /// This EndPoint To get User sorted  Depend on creation date
-        /// </summary>
+
         [HttpGet("sort-by-creation date/{sortDirection}")]
         public async Task<IActionResult> SortUserByCreateOn(string sortDirection)
         {
-            var users = await _userService.SortUserByCreateOn(sortDirection);
+            var users = await _userService.SortUserByCreation(sortDirection);
+            if (users.Count == 0 || users == null)
+            {
+                return NotFound();
+            }
+            return Ok(users);
+        }
+        [HttpGet("sort-by-Name/{sortDirection}")]
+        public async Task<IActionResult> SortUserByName(string sortDirection)
+        {
+            var users = await _userService.SortUserByName(sortDirection);
+            if (users.Count == 0 || users == null)
+            {
+                return NotFound();
+            }
+            return Ok(users);
+        }
+        [HttpGet("sort-by-Email/{sortDirection}")]
+        public async Task<IActionResult> SortUserByEmail(string sortDirection)
+        {
+            var users = await _userService.SortUserByEmail(sortDirection);
             if (users.Count == 0 || users == null)
             {
                 return NotFound();
@@ -64,6 +81,16 @@ namespace ShipShop.API.Controllers
             return Ok(users);
         }
 
+        [HttpGet("sort-by-Id/{sortDirection}")]
+        public async Task<IActionResult> SortCustomerById(string sortDirection)
+        {
+            var users = await _userService.SortUserById(sortDirection);
+            if (users.Count == 0 || users == null)
+            {
+                return NotFound();
+            }
+            return Ok(users);
+        }
 
         /// <summary>
         /// This EndPoint to Add new  User

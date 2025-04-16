@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.WebRequestMethods;
 
 namespace ShipShop.Application.Services
 {
@@ -24,7 +25,7 @@ namespace ShipShop.Application.Services
             {
                 Name = command.Name,
                 NameAr = command.NameAr,
-                ImagePath = command.ImagePath,
+                ImagePath =command.ImagePath,
             
             };
             return await _brandRepository.Add(brand);
@@ -40,7 +41,7 @@ namespace ShipShop.Application.Services
                 Id = x.Id,
                 Name = x.Name,
                 NameAr=x.NameAr,
-                ImagePath = x.ImagePath,
+                ImagePath = $"https://localhost:7057/Images/{x.ImagePath}",
                 CreatedOn = x.CreatedOn.ToShortDateString(),
                 UpdatedOn = x.UpdatedOn.ToString()
             }).ToList();
@@ -56,12 +57,67 @@ namespace ShipShop.Application.Services
             result.Id = brand.Id;
             result.Name = brand.Name;
             result.NameAr= brand.NameAr;
-            result.ImagePath = brand.ImagePath;
+            result.ImagePath = $"https://localhost:7057/Images/{brand.ImagePath}";
             result.CreatedOn = brand.CreatedOn.ToShortDateString();
           
             result.UpdatedOn = brand.UpdatedOn.ToString();
             return result;
 
+
+        }
+        public async Task<List<BrandModel>> SortByName(string sortDirection)
+        {
+            var brands = await _brandRepository.SortByName(sortDirection);
+            List<BrandModel> brandModel = brands.Select(x => new BrandModel
+            {
+                Id = x.Id,
+                Name = x.Name,
+                NameAr = x.NameAr,
+             
+              
+                CreatedOn = x.CreatedOn.ToShortDateString(),
+                UpdatedOn = x.UpdatedOn.ToString(),
+                ImagePath = $"https://localhost:7057/Images/{x.ImagePath}",
+                IsActive = x.IsActive,
+                
+            }).ToList();
+            return brandModel;
+
+        }
+        public async Task<List<BrandModel>> SortById(string sortDirection)
+        {
+            var brands = await _brandRepository.SortById(sortDirection);
+            List<BrandModel> brandModel = brands.Select(x => new BrandModel
+            {
+                Id = x.Id,
+                Name = x.Name,
+                NameAr = x.NameAr,
+
+
+                CreatedOn = x.CreatedOn.ToShortDateString(),
+                UpdatedOn = x.UpdatedOn.ToString(),
+                ImagePath = $"https://localhost:7057/Images/{x.ImagePath}",
+                IsActive = x.IsActive,
+
+            }).ToList();
+            return brandModel;
+
+        }
+        public async Task<List<BrandModel>> SortByCreationDate(string sortDirection)
+        {
+            var brands = await _brandRepository.SortByCreationDate(sortDirection);
+            List<BrandModel> brandModel = brands.Select(x => new BrandModel
+            {
+                Id = x.Id,
+                Name = x.Name,
+                NameAr = x.NameAr,
+                CreatedOn = x.CreatedOn.ToShortDateString(),
+                UpdatedOn = x.UpdatedOn.ToString(),
+                ImagePath = $"https://localhost:7057/Images/{x.ImagePath}",
+                IsActive = x.IsActive,
+
+            }).ToList();
+            return brandModel;
 
         }
         public async Task UpdateBrand(int id, BrandCommand command)

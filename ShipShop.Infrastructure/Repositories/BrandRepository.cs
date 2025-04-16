@@ -45,6 +45,51 @@ namespace ShipShop.Infrastructure.Repositories
             return brand;
         }
 
+        public async Task<List<Brand>> SortByCreationDate(string sortDirection)
+        {
+            IQueryable<Brand> query = _context.Brands;
+            if (sortDirection == "desc")
+            {
+                query = query.OrderByDescending(x => x.CreatedOn);
+            }
+            if (sortDirection == "asc")
+            {
+                query = query.OrderBy(x => x.CreatedOn);
+            }
+
+            return await query.ToListAsync();
+        }
+
+        public async Task<List<Brand>> SortById(string sortDirection)
+        {
+            IQueryable<Brand> query = _context.Brands;
+            if (sortDirection == "desc")
+            {
+                query = query.OrderByDescending(x => x.Id);
+            }
+            if (sortDirection == "asc")
+            {
+                query = query.OrderBy(x => x.Id);
+            }
+
+            return await query.ToListAsync();
+        }
+
+        public async Task<List<Brand>> SortByName(string sortDirection)
+        {
+            IQueryable<Brand> query = _context.Brands;
+            if (sortDirection == "desc")
+            {
+                query = query.OrderByDescending(x => x.Name);
+            }
+            if (sortDirection == "asc")
+            {
+                query = query.OrderBy(x => x.Name);
+            }
+
+            return await query.ToListAsync();
+        }
+
         public async Task Update(Brand input)
         {
             _context.Update(input);

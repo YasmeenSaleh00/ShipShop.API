@@ -27,14 +27,17 @@ namespace ShipShop.Application.Services
             {
                 CategoryId = command.CategoryId,
                 Name = command.Name,
+                NameAr=command.NameAr,  
                 CreatedOn = DateTime.Now,
                 BrandId = command.BrandId,
-                NameAr = command.NameAr,
+      
                 Description = command.Description,
-                DescriptionAr = command.DescriptionAr,  
+                DescriptionAr= command.DescriptionAr,
+               
                 Price = command.Price,
                 ProductStatusId = 1,
                 TaxPercentage = command.TaxPercentage,
+                ImageUrl = command.ImageUrl,
 
             };
 
@@ -87,7 +90,9 @@ namespace ShipShop.Application.Services
                 ProductStatus = x.LookupItem.Value,
                 CreatedOn = x.CreatedOn.ToShortDateString(),
                 UpdatedOn = x.UpdatedOn.ToString(),
-                CategoryName = x.Category.Name
+                CategoryName = x.Category.Name,
+                ImageUrl = $"https://localhost:7057/Images/{x.ImageUrl}",
+                IsActive= x.IsActive,   
 
             }).ToList();
 
@@ -112,8 +117,9 @@ namespace ShipShop.Application.Services
             productmodel.BrandName = product.Brand.NameAr;
             productmodel.ProductStatus = product.LookupItem.Value;
             productmodel.CreatedOn = product.CreatedOn.ToShortDateString();
-
+            productmodel.ImageUrl = $"https://localhost:7057/Images/{product.ImageUrl}";
             productmodel.UpdatedOn = product.UpdatedOn.ToString();
+            productmodel.IsActive=product.IsActive; 
 
             return productmodel;
 
@@ -133,7 +139,9 @@ namespace ShipShop.Application.Services
                 TaxPercentage = x.TaxPercentage,
                 CreatedOn = x.CreatedOn.ToShortDateString(),
                 UpdatedOn = x.UpdatedOn.ToString(),
-                CategoryName = x.Category.Name
+                CategoryName = x.Category.Name,
+                ImageUrl = $"https://localhost:7057/Images/{x.ImageUrl}",
+                IsActive = x.IsActive,
             }).ToList();
             return productModels;
 
@@ -152,6 +160,35 @@ namespace ShipShop.Application.Services
                 TaxPercentage = x.TaxPercentage,
                 CreatedOn = x.CreatedOn.ToShortDateString(),
                 UpdatedOn = x.UpdatedOn.ToString(),
+                ImageUrl = $"https://localhost:7057/Images/{x.ImageUrl}",
+                IsActive = x.IsActive,  
+                CategoryName = x.Category.Name, 
+               BrandName=x.Brand.Name,
+               ProductStatus=x.LookupItem.Value,
+            }).ToList();
+            return productModels;
+
+        }
+
+        public async Task<List<ProductModel>> SortByCreationDate(string sortDirection)
+        {
+            var products = await _productRepository.SortByCreationDate(sortDirection);
+            List<ProductModel> productModels = products.Select(x => new ProductModel
+            {
+                Id = x.Id,
+                Name = x.Name,
+                NameAr = x.NameAr,
+                Description = x.Description,
+                DescriptionAr = x.DescriptionAr,
+                Price = x.Price,
+                TaxPercentage = x.TaxPercentage,
+                CreatedOn = x.CreatedOn.ToShortDateString(),
+                UpdatedOn = x.UpdatedOn.ToString(),
+                ImageUrl = $"https://localhost:7057/Images/{x.ImageUrl}",
+                IsActive= x.IsActive,
+                CategoryName = x.Category.Name,
+                BrandName = x.Brand.Name,
+                ProductStatus = x.LookupItem.Value,
             }).ToList();
             return productModels;
 
@@ -170,6 +207,33 @@ namespace ShipShop.Application.Services
                 TaxPercentage = x.TaxPercentage,
                 CreatedOn = x.CreatedOn.ToShortDateString(),
                 UpdatedOn = x.UpdatedOn.ToString(),
+                ImageUrl = $"https://localhost:7057/Images/{x.ImageUrl}",
+                IsActive = x.IsActive,
+                CategoryName = x.Category.Name,
+                BrandName = x.Brand.Name,
+                ProductStatus = x.LookupItem.Value,
+            }).ToList();
+            return productModels;
+        }
+        public async Task<List<ProductModel>> SortById(string sortDirection)
+        {
+            var products = await _productRepository.SortById(sortDirection);
+            List<ProductModel> productModels = products.Select(x => new ProductModel
+            {
+                Id = x.Id,
+                Name = x.Name,
+                NameAr = x.NameAr,
+                Description = x.Description,
+                DescriptionAr = x.DescriptionAr,
+                Price = x.Price,
+                TaxPercentage = x.TaxPercentage,
+                CreatedOn = x.CreatedOn.ToShortDateString(),
+                UpdatedOn = x.UpdatedOn.ToString(),
+                ImageUrl = $"https://localhost:7057/Images/{x.ImageUrl}",
+                IsActive= x.IsActive,
+                CategoryName = x.Category.Name,
+                BrandName = x.Brand.Name,
+                ProductStatus = x.LookupItem.Value,
             }).ToList();
             return productModels;
         }

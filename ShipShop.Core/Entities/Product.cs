@@ -15,6 +15,7 @@ namespace ShipShop.Core.Entities
         public string DescriptionAr { get; set; }
         public float Price { get; set; }
         public float TaxPercentage { get; set; }
+        public string ImageUrl { get; set; }
        [ForeignKey("LookupItem")]
         public int ProductStatusId { get; set; }
         public LookupItem LookupItem { get; set; }
@@ -24,7 +25,7 @@ namespace ShipShop.Core.Entities
         public Brand Brand { get; set; }
         public List<OrderItem> Items { get; set; }
        public List<CartItem> CartItems { get; set; }
-        public List<WishList> WishList { get; set; }    
+        public List<WishListItem> WishListItems { get; set; }
 
     }
 }
