@@ -7,7 +7,7 @@ using System.Reflection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using ShipShop.API.Filters;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,7 +27,7 @@ builder.Services.AddSwaggerGen(options =>
         BearerFormat = "JWT",
         Scheme = JwtBearerDefaults.AuthenticationScheme
     });
-    //options.OperationFilter<AllowAnonymousOperationFilter>();
+  
 
 
 });

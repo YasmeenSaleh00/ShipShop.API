@@ -20,7 +20,7 @@ namespace ShipShop.API.Controllers
         /// This Endpoint For login 
         /// </summary>
         [HttpPost]
-        [Route("Login")]
+     
         public async Task<IActionResult> Login([FromBody] AuthenticationQuery model)
         {
             AuthenticationModel result = await _authService.Login(model);

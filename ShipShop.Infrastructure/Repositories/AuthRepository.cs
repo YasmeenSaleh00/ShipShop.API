@@ -32,6 +32,7 @@ namespace ShipShop.Infrastructure.Repositories
                 user = await _context.Customers
                     .Include(c => c.Carts)
                     .Include(c => c.Role)
+                    .Include(x=>x.WishList)
                     .FirstOrDefaultAsync(c => c.Email == username && c.Password == password);
             }
 

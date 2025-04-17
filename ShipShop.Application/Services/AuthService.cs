@@ -33,27 +33,37 @@ namespace ShipShop.Application.Services
             {
                 return null;
             }
-            int cartId = 0;  // افتراضياً سيكون CartId صفر إذا لم توجد سلة
+            int cartId = 0;
+            int wishlistId = 0;
 
-            if (user is Customer customer && customer.Carts != null && customer.Carts.Any())
+            if (user is Customer customer)
             {
-                cartId = customer.Carts.First().Id;  // استخدام أول سلة للمستخدم
+                if (customer.Carts != null && customer.Carts.Any())
+                {
+                    cartId = customer.Carts.First().Id;
+                }
+
+                if (customer.WishList != null && customer.WishList.Any())
+                {
+                    wishlistId = customer.WishList.First().Id;
+                }
             }
             AuthenticationModel authenticationModel = new AuthenticationModel
             {
-                AccessToken = GenerateToken(user.Id, user.Role.Name , cartId),
+                AccessToken = GenerateToken(user.Id, user.Role.Name , cartId , wishlistId),
                 ExpiresAt = DateTime.Now.AddHours(1)
             };
 
             return authenticationModel;
         }
-        private string GenerateToken(int userId, string role,int cartId)
+        private string GenerateToken(int userId, string role,int cartId , int wishlistId)
         {
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
                 new Claim(ClaimTypes.Role, role),
-                 new Claim("CartId", cartId.ToString()) // إضافة CartId هنا
+                 new Claim("CartId", cartId.ToString()),
+             new Claim("WishlistId", wishlistId.ToString())
 
 
             };
