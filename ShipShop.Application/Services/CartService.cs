@@ -39,6 +39,7 @@ namespace ShipShop.Application.Services
                 Id = cart.Id,
                 Items = cartItems.Select(item => new CartItemModel
                 {
+                    ProductId= item.ProductId,
                     ProductName = item.Product.Name,
                     ImageUrl = $"https://localhost:7057/Images/{item.Product.ImageUrl}",
 
@@ -64,6 +65,7 @@ namespace ShipShop.Application.Services
                 Id = cart.Id,
                 Items = cartItems.Select(item => new CartItemModel
                 {
+                    ProductId = item.ProductId,
                     ProductName = item.Product.Name,
                     ImageUrl = $"https://localhost:7057/Images/{item.Product.ImageUrl}",
 

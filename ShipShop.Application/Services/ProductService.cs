@@ -30,7 +30,8 @@ namespace ShipShop.Application.Services
                 NameAr=command.NameAr,  
                 CreatedOn = DateTime.Now,
                 BrandId = command.BrandId,
-      
+      Quantity=command.Quantity,
+
                 Description = command.Description,
                 DescriptionAr= command.DescriptionAr,
                
@@ -55,8 +56,9 @@ namespace ShipShop.Application.Services
                 DescriptionAr = command.DescriptionAr,
                 Price = command.Price,
                TaxPercentage= command.TaxPercentage,
-               BrandId = command.BrandId,   
-               ProductStatusId= command.ProductStatusId,
+               BrandId = command.BrandId,
+                Quantity = command.Quantity,
+                ProductStatusId = command.ProductStatusId,
 
                 UpdatedOn = DateTime.Now
             };
@@ -92,7 +94,8 @@ namespace ShipShop.Application.Services
                 UpdatedOn = x.UpdatedOn.ToString(),
                 CategoryName = x.Category.Name,
                 ImageUrl = $"https://localhost:7057/Images/{x.ImageUrl}",
-                IsActive= x.IsActive,   
+                IsActive= x.IsActive,  
+                Quantity=x.Quantity
 
             }).ToList();
 
@@ -119,6 +122,7 @@ namespace ShipShop.Application.Services
             productmodel.CreatedOn = product.CreatedOn.ToShortDateString();
             productmodel.ImageUrl = $"https://localhost:7057/Images/{product.ImageUrl}";
             productmodel.UpdatedOn = product.UpdatedOn.ToString();
+            productmodel.Quantity= product.Quantity;
             productmodel.IsActive=product.IsActive; 
 
             return productmodel;
@@ -142,6 +146,7 @@ namespace ShipShop.Application.Services
                 CategoryName = x.Category.Name,
                 ImageUrl = $"https://localhost:7057/Images/{x.ImageUrl}",
                 IsActive = x.IsActive,
+                Quantity = x.Quantity,  
             }).ToList();
             return productModels;
 
@@ -165,6 +170,7 @@ namespace ShipShop.Application.Services
                 CategoryName = x.Category.Name, 
                BrandName=x.Brand.Name,
                ProductStatus=x.LookupItem.Value,
+               Quantity=x.Quantity, 
             }).ToList();
             return productModels;
 
@@ -189,6 +195,7 @@ namespace ShipShop.Application.Services
                 CategoryName = x.Category.Name,
                 BrandName = x.Brand.Name,
                 ProductStatus = x.LookupItem.Value,
+                Quantity = x.Quantity,
             }).ToList();
             return productModels;
 
@@ -212,6 +219,7 @@ namespace ShipShop.Application.Services
                 CategoryName = x.Category.Name,
                 BrandName = x.Brand.Name,
                 ProductStatus = x.LookupItem.Value,
+                Quantity = x.Quantity,
             }).ToList();
             return productModels;
         }
@@ -234,6 +242,7 @@ namespace ShipShop.Application.Services
                 CategoryName = x.Category.Name,
                 BrandName = x.Brand.Name,
                 ProductStatus = x.LookupItem.Value,
+                Quantity = x.Quantity,
             }).ToList();
             return productModels;
         }

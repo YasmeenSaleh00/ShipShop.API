@@ -14,6 +14,7 @@ namespace ShipShop.Core.Entities
         [MaxLength(100)]
         public string? NameAr {  get; set; }
         public string Description { get; set; }
+        public string ImageUrl { get; set; }
         public string? DescriptionAr { get; set; }
        
         public List<Product> Products { get; set; }

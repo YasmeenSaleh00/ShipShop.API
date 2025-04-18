@@ -31,6 +31,7 @@ namespace ShipShop.Application.Services
                 Name = command.Name,
                 NameAr=command.NameAr,
                 DescriptionAr=command.DescriptionAr,
+                ImageUrl= command.ImageUrl, 
               
                 Description = command.Description,
               
@@ -53,6 +54,7 @@ namespace ShipShop.Application.Services
                 UpdatedOn = x.UpdatedOn.ToString(),
                 NameAr = x.NameAr,
                 DescriptionAr=x.DescriptionAr,
+                ImageUrl = $"https://localhost:7057/Images/{x.ImageUrl}",
 
 
                 IsActive = x.IsActive
@@ -71,8 +73,8 @@ namespace ShipShop.Application.Services
                 NameAr = x.NameAr,
                 Description = x.Description,
                 DescriptionAr = x.DescriptionAr,
-             
-           
+                ImageUrl = $"https://localhost:7057/Images/{x.ImageUrl}",
+
                 CreatedOn = x.CreatedOn.ToShortDateString(),
                 UpdatedOn = x.UpdatedOn.ToString(),
               
@@ -92,7 +94,7 @@ namespace ShipShop.Application.Services
                 NameAr = x.NameAr,
                 Description = x.Description,
                 DescriptionAr = x.DescriptionAr,
-
+                ImageUrl = $"https://localhost:7057/Images/{x.ImageUrl}",
 
                 CreatedOn = x.CreatedOn.ToShortDateString(),
                 UpdatedOn = x.UpdatedOn.ToString(),
@@ -113,7 +115,7 @@ namespace ShipShop.Application.Services
                 NameAr = x.NameAr,
                 Description = x.Description,
                 DescriptionAr = x.DescriptionAr,
-
+                ImageUrl = $"https://localhost:7057/Images/{x.ImageUrl}",
 
                 CreatedOn = x.CreatedOn.ToShortDateString(),
                 UpdatedOn = x.UpdatedOn.ToString(),
@@ -137,7 +139,8 @@ namespace ShipShop.Application.Services
             result.DescriptionAr = category.DescriptionAr;
             result.CreatedOn = category.CreatedOn.ToShortDateString();
             result.UpdatedOn = category.UpdatedOn.ToString()   ;
-            result.IsActive = category.IsActive;    
+            result.IsActive = category.IsActive;
+            result.ImageUrl = $"https://localhost:7057/Images/{category.ImageUrl}";
             return result;
         }
 
@@ -149,8 +152,8 @@ namespace ShipShop.Application.Services
                 Id=id,
                 Name = command.Name,
                 Description = command.Description,
-           
-               DescriptionAr=command.DescriptionAr,
+                ImageUrl = command.ImagePath,
+                DescriptionAr =command.DescriptionAr,
                NameAr=command.NameAr,
                IsActive=command.IsActive,
         

@@ -10,7 +10,7 @@ namespace ShipShop.Application.Commands
     {
         public int ProductId { get; set; }
         public int Quantity { get; set; }
-        //public int CartId { get; set; }
-        public int CustomerId { get; set; }
+   public int CustomerId { get; set; }
+ 
     }
 }

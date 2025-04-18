@@ -17,7 +17,7 @@ namespace ShipShop.Application.Commands
         public float Price { get; set; }
         public float TaxPercentage { get; set; }
      
-
+        public int  Quantity { get; set; }
         public int CategoryId { get; set; }
         public string ImageUrl { get; set; }
         public int BrandId { get; set; }

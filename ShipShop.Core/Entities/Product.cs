@@ -15,6 +15,7 @@ namespace ShipShop.Core.Entities
         public string DescriptionAr { get; set; }
         public float Price { get; set; }
         public float TaxPercentage { get; set; }
+        public int Quantity { get; set; }
         public string ImageUrl { get; set; }
        [ForeignKey("LookupItem")]
         public int ProductStatusId { get; set; }

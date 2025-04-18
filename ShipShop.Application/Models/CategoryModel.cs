@@ -16,6 +16,7 @@ namespace ShipShop.Application.Models
         public string CreatedOn { get; set; }
         public string UpdatedOn { get; set; }
         public bool IsActive { get; set; }
+        public string ImageUrl { get; set; }
     }
     
    

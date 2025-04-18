@@ -15,6 +15,7 @@ namespace ShipShop.Application.Commands
         public string? NameAr { get; set; }
         public string Description { get; set; }
         public string? DescriptionAr { get; set; }
-       
+        public string ImageUrl { get; set; }
+
     }
 }

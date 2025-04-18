@@ -17,6 +17,7 @@ namespace ShipShop.Application.Models
         public string Description { get; set; }
         public string DescriptionAr { get; set; }
         public float Price { get; set; }
+        public int Quantity { get; set; }
         public float TaxPercentage { get; set; }
         public string ProductStatus { get; set; }
         public string ImageUrl { get; set; }

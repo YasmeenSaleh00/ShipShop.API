@@ -36,6 +36,7 @@ namespace ShipShop.Application.Services
                 Id = wish.Id,
                 WishListItems = wishitem.Select(item => new WishListItemModel
                 {
+                    productId=item.ProductId,   
                     ProductName = item.Product.Name,
                     ImageUrl = $"https://localhost:7057/Images/{item.Product.ImageUrl}",
 
@@ -99,6 +100,7 @@ namespace ShipShop.Application.Services
                 Id = wishList.Id,
                 WishListItems = wishItems.Select(item => new WishListItemModel
                 {
+                    productId = item.ProductId,
                     ProductName = item.Product.Name,
                     ImageUrl = $"https://localhost:7057/Images/{item.Product.ImageUrl}",
 

@@ -56,6 +56,12 @@ namespace ShipShop.Infrastructure.Repositories
             return entity;
         }
 
+        public async Task<List<Product>> GetProductByCategory(int categoryId)
+        {
+            var product = await _context.Products.Include(x => x.Category).Include(b => b.Brand).Include(x => x.LookupItem).ToListAsync();
+            return product;
+        }
+
         public async Task<List<Product>> GetProductsByFilters(string? productName, string? categoryName)
         {
             var data = await _context.Products.Include(x => x.Category)
