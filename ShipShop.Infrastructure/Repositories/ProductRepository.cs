@@ -56,17 +56,21 @@ namespace ShipShop.Infrastructure.Repositories
             return entity;
         }
 
-        public async Task<List<Product>> GetProductByCategory(int categoryId)
+        public async Task<List<Product>> GetProductsByBrand(string brandName)
         {
-            var product = await _context.Products.Include(x => x.Category).Include(b => b.Brand).Include(x => x.LookupItem).ToListAsync();
-            return product;
+            var data = await _context.Products.Include(x => x.Category).Include(x => x.Brand).Include(x => x.LookupItem)
+                .Where(x =>
+
+                (string.IsNullOrEmpty(brandName) || x.Brand.Name.Contains(brandName)))
+                .ToListAsync();
+            return data;
         }
 
-        public async Task<List<Product>> GetProductsByFilters(string? productName, string? categoryName)
+        public async Task<List<Product>> GetProductsByFilters( string categoryName)
         {
-            var data = await _context.Products.Include(x => x.Category)
+            var data = await _context.Products.Include(x => x.Category).Include(x=>x.Brand).Include(x=>x.LookupItem)
                 .Where(x =>
-                (string.IsNullOrEmpty(productName) || x.Name.Contains(productName)) &&
+               
                 (string.IsNullOrEmpty(categoryName) || x.Category.Name.Contains(categoryName)))
                 .ToListAsync();
             return data;

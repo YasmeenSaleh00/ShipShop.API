@@ -90,7 +90,7 @@ app.UseStaticFiles(new StaticFileOptions
     RequestPath = "/Images"
 });
 app.UseCors("AllowAll");
-
+app.UseAuthentication();    
 app.UseAuthorization();
 app.MapControllers();
 

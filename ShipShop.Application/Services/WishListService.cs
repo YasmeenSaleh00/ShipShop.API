@@ -53,7 +53,7 @@ namespace ShipShop.Application.Services
         {
             await _wishlistRepository.RemoveFromWishlist(WishId, productId);
         }
-        public async Task AddProductToWishAsync1(int customerId, int productId)
+        public async Task<int> AddProductToWishAsync1(int customerId, int productId)
         {
             var wish = await _wishlistRepository.GetWishtByCustomerAsync(customerId);
 
@@ -84,6 +84,7 @@ namespace ShipShop.Application.Services
                 };
                 await _wishlistRepository.AddingProductToWishList(newItem); 
             }
+            return wish.Id; 
 
         }
         public async Task<WishListModel> GetWishtByCustomerId(int customerId)

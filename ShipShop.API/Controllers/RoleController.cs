@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ShipShop.Application.Commands;
 using ShipShop.Application.Services;
@@ -7,6 +8,7 @@ namespace ShipShop.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+ 
     public class RoleController : ControllerBase
     {
         private readonly RoleService _roleService;
@@ -38,6 +40,7 @@ namespace ShipShop.API.Controllers
         }
     
         [HttpPost]
+        [Authorize(Roles = "Add")]
         public async Task<IActionResult> AddNewRole (RoleCommand command)
         {
           var id=  await _roleService.Add(command);
@@ -76,6 +79,7 @@ namespace ShipShop.API.Controllers
             return Ok(users);
         }
         [HttpPut("{id}")]
+        [Authorize(Roles = "Edit")]
         public async Task<IActionResult> UpdateRole(RoleCommand command , int id)
         {
           
@@ -84,6 +88,7 @@ namespace ShipShop.API.Controllers
 
         }
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Delete")]
         public async Task<IActionResult> DeleteRole (int id)
         {
             if(id == 0 || id < 0)

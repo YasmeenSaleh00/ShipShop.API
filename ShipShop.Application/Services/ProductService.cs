@@ -129,9 +129,9 @@ namespace ShipShop.Application.Services
 
 
         }
-        public async Task<List<ProductModel>> GetProductsByFilters(ProductQuery query)
+        public async Task<List<ProductModel>> GetProductsByFilters(string categoryName)
         {
-            var products = await _productRepository.GetProductsByFilters(query.ProductName , query.CategoryName);
+            var products = await _productRepository.GetProductsByFilters( categoryName);
             List<ProductModel> productModels = products.Select(x => new ProductModel
             {
                 Id = x.Id,
@@ -143,10 +143,37 @@ namespace ShipShop.Application.Services
                 TaxPercentage = x.TaxPercentage,
                 CreatedOn = x.CreatedOn.ToShortDateString(),
                 UpdatedOn = x.UpdatedOn.ToString(),
-                CategoryName = x.Category.Name,
                 ImageUrl = $"https://localhost:7057/Images/{x.ImageUrl}",
                 IsActive = x.IsActive,
-                Quantity = x.Quantity,  
+                CategoryName = x.Category.Name,
+                BrandName = x.Brand.Name,
+                ProductStatus = x.LookupItem.Value,
+                Quantity = x.Quantity,
+            }).ToList();
+            return productModels;
+
+        }
+
+        public async Task<List<ProductModel>> GetProductsBrand(string brandName)
+        {
+            var products = await _productRepository.GetProductsByBrand(brandName);
+            List<ProductModel> productModels = products.Select(x => new ProductModel
+            {
+                Id = x.Id,
+                Name = x.Name,
+                NameAr = x.NameAr,
+                Description = x.Description,
+                DescriptionAr = x.DescriptionAr,
+                Price = x.Price,
+                TaxPercentage = x.TaxPercentage,
+                CreatedOn = x.CreatedOn.ToShortDateString(),
+                UpdatedOn = x.UpdatedOn.ToString(),
+                ImageUrl = $"https://localhost:7057/Images/{x.ImageUrl}",
+                IsActive = x.IsActive,
+                CategoryName = x.Category.Name,
+                BrandName = x.Brand.Name,
+                ProductStatus = x.LookupItem.Value,
+                Quantity = x.Quantity,
             }).ToList();
             return productModels;
 

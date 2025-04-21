@@ -11,7 +11,6 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-
 namespace ShipShop.Application.Services
 {
     public class CartService
@@ -23,7 +22,6 @@ namespace ShipShop.Application.Services
             _cartRepository = cartRepository;
             this.accessor = accessor;
         }
-
 
         public async Task<CartModel> GetCartById(int cartId)
         {
@@ -39,24 +37,22 @@ namespace ShipShop.Application.Services
                 Id = cart.Id,
                 Items = cartItems.Select(item => new CartItemModel
                 {
-                    ProductId= item.ProductId,
+                    ProductId = item.ProductId,
                     ProductName = item.Product.Name,
                     ImageUrl = $"https://localhost:7057/Images/{item.Product.ImageUrl}",
-
                     Price = item.Product.Price,
                     Quantity = item.Quantity
                 }).ToList()
             };
 
             return model;
-
         }
+
         public async Task<CartModel> GetCartByCustomerId(int customerId)
         {
-            var cart=await _cartRepository.GetCartByCustomerAsync(customerId);
+            var cart = await _cartRepository.GetCartByCustomerAsync(customerId);
             if (cart == null)
                 return null;
-
 
             var cartItems = await _cartRepository.GetCartItemById(cart.Id);
 
@@ -68,7 +64,6 @@ namespace ShipShop.Application.Services
                     ProductId = item.ProductId,
                     ProductName = item.Product.Name,
                     ImageUrl = $"https://localhost:7057/Images/{item.Product.ImageUrl}",
-
                     Price = item.Product.Price,
                     Quantity = item.Quantity
                 }).ToList()
@@ -77,18 +72,17 @@ namespace ShipShop.Application.Services
             return model;
         }
 
-        
         public async Task RemoveProductFromCartAsync(int cartId, int productId)
         {
             await _cartRepository.RemoveFromCartAsync(cartId, productId);
         }
+
         public async Task ClearCartAsync(int cartId)
         {
             await _cartRepository.ClearCartAsync(cartId);
         }
 
-
-        public async Task AddProductToCartAsync1(int customerId, int productId, int quantity)
+        public async Task<int> AddProductToCartAsync(int customerId, int productId, int quantity)
         {
             var cart = await _cartRepository.GetCartByCustomerAsync(customerId);
 
@@ -98,10 +92,10 @@ namespace ShipShop.Application.Services
                 {
                     CustomerId = customerId,
                     CreatedOn = DateTime.UtcNow,
-                    StatusCartId=9
+                    StatusCartId = 9
                 };
 
-                await _cartRepository.Add(cart); 
+                await _cartRepository.Add(cart);
             }
 
             var existingItem = await _cartRepository.IsProductInCartAsync(productId, cart.Id);
@@ -122,9 +116,35 @@ namespace ShipShop.Application.Services
 
                 await _cartRepository.AddingProductToCart(newItem);
             }
+
+            return cart.Id; 
         }
 
+        public async Task<int> CreateEmptyCartAsync(int customerId)
+        {
+            var cart = new Cart
+            {
+                CustomerId = customerId,
+                CreatedOn = DateTime.UtcNow,
+                StatusCartId = 9
+            };
 
+            await _cartRepository.Add(cart);
+            return cart.Id;
+        }
+        public async Task UpdateCartItemQuantityAsync(int customerId,int productId, int quantity)
+        {
+            var cart = await _cartRepository.GetCartByCustomerAsync(customerId);
+            if (cart == null)
+                throw new Exception("no cart with the given id ");
 
+            var existingItem = await _cartRepository.IsProductInCartAsync(productId, cart.Id);
+            if (existingItem == null)
+                throw new Exception("not found");
+
+            existingItem.Quantity = quantity;
+            existingItem.UpdatedOn = DateTime.Now;   
+            await _cartRepository.UpdateCartItem(existingItem);
+        }
     }
 }

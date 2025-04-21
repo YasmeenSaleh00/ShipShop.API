@@ -34,10 +34,9 @@ namespace ShipShop.Infrastructure.Repositories
                  .FirstOrDefaultAsync(x => x.ProductId == productId && x.CartId == cartId);
             return sh;
         }
-
-        public async Task UpdateCartItemQuantityAsync(int cartItemId, int newQuantity)
+        public async Task UpdateCartItemQuantityAsync(int customerId, int productId, int quantity)
         {
-            var cartItem = await _context.CartItems.FindAsync(cartItemId);
+            var cartItem = await _context.CartItems.FirstOrDefaultAsync(x=>x.ProductId==productId);
             _context.Update(cartItem);
             await _context.SaveChangesAsync();
         }

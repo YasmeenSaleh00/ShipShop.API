@@ -13,7 +13,7 @@ namespace ShipShop.Core.Interfaces
         Task<List<CartItem>> GetCartItemById(int cartId);
         Task<CartItem> IsProductInCartAsync(int productId, int cartId);
         Task UpdateCartItem(CartItem item);
-        Task UpdateCartItemQuantityAsync(int cartItemId, int newQuantity);
+        Task UpdateCartItemQuantityAsync(int customerId,int productId, int quantity);
         Task Add(Cart cart);
         Task RemoveFromCartAsync(int cartId,int productId);
         Task<Cart> GetCartByCustomerAsync(int customerId);

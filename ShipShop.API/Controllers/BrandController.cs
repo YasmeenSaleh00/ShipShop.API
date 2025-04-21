@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ShipShop.Application.Commands;
 using ShipShop.Application.Services;
@@ -7,6 +8,7 @@ namespace ShipShop.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+
     public class BrandController : ControllerBase
     {
         private readonly BrandService _brandService;
@@ -73,6 +75,7 @@ namespace ShipShop.API.Controllers
         /// This EndPoint To Add new  Brand  
         /// </summary>
         [HttpPost]
+        [Authorize(Roles = "Add")]
         public async Task<IActionResult> AddBrand(BrandCommand command)
         {
             if(command == null)
@@ -86,6 +89,7 @@ namespace ShipShop.API.Controllers
         /// This EndPoint To update Brand info
         /// </summary>
         [HttpPut("{id}")]
+        [Authorize(Roles = "Edit")]
         public async Task<IActionResult> UpdateBrand(int id ,BrandCommand command)
         {
             var brand = await _brandService.GetById(id);
@@ -101,6 +105,7 @@ namespace ShipShop.API.Controllers
         /// This EndPoint To delete  Brand
         /// </summary>
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Delete")]
         public async Task<IActionResult> DeleteBrand(int id)
         {
             var brand = await _brandService.GetById(id);

@@ -9,11 +9,12 @@ namespace ShipShop.Core.Interfaces
 {
     public interface IProductRepository:IRepository<Product>
     {
-        Task<List<Product>> GetProductsByFilters(string? productName, string? categoryName);
+        Task<List<Product>> GetProductsByBrand(string brandName);
+        Task<List<Product>> GetProductsByFilters(string categoryName);
         Task<List<Product>> SortByName(string sortDirection);
         Task<List<Product>> SortByPrice(string sortDirection);
         Task<List<Product>> SortById(string sortDirection);
         Task<List<Product>> SortByCreationDate(string sortDirection);
-        Task<List<Product>> GetProductByCategory(int categoryId);
+       
     }
 }

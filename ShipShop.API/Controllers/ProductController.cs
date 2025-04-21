@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ShipShop.Application.Commands;
 using ShipShop.Application.Queries;
@@ -20,8 +21,8 @@ namespace ShipShop.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllProduct()
         {
-          var products =  await _productService.GetAll();
-            if(products == null || products.Count == 0)
+            var products = await _productService.GetAll();
+            if (products == null || products.Count == 0)
             {
                 return NotFound();
             }
@@ -33,19 +34,32 @@ namespace ShipShop.API.Controllers
         {
 
             var product = await _productService.GetById(id);
-            if(product == null)
+            if (product == null)
             {
                 return BadRequest();
             }
-            return Ok(product); 
+            return Ok(product);
         }
         [HttpGet]
-        [Route("GetByFilters")]
+        [Route("GetByFilters/{categoryName}")]
 
-        public async Task<IActionResult> GetProductsByFilters([FromQuery] ProductQuery query)
+        public async Task<IActionResult> GetProductsByFilters(string categoryName)
         {
-            var products = await _productService.GetProductsByFilters(query);
+            var products = await _productService.GetProductsByFilters(categoryName);
             if(products == null || products.Count == 0)
+            {
+                return NotFound();
+            }
+            return Ok(products);
+        }
+
+        [HttpGet]
+        [Route("GetByBrand/{brandName}")]
+
+        public async Task<IActionResult> GetProductsByBrand(string brandName)
+        {
+            var products = await _productService.GetProductsBrand(brandName);
+            if (products == null || products.Count == 0)
             {
                 return NotFound();
             }
@@ -88,6 +102,7 @@ namespace ShipShop.API.Controllers
 
         }
         [HttpPost]
+        [Authorize(Roles = "Add")]
         public async Task<IActionResult> CreateProduct(ProductCommand command)
         {
             if (command == null)
@@ -98,6 +113,7 @@ namespace ShipShop.API.Controllers
             return Ok("Product successfully added");
         }
         [HttpPut("{id}")]
+        [Authorize(Roles = "Edit")]
         public async Task<IActionResult> UpdateProduct(UpdateProductCommand command , int id)
         {
             if (command == null || id == 0 || id <0)
@@ -109,6 +125,7 @@ namespace ShipShop.API.Controllers
         }
       
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Delete")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
             await _productService.Delete(id);

@@ -20,5 +20,10 @@ namespace ShipShop.Core.Entities
 
         [NotMapped]
         public string FullName { get => FirstName + " "+ LastName; }
+
+        public static object FindFirst(string nameIdentifier)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

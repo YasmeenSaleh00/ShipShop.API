@@ -9,6 +9,7 @@ namespace ShipShop.API.Controllers
     [Route("api/[controller]")]
     [ApiController]
 
+
     public class CategoryController : ControllerBase
     {
         private readonly CategoryService _categoryService;
@@ -83,6 +84,7 @@ namespace ShipShop.API.Controllers
         ///This EndPoint to add new Category
         ///</summary>
         [HttpPost]
+        [Authorize(Roles = "Add")]
         public async Task<IActionResult> AddCategory([FromBody] CategoryCommand command)
         {
             var id = await _categoryService.AddCategory(command);
@@ -93,6 +95,7 @@ namespace ShipShop.API.Controllers
         /// </summary>
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Edit")]
         public async Task<IActionResult> UpdateCategory([FromRoute]int id, UpdateCategoryCommand command)
         {
             if(id == 0 || id < 0)
@@ -111,6 +114,7 @@ namespace ShipShop.API.Controllers
         /// </summary>
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Delete")]
         public async Task<IActionResult> DeleteCategory(int id)
         {
             if(id == 0 || id < 0)

@@ -11,6 +11,8 @@ namespace ShipShop.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
+   
 
     public class UserController : ControllerBase
     {
@@ -96,6 +98,7 @@ namespace ShipShop.API.Controllers
         /// This EndPoint to Add new  User
         /// </summary>
         [HttpPost]
+        [Authorize(Roles = "Add")]
         public async Task<IActionResult> CreateNewUser(AddUserCommand command)
         {
            await _userService.CreateNewUser(command);
@@ -103,6 +106,7 @@ namespace ShipShop.API.Controllers
 
         }
         [HttpPut("{id}")]
+        [Authorize(Roles = "Edit")]
         public async Task<IActionResult> UpdatePassword(int id, UpdatePasswordCommand command)
         {
             var user = await _userService.GetById(id);
@@ -118,6 +122,7 @@ namespace ShipShop.API.Controllers
         /// </summary>
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Delete")]
         public async Task<IActionResult> DeleteUser(int id)
         {
             await _userService.DeleteAsync(id);

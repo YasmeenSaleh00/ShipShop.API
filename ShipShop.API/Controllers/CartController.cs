@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ShipShop.Application.Commands;
 using ShipShop.Application.Services;
 using ShipShop.Core.Entities;
+using System.Security.Claims;
 
 namespace ShipShop.API.Controllers
 {
@@ -19,10 +20,12 @@ namespace ShipShop.API.Controllers
         {
             _cartService = cartService;
         }
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetCartById(int id)
+   
+        [HttpGet("{cartId}")]
+        [Authorize(Roles = "Customer")]
+        public async Task<IActionResult> GetCartById(int cartId)
         {
-            var cart = await _cartService.GetCartById(id);
+            var cart = await _cartService.GetCartById(cartId);
             if (cart == null)
             {
                 
@@ -35,6 +38,7 @@ namespace ShipShop.API.Controllers
 
         [HttpGet]
         [Route("get-by-customer/{customerId}")]
+        [Authorize(Roles = "Customer")]
         public async Task<IActionResult> GetCartByCustomerId(int customerId)
         {
             var cart = await _cartService.GetCartByCustomerId(customerId);
@@ -51,6 +55,7 @@ namespace ShipShop.API.Controllers
      
 
         [HttpDelete("{cartId}/{productId}")]
+        [Authorize(Roles = "Customer")]
         public async Task<IActionResult>  RemoveProductFromCartAsync(int cartId, int productId)
         {
             try
@@ -65,6 +70,7 @@ namespace ShipShop.API.Controllers
         }
 
         [HttpDelete("clear/{cartId}")]
+        [Authorize(Roles = "Customer")]
         public async Task<IActionResult> ClearCart(int cartId)
         {
             try
@@ -78,12 +84,15 @@ namespace ShipShop.API.Controllers
             }
         }
         [HttpPost]
+        [Authorize(Roles = "Customer")]
         public async Task<IActionResult> AddToCart([FromBody] CartCommand dto)
         {
             try
             {
-                await _cartService.AddProductToCartAsync1(dto.CustomerId, dto.ProductId, dto.Quantity);
-                return Ok();
+                 
+
+            var cart=    await _cartService.AddProductToCartAsync(dto.customerId, dto.ProductId, dto.Quantity);
+                return Ok(cart);
             }
             catch (DbUpdateException ex)
             {
@@ -94,6 +103,22 @@ namespace ShipShop.API.Controllers
                 return BadRequest($"Error: {ex.Message}");
             }
         }
+
+        [HttpPut("UpdateQuantity")]
+        [Authorize(Roles = "Customer")]
+        public async Task<IActionResult> UpdateQuantity([FromBody] UpdateCartItemCommand dto)
+        {
+            try
+            {
+                await _cartService.UpdateCartItemQuantityAsync(dto.CustomerId,dto.ProductId, dto.Quantity);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error: {ex.Message}");
+            }
+        }
+
 
     }
 }
