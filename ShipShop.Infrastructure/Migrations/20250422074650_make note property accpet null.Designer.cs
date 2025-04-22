@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShipShop.Infrastructure.Context;
 
@@ -11,9 +12,11 @@ using ShipShop.Infrastructure.Context;
 namespace ShipShop.Infrastructure.Migrations
 {
     [DbContext(typeof(ShipShopDbContext))]
-    partial class ShipShopDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250422074650_make note property accpet null")]
+    partial class makenotepropertyaccpetnull
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -374,7 +377,7 @@ namespace ShipShop.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CartId")
+                    b.Property<int>("CartId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedOn")
@@ -420,8 +423,7 @@ namespace ShipShop.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CartId")
-                        .IsUnique()
-                        .HasFilter("[CartId] IS NOT NULL");
+                        .IsUnique();
 
                     b.HasIndex("CustomerId");
 
@@ -795,7 +797,8 @@ namespace ShipShop.Infrastructure.Migrations
                     b.HasOne("ShipShop.Core.Entities.Cart", "Cart")
                         .WithOne("Order")
                         .HasForeignKey("ShipShop.Core.Entities.Order", "CartId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ShipShop.Core.Entities.Customer", "Customer")
                         .WithMany("Orders")

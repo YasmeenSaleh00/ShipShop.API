@@ -17,7 +17,8 @@ namespace ShipShop.Application.Models
         public string ShippingAddress { get; set; }
         public string DeliveryDate { get; set; }
         public string Notes { get; set; }
-        public string Feedback { get; set; }
-        List<OrderItem> Items { get; set; }
+        public float TotalPrice { get; set; }
+   
+        public List<OrderItemModel> Items { get; set; }
     }
 }

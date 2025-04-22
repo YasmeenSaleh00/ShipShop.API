@@ -22,7 +22,7 @@ namespace ShipShop.Infrastructure.Repositories
 
         public async Task<Cart> GetCartById(int cartId)
         {
-          var cart= await _context.Carts.Include(x=>x.CartItems).ThenInclude(x=>x.Product).FirstOrDefaultAsync(c => c.Id == cartId);
+            var cart = await _context.Carts.Include(x => x.CartItems).ThenInclude(x => x.Product).FirstOrDefaultAsync(c => c.Id == cartId);
             return cart;
         }
 
@@ -36,7 +36,7 @@ namespace ShipShop.Infrastructure.Repositories
         }
         public async Task UpdateCartItemQuantityAsync(int customerId, int productId, int quantity)
         {
-            var cartItem = await _context.CartItems.FirstOrDefaultAsync(x=>x.ProductId==productId);
+            var cartItem = await _context.CartItems.FirstOrDefaultAsync(x => x.ProductId == productId);
             _context.Update(cartItem);
             await _context.SaveChangesAsync();
         }
@@ -73,30 +73,37 @@ namespace ShipShop.Infrastructure.Repositories
 
         public async Task Add(Cart cart)
         {
-           _context.Add(cart);
+            _context.Add(cart);
             await _context.SaveChangesAsync();
         }
 
         public async Task<List<CartItem>> GetCartItemById(int cartId)
         {
             var cartItems = await _context.CartItems
-        .Include(x => x.Product) 
+        .Include(x => x.Product)
         .Where(x => x.CartId == cartId)
         .ToListAsync();
             return cartItems;
         }
 
-    
+
 
         public async Task ClearCartAsync(int cartId)
         {
-            var cartItems = await _context.CartItems
-         .Where(ci => ci.CartId == cartId)
-         .ToListAsync();
-            _context.CartItems.RemoveRange(cartItems);
-            await _context.SaveChangesAsync();
+            var cart = await _context.Carts
+                .Include(c => c.CartItems)
+                .FirstOrDefaultAsync(c => c.Id == cartId);
 
+            if (cart != null)
+            {
+                _context.CartItems.RemoveRange(cart.CartItems); // امسح الاصناف
 
+                _context.Carts.Remove(cart); // امسح الكارت نفسه
+
+                await _context.SaveChangesAsync(); // حفظ التغييرات
+            }
         }
+
+
     }
 }

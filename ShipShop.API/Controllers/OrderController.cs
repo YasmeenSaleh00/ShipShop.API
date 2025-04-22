@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ShipShop.Application.Commands;
 using ShipShop.Application.Services;
 
 namespace ShipShop.API.Controllers
@@ -33,6 +34,23 @@ namespace ShipShop.API.Controllers
                 return NotFound();
             }
             return Ok(order);
+        }
+        [HttpGet]
+        [Route("[action]/{customerId}")]
+        public async Task<IActionResult> GetAllOrdersByCustomerId(int customerId)
+        {
+            var orders= await _orderService.GetAllOrdersByCustomerId(customerId);
+            if (orders == null )
+            {
+                return NotFound();
+            }
+            return Ok(orders);
+        }
+        [HttpPost("{customerId}")]
+        public async Task<IActionResult> CreateOrder(OrderCommand orderCommand , int customerId)
+        {
+            await _orderService.CreateOrder(orderCommand,customerId);
+            return Ok();    
         }
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteOrder(int id)

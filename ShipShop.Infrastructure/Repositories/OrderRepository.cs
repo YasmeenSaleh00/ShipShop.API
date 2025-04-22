@@ -50,13 +50,24 @@ namespace ShipShop.Infrastructure.Repositories
             return orders;
         }
 
+        public async Task<List<Order>> GetAllOrdersByCustomerId(int customerId)
+        {
+            var orders = await _context.Orders.Include(o => o.Customer)
+                                           .Include(o => o.Items)
+                                           .ThenInclude(od => od.Product)
+                                           .Include(od => od.LookupItem)
+                                           .Where(o => o.CustomerId == customerId).ToListAsync();
+
+            return orders;
+        }
+
         public async Task<Order> GetById(int id)
         {
             var order = await _context.Orders.Include(o => o.Customer)
                                            .Include(o => o.Items)
                                            .ThenInclude(od => od.Product)
                                            .Include(od => od.LookupItem)
-                                           .FirstOrDefaultAsync(o => o.Id == id);
+                                           .FirstOrDefaultAsync(o => o.CustomerId == id);
             return order;
         }
 

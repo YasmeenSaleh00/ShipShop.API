@@ -21,11 +21,11 @@ namespace ShipShop.Core.Entities
 
         public string? Note { get; set; }
         public float TotalPrice { get; set; }
-        public string Feedback { get; set; }
+
 
         public int CustomerId { get; set; }
         public Customer Customer { get; set; }
-        public int CartId { get; set; }
+        public int? CartId { get; set; }
         public Cart Cart { get; set; }  
         public List<OrderItem> Items { get; set; }
     }

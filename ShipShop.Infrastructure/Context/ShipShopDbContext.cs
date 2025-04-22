@@ -243,6 +243,14 @@ namespace ShipShop.Infrastructure.Context
                 .WithMany(l=>l.Carts)
                 .HasForeignKey(c => c.StatusCartId)
                 .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Order>()
+          .HasOne(o => o.Cart) // الـ Order يحتوي على Cart واحد
+          .WithOne(c => c.Order) // الـ Cart يحتوي على Order واحد فقط
+          .HasForeignKey<Order>(o => o.CartId) // تحديد الـ Foreign Key في الـ Order
+          .OnDelete(DeleteBehavior.SetNull); // لا يتم حذف الطلب إذا تم حذف الكارت
+
+
+
         }
     }
 }
