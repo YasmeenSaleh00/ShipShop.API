@@ -55,11 +55,14 @@ namespace ShipShop.Application.Services
             result.DeliveryDate = order.DeliveryDate.ToString();
             result.OrderStatus = order.LookupItem.Value;
             result.TotalPrice= order.TotalPrice;
+            result.OrderStatusId = order.OrderStatusId;
+           
             result.Items = order.Items.Select(x=>new OrderItemModel
             {
                 ProductName = x.Product.Name,
                 Quantity = x.Quantity,
-                UnitPrice = x.UnitPrice
+                UnitPrice = x.UnitPrice,
+                ImageUrl= $"https://localhost:7057/Images/{x.Product.ImageUrl}"
             }).ToList();    
         
           
@@ -84,11 +87,13 @@ namespace ShipShop.Application.Services
 
                 OrderStatus = x.LookupItem.Value,
                 CustomerPhone = x.Phone,
+                OrderStatusId=x.OrderStatusId,
                 Items = x.Items.Select(i => new OrderItemModel
                 {
                     ProductName = i.Product.Name,
                     Quantity = i.Quantity,
-                    UnitPrice = i.UnitPrice
+                    UnitPrice = i.UnitPrice,
+                    ImageUrl = $"https://localhost:7057/Images/{i.Product.ImageUrl}"
                 }).ToList(),
 
 
@@ -135,6 +140,21 @@ namespace ShipShop.Application.Services
 
             return orderId;
         }
+        public async Task<bool> UpdateOrderStatus(int orderId, int orderStatusId)
+        {
+            var order = await _orderRepository.GetById(orderId);
+            if (order == null)
+            {
+                
+                return false;
+            }
+            order.OrderStatusId = orderStatusId;
+            order.UpdatedOn = DateTime.Now;
+            await _orderRepository.Update(order); 
+            return true;
 
+        }
+        
     }
+   
 }

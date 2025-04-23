@@ -13,6 +13,8 @@ namespace ShipShop.Application.Models
         public string CustomerName { get; set; }
         public string CustomerPhone { get; set; }
         public string OrderStatus { get; set; }
+
+        public int OrderStatusId { get; set; }
         public string OrderDate { get; set; }
         public string ShippingAddress { get; set; }
         public string DeliveryDate { get; set; }

@@ -55,7 +55,7 @@ namespace ShipShop.Infrastructure.Context
              new LookupItem { Id=3,Value= "Active",LookupTypeId=2 },
              new LookupItem { Id = 4, Value = "Banned", LookupTypeId = 2 },
              new LookupItem { Id = 5, Value = "New", LookupTypeId = 3 },
-             new LookupItem { Id = 6, Value = "Confirmed", LookupTypeId = 3 },
+             new LookupItem { Id = 6, Value = "Processing", LookupTypeId = 3 },
              new LookupItem { Id = 7, Value = "Cancelled", LookupTypeId = 3 },
              new LookupItem { Id = 8, Value = "Delivered", LookupTypeId = 3 },
              new LookupItem { Id = 9, Value = "Active", LookupTypeId = 4 },

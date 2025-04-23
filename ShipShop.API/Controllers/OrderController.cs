@@ -52,6 +52,24 @@ namespace ShipShop.API.Controllers
             await _orderService.CreateOrder(orderCommand,customerId);
             return Ok();    
         }
+        [HttpPut("update-status")]
+        public async Task<IActionResult> UpdateOrderStatus([FromBody] UpdateOrderStatusCommand request)
+        {
+            if (request.OrderId <= 0 || request.OrderStatusId <= 0)
+            {
+                return BadRequest("Invalid OrderId or OrderStatusId");
+            }
+
+            var result = await _orderService.UpdateOrderStatus(request.OrderId, request.OrderStatusId);
+
+            if (result)
+            {
+                return Ok();
+            }
+
+            return NotFound("Order not found.");
+        }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteOrder(int id)
         { 

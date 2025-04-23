@@ -36,6 +36,7 @@ namespace ShipShop.Application.Services
             lookupModel.Value = lookups.Value;
             lookupModel.CreatedOn=lookups.CreatedOn.ToShortDateString();    
             lookupModel.IsActive=lookups.IsActive;
+          
        
             return lookupModel;
         }
@@ -49,6 +50,7 @@ namespace ShipShop.Application.Services
                 Id = s.Id,
                 TypeName = s.LookupType.Name,
                 Value = s.Value,
+                LookupTypeId = LookupTypeId
 
                 
 

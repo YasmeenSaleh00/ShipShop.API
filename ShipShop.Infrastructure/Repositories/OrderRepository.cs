@@ -67,7 +67,7 @@ namespace ShipShop.Infrastructure.Repositories
                                            .Include(o => o.Items)
                                            .ThenInclude(od => od.Product)
                                            .Include(od => od.LookupItem)
-                                           .FirstOrDefaultAsync(o => o.CustomerId == id);
+                                           .FirstOrDefaultAsync(o => o.Id == id);
             return order;
         }
 

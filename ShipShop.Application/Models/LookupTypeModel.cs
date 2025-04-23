@@ -8,10 +8,10 @@ namespace ShipShop.Application.Models
 {
     public class LookupTypeModel
     {
-        public int Id { get; set; }
+        public int Id { get; set; }     
         public string TypeName { get; set; }
-        public string Value { get; set; }
-      
-       
+        public string Value { get; set; }  
+        public int LookupTypeId { get; set; } 
     }
+
 }
