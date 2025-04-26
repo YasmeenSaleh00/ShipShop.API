@@ -46,6 +46,42 @@ namespace ShipShop.API.Controllers
             }
             return Ok(orders);
         }
+        [HttpGet]
+        [Route("sort-by-customer-name/{sortDirection}")]
+
+        public async Task<IActionResult> SortByCustomer(string sortDirection)
+        {
+            var orders = await _orderService.SortByName(sortDirection);
+            if (orders == null || orders.Count == 0)
+            {
+                return NotFound();
+            }
+            return Ok(orders);
+        }
+ 
+        [HttpGet]
+        [Route("sort-by-id/{sortDirection}")]
+        public async Task<IActionResult> SortById(string sortDirection)
+        {
+            var orders = await _orderService.SortById(sortDirection);
+            return Ok(orders);
+
+        }
+        [HttpGet]
+        [Route("sort-by-creation-date/{sortDirection}")]
+        public async Task<IActionResult> SortByCreationDate(string sortDirection)
+        {
+            var orders = await _orderService.SortByCreation(sortDirection);
+            return Ok(orders);
+        }
+
+        [HttpGet]
+        [Route("sort-by-delivery-date/{sortDirection}")]
+        public async Task<IActionResult> SortByDeliveryDate(string sortDirection)
+        {
+            var orders = await _orderService.SortByDeliveryDate(sortDirection);
+            return Ok(orders);
+        }
         [HttpPost("{customerId}")]
         public async Task<IActionResult> CreateOrder(OrderCommand orderCommand , int customerId)
         {

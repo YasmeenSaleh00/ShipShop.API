@@ -96,11 +96,11 @@ namespace ShipShop.Infrastructure.Repositories
 
             if (cart != null)
             {
-                _context.CartItems.RemoveRange(cart.CartItems); // امسح الاصناف
+                _context.CartItems.RemoveRange(cart.CartItems);  
 
-                _context.Carts.Remove(cart); // امسح الكارت نفسه
+                _context.Carts.Remove(cart);  
 
-                await _context.SaveChangesAsync(); // حفظ التغييرات
+                await _context.SaveChangesAsync(); 
             }
         }
 

@@ -9,7 +9,8 @@ namespace ShipShop.Core.Interfaces
 {
     public interface IOrderRepository:IRepository<Order>
     {
-        Task<float> CalculateTotalAmount(int id);
-        Task<List<Order>> GetAllOrdersByCustomerId(int customerId);   
+    
+        Task<List<Order>> GetAllOrdersByCustomerId(int customerId);
+        Task<List<Order>> SortByDeliveryDate(string sortDirection);
     }
 }

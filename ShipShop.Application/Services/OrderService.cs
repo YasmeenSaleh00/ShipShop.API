@@ -5,6 +5,7 @@ using ShipShop.Core.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -154,7 +155,115 @@ namespace ShipShop.Application.Services
             return true;
 
         }
-        
+        public async Task<List<OrderModel>> SortById(string sortDirection)
+        {
+            var order=await _orderRepository.SortById(sortDirection);
+
+            List<OrderModel> list = order.Select(x=>new OrderModel
+            {
+                OrderNumber=x.Id,
+                CustomerName=x.CustomerName,
+                CustomerPhone=x.Phone,
+                OrderStatus=x.LookupItem.Value,
+                OrderDate = x.CreatedOn.ToShortDateString(),
+                OrderStatusId =x.OrderStatusId,
+                ShippingAddress=x.ShippingAddress,
+                DeliveryDate=x.DeliveryDate.ToString(),
+                Notes=x.Note,
+                TotalPrice=x.TotalPrice,
+                Items = x.Items.Select(i => new OrderItemModel
+                {
+                    ProductName = i.Product.Name,
+                    Quantity = i.Quantity,
+                    UnitPrice = i.UnitPrice,
+                    ImageUrl = $"https://localhost:7057/Images/{i.Product.ImageUrl}"
+                }).ToList(),
+
+            }).ToList();    
+            return list;
+        }
+
+        public async Task<List<OrderModel>> SortByName(string sortDirection)
+        {
+            var order = await _orderRepository.SortByName(sortDirection);
+
+            List<OrderModel> list = order.Select(x => new OrderModel
+            {
+                OrderNumber = x.Id,
+                CustomerName = x.CustomerName,
+                CustomerPhone = x.Phone,
+                OrderStatus = x.LookupItem.Value,
+                OrderDate = x.CreatedOn.ToShortDateString(),
+                OrderStatusId = x.OrderStatusId,
+                ShippingAddress = x.ShippingAddress,
+                DeliveryDate = x.DeliveryDate.ToString(),
+                Notes = x.Note,
+                TotalPrice = x.TotalPrice,
+                Items = x.Items.Select(i => new OrderItemModel
+                {
+                    ProductName = i.Product.Name,
+                    Quantity = i.Quantity,
+                    UnitPrice = i.UnitPrice,
+                    ImageUrl = $"https://localhost:7057/Images/{i.Product.ImageUrl}"
+                }).ToList(),
+
+            }).ToList();
+            return list;
+        }
+        public async Task<List<OrderModel>> SortByCreation(string sortDirection)
+        {
+            var order = await _orderRepository.SortByCreationDate(sortDirection);
+
+            List<OrderModel> list = order.Select(x => new OrderModel
+            {
+                OrderNumber = x.Id,
+                CustomerName = x.CustomerName,
+                CustomerPhone = x.Phone,
+                OrderStatus = x.LookupItem.Value,
+                OrderDate = x.CreatedOn.ToShortDateString(),
+                OrderStatusId = x.OrderStatusId,
+                ShippingAddress = x.ShippingAddress,
+                DeliveryDate = x.DeliveryDate.ToString(),
+                Notes = x.Note,
+                TotalPrice = x.TotalPrice,
+                Items = x.Items.Select(i => new OrderItemModel
+                {
+                    ProductName = i.Product.Name,
+                    Quantity = i.Quantity,
+                    UnitPrice = i.UnitPrice,
+                    ImageUrl = $"https://localhost:7057/Images/{i.Product.ImageUrl}"
+                }).ToList(),
+
+            }).ToList();
+            return list;
+        }
+        public async Task<List<OrderModel>> SortByDeliveryDate(string sortDirection)
+        {
+            var order = await _orderRepository.SortByDeliveryDate(sortDirection);
+
+            List<OrderModel> list = order.Select(x => new OrderModel
+            {
+                OrderNumber = x.Id,
+                CustomerName = x.CustomerName,
+                CustomerPhone = x.Phone,
+                OrderStatus = x.LookupItem.Value,
+                OrderDate = x.CreatedOn.ToShortDateString(),
+                OrderStatusId = x.OrderStatusId,
+                ShippingAddress = x.ShippingAddress,
+                DeliveryDate = x.DeliveryDate.ToString(),
+                Notes = x.Note,
+                TotalPrice = x.TotalPrice,
+                Items = x.Items.Select(i => new OrderItemModel
+                {
+                    ProductName = i.Product.Name,
+                    Quantity = i.Quantity,
+                    UnitPrice = i.UnitPrice,
+                    ImageUrl = $"https://localhost:7057/Images/{i.Product.ImageUrl}"
+                }).ToList(),
+
+            }).ToList();
+            return list;
+        }
     }
    
 }

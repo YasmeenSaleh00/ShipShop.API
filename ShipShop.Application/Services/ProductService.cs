@@ -30,7 +30,7 @@ namespace ShipShop.Application.Services
                 NameAr=command.NameAr,  
                 CreatedOn = DateTime.Now,
                 BrandId = command.BrandId,
-      Quantity=command.Quantity,
+                 Quantity=command.Quantity,
 
                 Description = command.Description,
                 DescriptionAr= command.DescriptionAr,

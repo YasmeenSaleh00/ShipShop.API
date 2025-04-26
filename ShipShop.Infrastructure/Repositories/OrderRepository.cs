@@ -27,10 +27,7 @@ namespace ShipShop.Infrastructure.Repositories
        
         }
 
-        public Task<float> CalculateTotalAmount(int id)
-        {
-            throw new NotImplementedException();
-        }
+      
 
         public async Task Delete(int id)
         {
@@ -71,19 +68,72 @@ namespace ShipShop.Infrastructure.Repositories
             return order;
         }
 
-        public Task<List<Order>> SortByCreationDate(string sortDirection)
+        public async Task<List<Order>> SortByCreationDate(string sortDirection)
         {
-            throw new NotImplementedException();
+            IQueryable<Order> orders = _context.Orders.Include(o => o.Customer)
+                                           .Include(o => o.Items)
+                                           .ThenInclude(od => od.Product)
+                                           .Include(od => od.LookupItem);
+           if (sortDirection == "desc")
+            {
+               orders= orders.OrderByDescending(x => x.CreatedOn);
+            }
+            if (sortDirection == "asc")
+            {
+                orders = orders.OrderBy(x => x.CreatedOn);
+            }
+            return await orders.ToListAsync();
         }
 
-        public Task<List<Order>> SortById(string sortDirection)
+        public async Task<List<Order>> SortByDeliveryDate(string sortDirection)
         {
-            throw new NotImplementedException();
+            IQueryable<Order> orders = _context.Orders.Include(o => o.Customer)
+                                            .Include(o => o.Items)
+                                            .ThenInclude(od => od.Product)
+                                            .Include(od => od.LookupItem);
+            if (sortDirection == "desc")
+            {
+                orders = orders.OrderByDescending(x => x.DeliveryDate);
+            }
+            if (sortDirection == "asc")
+            {
+                orders = orders.OrderBy(x => x.DeliveryDate);
+            }
+            return await orders.ToListAsync();
         }
 
-        public Task<List<Order>> SortByName(string sortDirection)
+        public async Task<List<Order>> SortById(string sortDirection)
         {
-            throw new NotImplementedException();
+            IQueryable<Order> orders =  _context.Orders.Include(o => o.Customer)
+                                           .Include(o => o.Items)
+                                           .ThenInclude(od => od.Product)
+                                           .Include(od => od.LookupItem);
+            if (sortDirection == "desc")
+            {
+                orders = orders.OrderByDescending(x => x.Id);
+            }
+            if (sortDirection == "asc")
+            {
+                orders = orders.OrderBy(x => x.Id);
+            }
+            return await orders.ToListAsync();
+        }
+
+        public async Task<List<Order>> SortByName(string sortDirection)
+        {
+            IQueryable<Order> orders = _context.Orders.Include(o => o.Customer)
+                               .Include(o => o.Items)
+                               .ThenInclude(od => od.Product)
+                               .Include(od => od.LookupItem);
+            if (sortDirection == "desc")
+            {
+                orders = orders.OrderByDescending(x => x.CustomerName);
+            }
+            if (sortDirection == "asc")
+            {
+                orders = orders.OrderBy(x => x.CustomerName);
+            }
+            return await orders.ToListAsync();
         }
 
         public async Task Update(Order input)
