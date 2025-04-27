@@ -10,41 +10,42 @@ using System.Threading.Tasks;
 
 namespace ShipShop.Application.Services
 {
-    public class CategoryService
+    public class SubCategoryService
     {
-        private readonly IRepository<Category> _repository;
+        private readonly ISubCategoryRepository _repository;
+      
 
-        public CategoryService(IRepository<Category> repository)
+        public SubCategoryService(ISubCategoryRepository repository)
         {
-            _repository = repository;
+            this._repository = repository;
+          
         }
-
-        public async Task<int> AddCategory(CategoryCommand command)
+        public async Task<int> AddCategory(SubCategoryCommand command)
         {
-            if (command == null)
+            if(command == null)
             {
                 throw new Exception("Please Fill in the data");
             }
-            var category = new Category()
+            var category=new SubCategory()
             {
                 Name = command.Name,
-                NameAr = command.NameAr,
-                DescriptionAr = command.DescriptionAr,
-                ImageUrl = command.ImageUrl,
-
+                NameAr=command.NameAr,
+                DescriptionAr=command.DescriptionAr,
+                ImageUrl= command.ImageUrl, 
+               CategoryId=command.CategoryId,
                 Description = command.Description,
-
+              
             };
             return await _repository.Add(category);
         }
 
-        public async Task<List<CategoryModel>> GetAllCategory()
+        public async Task<List<SubCategoryModel>> GetAllCategory()
         {
             var categories = await _repository.GetAll();
 
-            List<CategoryModel> result = new List<CategoryModel>();
+            List<SubCategoryModel> result = new List<SubCategoryModel>();
 
-            result = categories.Select(x => new CategoryModel
+            result = categories.Select(x => new SubCategoryModel
             {
                 Id = x.Id,
                 Name = x.Name,
@@ -52,8 +53,9 @@ namespace ShipShop.Application.Services
                 CreatedOn = x.CreatedOn.ToShortDateString(),
                 UpdatedOn = x.UpdatedOn.ToString(),
                 NameAr = x.NameAr,
-                DescriptionAr = x.DescriptionAr,
+                DescriptionAr=x.DescriptionAr,
                 ImageUrl = $"https://localhost:7057/Images/{x.ImageUrl}",
+                MainCategory=x.Category.Name,
 
 
                 IsActive = x.IsActive
@@ -62,10 +64,10 @@ namespace ShipShop.Application.Services
             return result;
 
         }
-        public async Task<List<CategoryModel>> SortByCreationDate(string sortDirection)
+        public async Task<List<SubCategoryModel>> SortByCreationDate(string sortDirection)
         {
             var category = await _repository.SortByCreationDate(sortDirection);
-            List<CategoryModel> productModels = category.Select(x => new CategoryModel
+            List<SubCategoryModel> categoryModels = category.Select(x => new SubCategoryModel
             {
                 Id = x.Id,
                 Name = x.Name,
@@ -73,20 +75,20 @@ namespace ShipShop.Application.Services
                 Description = x.Description,
                 DescriptionAr = x.DescriptionAr,
                 ImageUrl = $"https://localhost:7057/Images/{x.ImageUrl}",
-
+                MainCategory = x.Category.Name,
                 CreatedOn = x.CreatedOn.ToShortDateString(),
                 UpdatedOn = x.UpdatedOn.ToString(),
-
+              
                 IsActive = x.IsActive,
-
+            
             }).ToList();
-            return productModels;
+            return categoryModels;
 
         }
-        public async Task<List<CategoryModel>> SortByName(string sortDirection)
+        public async Task<List<SubCategoryModel>> SortByName(string sortDirection)
         {
             var category = await _repository.SortByName(sortDirection);
-            List<CategoryModel> productModels = category.Select(x => new CategoryModel
+            List<SubCategoryModel> categoryModels = category.Select(x => new SubCategoryModel
             {
                 Id = x.Id,
                 Name = x.Name,
@@ -94,21 +96,20 @@ namespace ShipShop.Application.Services
                 Description = x.Description,
                 DescriptionAr = x.DescriptionAr,
                 ImageUrl = $"https://localhost:7057/Images/{x.ImageUrl}",
-
+                MainCategory = x.Category.Name,
                 CreatedOn = x.CreatedOn.ToShortDateString(),
                 UpdatedOn = x.UpdatedOn.ToString(),
 
                 IsActive = x.IsActive,
 
             }).ToList();
-            return productModels;
+            return categoryModels;
 
         }
-
-        public async Task<List<CategoryModel>> SortById(string sortDirection)
+        public async Task<List<SubCategoryModel>> SortById(string sortDirection)
         {
             var category = await _repository.SortById(sortDirection);
-            List<CategoryModel> productModels = category.Select(x => new CategoryModel
+            List<SubCategoryModel> categoryModels = category.Select(x => new SubCategoryModel
             {
                 Id = x.Id,
                 Name = x.Name,
@@ -116,46 +117,70 @@ namespace ShipShop.Application.Services
                 Description = x.Description,
                 DescriptionAr = x.DescriptionAr,
                 ImageUrl = $"https://localhost:7057/Images/{x.ImageUrl}",
-
+                MainCategory = x.Category.Name,
                 CreatedOn = x.CreatedOn.ToShortDateString(),
                 UpdatedOn = x.UpdatedOn.ToString(),
 
                 IsActive = x.IsActive,
 
             }).ToList();
-            return productModels;
+            return categoryModels;
 
         }
-        public async Task<CategoryModel> GetById(int id)
+        public async Task<SubCategoryModel> GetById(int id)
         {
             var category = await _repository.GetById(id);
             if (category == null)
                 return null;
-            CategoryModel result = new CategoryModel();
+            SubCategoryModel result = new SubCategoryModel();
             result.Id = category.Id;
             result.Name = category.Name;
             result.Description = category.Description;
             result.NameAr = category.NameAr;
             result.DescriptionAr = category.DescriptionAr;
             result.CreatedOn = category.CreatedOn.ToShortDateString();
-            result.UpdatedOn = category.UpdatedOn.ToString();
+            result.UpdatedOn = category.UpdatedOn.ToString()   ;
             result.IsActive = category.IsActive;
             result.ImageUrl = $"https://localhost:7057/Images/{category.ImageUrl}";
+            result.MainCategory= category.Category.Name; 
             return result;
         }
-
-        public async Task UpdateCategory(int id, UpdateCategoryCommand command)
+        public async Task<List<SubCategoryModel>> GetSubCategoriesByCategoryId(int categoryId)
         {
-
-            var category = new Category()
+            var category =await _repository.GetSubCategoriesByCategoryId(categoryId);
+            List<SubCategoryModel> categoryModels = category.Select(x => new SubCategoryModel
             {
-                Id = id,
+                Id = x.Id,
+                Name = x.Name,
+                NameAr = x.NameAr,
+                Description = x.Description,
+                DescriptionAr = x.DescriptionAr,
+                ImageUrl = $"https://localhost:7057/Images/{x.ImageUrl}",
+                MainCategory = x.Category.Name,
+                CreatedOn = x.CreatedOn.ToShortDateString(),
+                UpdatedOn = x.UpdatedOn.ToString(),
+
+                IsActive = x.IsActive,
+
+            }).ToList();
+
+            return categoryModels;
+
+        }
+        public async Task UpdateCategory(int id, UpdateSubCategoryCommand command)
+        {
+     
+            var category = new SubCategory()
+            {
+                Id=id,
                 Name = command.Name,
                 Description = command.Description,
                 ImageUrl = command.ImagePath,
-                DescriptionAr = command.DescriptionAr,
-                NameAr = command.NameAr,
-                IsActive = command.IsActive,
+                DescriptionAr =command.DescriptionAr,
+               NameAr=command.NameAr,
+               IsActive=command.IsActive,
+                      CategoryId=command.CategoryId,
+               
 
                 UpdatedOn = DateTime.Now,
 
@@ -166,7 +191,7 @@ namespace ShipShop.Application.Services
         public async Task DeleteCategory(int id)
         {
             var category = await _repository.GetById(id);
-            if (category == null)
+            if(category == null)
             {
                 throw new Exception("no category with the given id");
             }

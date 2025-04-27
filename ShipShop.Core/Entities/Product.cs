@@ -20,8 +20,9 @@ namespace ShipShop.Core.Entities
        [ForeignKey("LookupItem")]
         public int ProductStatusId { get; set; }
         public LookupItem LookupItem { get; set; }
-        public int CategoryId { get; set; }
-        public Category Category { get; set; }
+        [ForeignKey("SubCategory")]
+        public int SubCategoryId { get; set; }
+        public SubCategory SubCategory { get; set; }
         public int BrandId { get; set; }
         public Brand Brand { get; set; }
         public List<OrderItem> Items { get; set; }

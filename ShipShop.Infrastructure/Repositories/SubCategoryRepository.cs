@@ -10,18 +10,18 @@ using System.Threading.Tasks;
 
 namespace ShipShop.Infrastructure.Repositories
 {
-    public class CategoryRepository : IRepository<Category>
+    public class SubCategoryRepository : ISubCategoryRepository
     {
         private readonly ShipShopDbContext _context;
 
-        public CategoryRepository(ShipShopDbContext context)
+        public SubCategoryRepository(ShipShopDbContext context)
         {
             _context = context;
         }
 
-        public async Task<int> Add(Category input)
+        public async Task<int> Add(SubCategory input)
         {
-            await _context.Categories.AddAsync(input);
+          await  _context.SubCategories.AddAsync(input);
             await _context.SaveChangesAsync();
             return input.Id;
         }
@@ -31,24 +31,31 @@ namespace ShipShop.Infrastructure.Repositories
             var category = await GetById(id);
             _context.Remove(category);
             await _context.SaveChangesAsync();
+
         }
 
-        public async Task<List<Category>> GetAll()
+        public async Task<List<SubCategory>> GetAll()
         {
-            var categories = await _context.Categories.AsNoTracking().ToListAsync();
+            var categories = await _context.SubCategories.Include(x=>x.Category).AsNoTracking().ToListAsync();
             return categories;
-
         }
 
-        public async Task<Category> GetById(int id)
+        public async Task<SubCategory> GetById(int id)
         {
-            var category = await _context.Categories.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+            var category = await _context.SubCategories.Include(x => x.Category).AsNoTracking().FirstOrDefaultAsync(x=>x.Id == id);
             return category;
         }
 
-        public async Task<List<Category>> SortByCreationDate(string sortDirection)
+        public async Task<List<SubCategory>> GetSubCategoriesByCategoryId(int categoryId)
         {
-            IQueryable<Category> query = _context.Categories;
+            var category = await _context.SubCategories.Include(x => x.Category).AsNoTracking().Where(x => x.CategoryId == categoryId).ToListAsync();
+            return category;
+
+        }
+
+        public async Task<List<SubCategory>> SortByCreationDate(string sortDirection)
+        {
+            IQueryable<SubCategory> query = _context.SubCategories.Include(x => x.Category);
             if (sortDirection == "desc")
             {
                 query = query.OrderByDescending(x => x.CreatedOn);
@@ -61,10 +68,9 @@ namespace ShipShop.Infrastructure.Repositories
             return await query.ToListAsync();
         }
 
-        public async Task<List<Category>> SortById(string sortDirection)
+        public async Task<List<SubCategory>> SortById(string sortDirection)
         {
-
-            IQueryable<Category> query = _context.Categories;
+            IQueryable<SubCategory> query = _context.SubCategories.Include(x => x.Category);
             if (sortDirection == "desc")
             {
                 query = query.OrderByDescending(x => x.Id);
@@ -77,9 +83,10 @@ namespace ShipShop.Infrastructure.Repositories
             return await query.ToListAsync();
         }
 
-        public async Task<List<Category>> SortByName(string sortDirection)
+        public async Task<List<SubCategory>> SortByName(string sortDirection)
         {
-            IQueryable<Category> query = _context.Categories;
+            IQueryable<SubCategory> query = _context.SubCategories.Include(x => x.Category);
+
             if (sortDirection == "desc")
             {
                 query = query.OrderByDescending(x => x.Name);
@@ -92,9 +99,10 @@ namespace ShipShop.Infrastructure.Repositories
             return await query.ToListAsync();
         }
 
-        public async Task Update(Category input)
+        public async Task Update(SubCategory input)
         {
-            _context.Categories.Update(input);
+
+            _context.SubCategories.Update(input);
             await _context.SaveChangesAsync();
         }
     }

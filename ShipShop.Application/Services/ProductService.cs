@@ -25,7 +25,7 @@ namespace ShipShop.Application.Services
         {
             Product product = new Product()
             {
-                CategoryId = command.CategoryId,
+                SubCategoryId = command.SubCategoryId,
                 Name = command.Name,
                 NameAr=command.NameAr,  
                 CreatedOn = DateTime.Now,
@@ -50,7 +50,7 @@ namespace ShipShop.Application.Services
             {
                 Id = id,
                 Name = command.Name,
-                CategoryId = command.CategoryId,
+                SubCategoryId = command.SubCategoryId,
                 NameAr = command.NameAr,
                 Description = command.Description,
                 DescriptionAr = command.DescriptionAr,
@@ -92,7 +92,7 @@ namespace ShipShop.Application.Services
                 ProductStatus = x.LookupItem.Value,
                 CreatedOn = x.CreatedOn.ToShortDateString(),
                 UpdatedOn = x.UpdatedOn.ToString(),
-                CategoryName = x.Category.Name,
+                CategoryName = x.SubCategory.Name,
                 ImageUrl = $"https://localhost:7057/Images/{x.ImageUrl}",
                 IsActive= x.IsActive,  
                 Quantity=x.Quantity
@@ -116,7 +116,7 @@ namespace ShipShop.Application.Services
             productmodel.DescriptionAr = product.DescriptionAr;
             productmodel.Price = product.Price;
             productmodel.TaxPercentage = product.TaxPercentage;
-            productmodel.CategoryName = product.Category.Name;
+            productmodel.CategoryName = product.SubCategory.Name;
             productmodel.BrandName = product.Brand.NameAr;
             productmodel.ProductStatus = product.LookupItem.Value;
             productmodel.CreatedOn = product.CreatedOn.ToShortDateString();
@@ -145,7 +145,7 @@ namespace ShipShop.Application.Services
                 UpdatedOn = x.UpdatedOn.ToString(),
                 ImageUrl = $"https://localhost:7057/Images/{x.ImageUrl}",
                 IsActive = x.IsActive,
-                CategoryName = x.Category.Name,
+                CategoryName = x.SubCategory.Name,
                 BrandName = x.Brand.Name,
                 ProductStatus = x.LookupItem.Value,
                 Quantity = x.Quantity,
@@ -170,7 +170,7 @@ namespace ShipShop.Application.Services
                 UpdatedOn = x.UpdatedOn.ToString(),
                 ImageUrl = $"https://localhost:7057/Images/{x.ImageUrl}",
                 IsActive = x.IsActive,
-                CategoryName = x.Category.Name,
+                CategoryName = x.SubCategory.Name,
                 BrandName = x.Brand.Name,
                 ProductStatus = x.LookupItem.Value,
                 Quantity = x.Quantity,
@@ -194,7 +194,7 @@ namespace ShipShop.Application.Services
                 UpdatedOn = x.UpdatedOn.ToString(),
                 ImageUrl = $"https://localhost:7057/Images/{x.ImageUrl}",
                 IsActive = x.IsActive,  
-                CategoryName = x.Category.Name, 
+                CategoryName = x.SubCategory.Name, 
                BrandName=x.Brand.Name,
                ProductStatus=x.LookupItem.Value,
                Quantity=x.Quantity, 
@@ -219,7 +219,7 @@ namespace ShipShop.Application.Services
                 UpdatedOn = x.UpdatedOn.ToString(),
                 ImageUrl = $"https://localhost:7057/Images/{x.ImageUrl}",
                 IsActive= x.IsActive,
-                CategoryName = x.Category.Name,
+                CategoryName = x.SubCategory.Name,
                 BrandName = x.Brand.Name,
                 ProductStatus = x.LookupItem.Value,
                 Quantity = x.Quantity,
@@ -243,7 +243,7 @@ namespace ShipShop.Application.Services
                 UpdatedOn = x.UpdatedOn.ToString(),
                 ImageUrl = $"https://localhost:7057/Images/{x.ImageUrl}",
                 IsActive = x.IsActive,
-                CategoryName = x.Category.Name,
+                CategoryName = x.SubCategory.Name,
                 BrandName = x.Brand.Name,
                 ProductStatus = x.LookupItem.Value,
                 Quantity = x.Quantity,
@@ -266,7 +266,7 @@ namespace ShipShop.Application.Services
                 UpdatedOn = x.UpdatedOn.ToString(),
                 ImageUrl = $"https://localhost:7057/Images/{x.ImageUrl}",
                 IsActive= x.IsActive,
-                CategoryName = x.Category.Name,
+                CategoryName = x.SubCategory.Name,
                 BrandName = x.Brand.Name,
                 ProductStatus = x.LookupItem.Value,
                 Quantity = x.Quantity,

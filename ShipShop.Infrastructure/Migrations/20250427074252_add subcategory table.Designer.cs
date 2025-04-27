@@ -12,8 +12,8 @@ using ShipShop.Infrastructure.Context;
 namespace ShipShop.Infrastructure.Migrations
 {
     [DbContext(typeof(ShipShopDbContext))]
-    [Migration("20250418102047_proprty for category table")]
-    partial class proprtyforcategorytable
+    [Migration("20250427074252_add subcategory table")]
+    partial class addsubcategorytable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -138,52 +138,6 @@ namespace ShipShop.Infrastructure.Migrations
                     b.ToTable("CartItems");
                 });
 
-            modelBuilder.Entity("ShipShop.Core.Entities.Category", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedOn")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETDATE()");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DescriptionAr")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("NameAr")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime?>("UpdatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Categories");
-                });
-
             modelBuilder.Entity("ShipShop.Core.Entities.LookupItem", b =>
                 {
                     b.Property<int>("Id")
@@ -265,7 +219,7 @@ namespace ShipShop.Infrastructure.Migrations
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsActive = true,
                             LookupTypeId = 3,
-                            Value = "Confirmed"
+                            Value = "Processing"
                         },
                         new
                         {
@@ -377,7 +331,7 @@ namespace ShipShop.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CartId")
+                    b.Property<int?>("CartId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedOn")
@@ -394,10 +348,6 @@ namespace ShipShop.Infrastructure.Migrations
 
                     b.Property<DateOnly>("DeliveryDate")
                         .HasColumnType("date");
-
-                    b.Property<string>("Feedback")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
@@ -427,7 +377,8 @@ namespace ShipShop.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CartId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[CartId] IS NOT NULL");
 
                     b.HasIndex("CustomerId");
 
@@ -489,9 +440,6 @@ namespace ShipShop.Infrastructure.Migrations
                     b.Property<int>("BrandId")
                         .HasColumnType("int");
 
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
@@ -531,6 +479,9 @@ namespace ShipShop.Infrastructure.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
+                    b.Property<int>("SubCategoryId")
+                        .HasColumnType("int");
+
                     b.Property<float>("TaxPercentage")
                         .HasColumnType("real");
 
@@ -541,9 +492,9 @@ namespace ShipShop.Infrastructure.Migrations
 
                     b.HasIndex("BrandId");
 
-                    b.HasIndex("CategoryId");
-
                     b.HasIndex("ProductStatusId");
+
+                    b.HasIndex("SubCategoryId");
 
                     b.ToTable("Products");
                 });
@@ -606,6 +557,52 @@ namespace ShipShop.Infrastructure.Migrations
                             IsActive = true,
                             Name = "Read"
                         });
+                });
+
+            modelBuilder.Entity("ShipShop.Core.Entities.SubCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedOn")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DescriptionAr")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("NameAr")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SubCategories");
                 });
 
             modelBuilder.Entity("ShipShop.Core.Entities.User", b =>
@@ -801,8 +798,7 @@ namespace ShipShop.Infrastructure.Migrations
                     b.HasOne("ShipShop.Core.Entities.Cart", "Cart")
                         .WithOne("Order")
                         .HasForeignKey("ShipShop.Core.Entities.Order", "CartId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("ShipShop.Core.Entities.Customer", "Customer")
                         .WithMany("Orders")
@@ -850,23 +846,23 @@ namespace ShipShop.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ShipShop.Core.Entities.Category", "Category")
-                        .WithMany("Products")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("ShipShop.Core.Entities.LookupItem", "LookupItem")
                         .WithMany("Products")
                         .HasForeignKey("ProductStatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("ShipShop.Core.Entities.SubCategory", "SubCategory")
+                        .WithMany("Products")
+                        .HasForeignKey("SubCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Brand");
 
-                    b.Navigation("Category");
-
                     b.Navigation("LookupItem");
+
+                    b.Navigation("SubCategory");
                 });
 
             modelBuilder.Entity("ShipShop.Core.Entities.User", b =>
@@ -932,11 +928,6 @@ namespace ShipShop.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ShipShop.Core.Entities.Category", b =>
-                {
-                    b.Navigation("Products");
-                });
-
             modelBuilder.Entity("ShipShop.Core.Entities.LookupItem", b =>
                 {
                     b.Navigation("Carts");
@@ -970,6 +961,11 @@ namespace ShipShop.Infrastructure.Migrations
             modelBuilder.Entity("ShipShop.Core.Entities.Role", b =>
                 {
                     b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("ShipShop.Core.Entities.SubCategory", b =>
+                {
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("ShipShop.Core.Entities.WishList", b =>

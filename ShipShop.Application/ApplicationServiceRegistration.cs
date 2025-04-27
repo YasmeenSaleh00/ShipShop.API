@@ -12,6 +12,7 @@ namespace ShipShop.Application
     {
         public static void AddApplicationServices(this IServiceCollection services)
         {
+            services.AddScoped<SubCategoryService>();
             services.AddScoped<CategoryService>();
             services.AddScoped<BrandService>();
             services.AddScoped<LookupService>();   

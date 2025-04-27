@@ -39,7 +39,7 @@ namespace ShipShop.Infrastructure.Repositories
         {
             var products = await _context.Products
                    .Include(x => x.LookupItem)
-                   .Include(x => x.Category)
+                   .Include(x => x.SubCategory)
                    .Include(x => x.Brand)
                    .AsNoTracking()
                    .ToListAsync(); return products;
@@ -48,7 +48,7 @@ namespace ShipShop.Infrastructure.Repositories
         public async Task<Product> GetById(int id)
         {
             var entity = await _context
-                     .Products.AsNoTracking().Include(x => x.Category)
+                     .Products.AsNoTracking().Include(x => x.SubCategory)
                      .Include(x=>x.Brand)
                      .Include(x=>x.LookupItem)
                      .FirstOrDefaultAsync(x => x.Id == id);
@@ -58,7 +58,7 @@ namespace ShipShop.Infrastructure.Repositories
 
         public async Task<List<Product>> GetProductsByBrand(string brandName)
         {
-            var data = await _context.Products.Include(x => x.Category).Include(x => x.Brand).Include(x => x.LookupItem)
+            var data = await _context.Products.Include(x => x.SubCategory).Include(x => x.Brand).Include(x => x.LookupItem)
                 .Where(x =>
 
                 (string.IsNullOrEmpty(brandName) || x.Brand.Name.Contains(brandName)))
@@ -66,12 +66,12 @@ namespace ShipShop.Infrastructure.Repositories
             return data;
         }
 
-        public async Task<List<Product>> GetProductsByFilters( string categoryName)
+        public async Task<List<Product>> GetProductsByFilters(string categoryName)
         {
-            var data = await _context.Products.Include(x => x.Category).Include(x=>x.Brand).Include(x=>x.LookupItem)
+            var data = await _context.Products.Include(x => x.SubCategory).Include(x=>x.Brand).Include(x=>x.LookupItem)
                 .Where(x =>
                
-                (string.IsNullOrEmpty(categoryName) || x.Category.Name.Contains(categoryName)))
+                (string.IsNullOrEmpty(categoryName) || x.SubCategory.Name.Contains(categoryName)))
                 .ToListAsync();
             return data;
 
@@ -79,7 +79,7 @@ namespace ShipShop.Infrastructure.Repositories
 
         public async Task<List<Product>> SortByCreationDate(string sortDirection)
         {
-            IQueryable<Product> query = _context.Products.Include(x=>x.Brand).Include(x=>x.LookupItem).Include(x=>x.Category);
+            IQueryable<Product> query = _context.Products.Include(x=>x.Brand).Include(x=>x.LookupItem).Include(x=>x.SubCategory);
             if (sortDirection == "desc")
             {
                 query = query.OrderByDescending(x => x.CreatedOn);
@@ -95,7 +95,7 @@ namespace ShipShop.Infrastructure.Repositories
 
         public async Task<List<Product>> SortById(string sortDirection)
         {
-            IQueryable<Product> query = _context.Products.Include(x => x.Brand).Include(x => x.LookupItem).Include(x => x.Category);
+            IQueryable<Product> query = _context.Products.Include(x => x.Brand).Include(x => x.LookupItem).Include(x => x.SubCategory);
             if (sortDirection == "desc")
             {
                 query = query.OrderByDescending(x => x.Id);
@@ -110,7 +110,7 @@ namespace ShipShop.Infrastructure.Repositories
 
         public async Task<List<Product>> SortByName(string sortDirection)
         {
-            IQueryable<Product> query = _context.Products.Include(x => x.Brand).Include(x => x.LookupItem).Include(x => x.Category);
+            IQueryable<Product> query = _context.Products.Include(x => x.Brand).Include(x => x.LookupItem).Include(x => x.SubCategory);
             if (sortDirection == "desc")
             {
                 query = query.OrderByDescending(x => x.Name);
@@ -125,7 +125,7 @@ namespace ShipShop.Infrastructure.Repositories
 
         public async Task<List<Product>> SortByPrice(string sortDirection)
         {
-            IQueryable<Product> query = _context.Products.Include(x => x.Brand).Include(x => x.LookupItem).Include(x => x.Category);
+            IQueryable<Product> query = _context.Products.Include(x => x.Brand).Include(x => x.LookupItem).Include(x => x.SubCategory);
 
             if (sortDirection.ToLower() == "desc")
             {

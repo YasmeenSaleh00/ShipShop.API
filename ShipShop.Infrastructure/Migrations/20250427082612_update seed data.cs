@@ -5,28 +5,28 @@
 namespace ShipShop.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class updatesomelookups : Migration
+    public partial class updateseeddata : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.UpdateData(
-                table: "LookupItems",
+                table: "Roles",
                 keyColumn: "Id",
-                keyValue: 6,
-                column: "Value",
-                value: "Processing");
+                keyValue: 1,
+                column: "Name",
+                value: "Add");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.UpdateData(
-                table: "LookupItems",
+                table: "Roles",
                 keyColumn: "Id",
-                keyValue: 6,
-                column: "Value",
-                value: "Confirmed");
+                keyValue: 1,
+                column: "Name",
+                value: "Create");
         }
     }
 }

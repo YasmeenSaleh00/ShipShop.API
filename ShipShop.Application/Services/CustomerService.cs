@@ -43,7 +43,8 @@ namespace ShipShop.Application.Services
                 Password = user.Password,
                 ConfirmPassword = user.ConfirmPassword,
        
-                CustomerStatusId = 3
+                CustomerStatusId = 3,
+                RoleId=4
             };
             await _customerRepository.Singup(newUser);
         }

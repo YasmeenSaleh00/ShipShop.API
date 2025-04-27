@@ -14,6 +14,7 @@ namespace ShipShop.Infrastructure
     {
         public static void AddInfrastructureServices(this IServiceCollection services)
         {
+            services.AddScoped<ISubCategoryRepository, SubCategoryRepository>();
             services.AddScoped<IRepository<Category>, CategoryRepository>();
             services.AddScoped<IRepository<Brand>, BrandRepository>();
             services.AddScoped<ILookupRepository, LookupRepository>();  

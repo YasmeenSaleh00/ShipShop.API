@@ -8,14 +8,17 @@ namespace ShipShop.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoryController : ControllerBase
-    {
-        private readonly CategoryService _categoryService;
 
-        public CategoryController(CategoryService categoryService)
+
+    public class SubCategoryController : ControllerBase
+    {
+        private readonly SubCategoryService _categoryService;
+
+        public SubCategoryController(SubCategoryService categoryService)
         {
-            _categoryService = categoryService;
+            this._categoryService = categoryService;
         }
+
         /// <summary>
         /// This EndPoint To Show All Category
         /// </summary>
@@ -23,10 +26,10 @@ namespace ShipShop.API.Controllers
         public async Task<IActionResult> GetAllCategories()
         {
             var categories = await _categoryService.GetAllCategory();
-            if (categories == null || categories.Count == 0)
+            if(categories == null || categories.Count == 0)
             {
                 return NoContent();
-            }
+            } 
             return Ok(categories);
         }
         [HttpGet]
@@ -34,27 +37,27 @@ namespace ShipShop.API.Controllers
 
         public async Task<IActionResult> SortByName(string sortDirection)
         {
-            var categories = await _categoryService.SortByName(sortDirection);
-            if (categories == null || categories.Count == 0)
+            var subCategories = await _categoryService.SortByName(sortDirection);
+            if (subCategories == null || subCategories.Count == 0)
             {
                 return NotFound();
             }
-            return Ok(categories);
+            return Ok(subCategories);
         }
         [HttpGet]
         [Route("sort-by-id/{sortDirection}")]
         public async Task<IActionResult> SortById(string sortDirection)
         {
-            var categories = await _categoryService.SortById(sortDirection);
-            return Ok(categories);
+            var subCategories = await _categoryService.SortById(sortDirection);
+            return Ok(subCategories);
 
         }
         [HttpGet]
         [Route("sort-by-creation-date/{sortDirection}")]
         public async Task<IActionResult> SortByCreationDate(string sortDirection)
         {
-            var categories = await _categoryService.SortByCreationDate(sortDirection);
-            return Ok(categories);
+            var subCategories = await _categoryService.SortByCreationDate(sortDirection);
+            return Ok(subCategories);
 
         }
         /// <summary>
@@ -65,11 +68,27 @@ namespace ShipShop.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCategory([FromRoute] int id)
         {
-            if (id == 0 || id < 0)
+            if(id == 0 || id < 0)
             {
                 return BadRequest();
             }
             var category = await _categoryService.GetById(id);
+            if(category == null)
+            {
+                return NotFound();
+            }
+            return Ok(category);
+
+        }
+        [HttpGet]
+        [Route("get-by-filter/{categoryId}")]
+        public async Task<IActionResult> GetSubCategoriesByCategoryId(int categoryId)
+        {
+            if (categoryId == 0 || categoryId < 0)
+            {
+                return BadRequest();
+            }
+            var category = await _categoryService.GetSubCategoriesByCategoryId(categoryId);
             if (category == null)
             {
                 return NotFound();
@@ -82,7 +101,7 @@ namespace ShipShop.API.Controllers
         ///</summary>
         [HttpPost]
         [Authorize(Roles = "Add")]
-        public async Task<IActionResult> AddCategory([FromBody] CategoryCommand command)
+        public async Task<IActionResult> AddCategory([FromBody] SubCategoryCommand command)
         {
             var id = await _categoryService.AddCategory(command);
             return Ok();
@@ -93,9 +112,9 @@ namespace ShipShop.API.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = "Edit")]
-        public async Task<IActionResult> UpdateCategory([FromRoute] int id, UpdateCategoryCommand command)
+        public async Task<IActionResult> UpdateCategory([FromRoute]int id, UpdateSubCategoryCommand command)
         {
-            if (id == 0 || id < 0)
+            if(id == 0 || id < 0)
             {
                 return BadRequest();
             }
@@ -114,7 +133,7 @@ namespace ShipShop.API.Controllers
         [Authorize(Roles = "Delete")]
         public async Task<IActionResult> DeleteCategory(int id)
         {
-            if (id == 0 || id < 0)
+            if(id == 0 || id < 0)
             {
                 return BadRequest();
             }

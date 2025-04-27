@@ -22,6 +22,7 @@ namespace ShipShop.Infrastructure.Context
             optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
         }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<SubCategory> SubCategories { get; set; }
 
         public DbSet<Brand> Brands { get; set; }
         public DbSet<LookupType> LookupTypes { get; set; }
@@ -67,7 +68,7 @@ namespace ShipShop.Infrastructure.Context
                 new Role
                 {
                     Id = 1,
-                    Name = "Create"
+                    Name = "Add"
                 }
                 , new Role {
                     Id = 2, 
@@ -81,8 +82,21 @@ namespace ShipShop.Infrastructure.Context
                   , new Role
                   {
                       Id=4,
-                      Name= "Read"
+                      Name= "Customer"
                   }
+            );
+            modelBuilder.Entity<User>().HasData(
+                new User
+                {
+                    Id=1,
+                    FirstName="Yasmeen",
+                    LastName="Saleh",
+                    Email="yasmeensaleh147@gmail.com",
+                    Password="12345678",
+                    ConfirmPassword="12345678",
+                    RoleId=1,
+
+                }
             );
   
             modelBuilder.Entity<User>()
@@ -90,14 +104,21 @@ namespace ShipShop.Infrastructure.Context
         .HasValue<User>("Admin")
         .HasValue<Customer>("Customer");
     
-            modelBuilder.Entity<Category>()
+            modelBuilder.Entity<SubCategory>()
            .Property(e => e.CreatedOn)
            .HasDefaultValueSql("GETDATE()");
+
+            modelBuilder.Entity<SubCategory>()
+           .Property(e => e.IsActive)
+           .HasDefaultValue(true);
+
+            modelBuilder.Entity<Category>()
+          .Property(e => e.CreatedOn)
+          .HasDefaultValueSql("GETDATE()");
 
             modelBuilder.Entity<Category>()
            .Property(e => e.IsActive)
            .HasDefaultValue(true);
-
             modelBuilder.Entity<Brand>()
         .Property(e => e.CreatedOn)
         .HasDefaultValueSql("GETDATE()");

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ShipShop.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class first : Migration
+    public partial class addsubcategorytable : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -29,26 +29,6 @@ namespace ShipShop.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Brands", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Categories",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    NameAr = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DescriptionAr = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
-                    UpdatedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Categories", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -81,6 +61,26 @@ namespace ShipShop.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Roles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SubCategories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    NameAr = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DescriptionAr = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
+                    UpdatedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SubCategories", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -118,8 +118,10 @@ namespace ShipShop.Infrastructure.Migrations
                     DescriptionAr = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<float>(type: "real", nullable: false),
                     TaxPercentage = table.Column<float>(type: "real", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ProductStatusId = table.Column<int>(type: "int", nullable: false),
-                    CategoryId = table.Column<int>(type: "int", nullable: false),
+                    SubCategoryId = table.Column<int>(type: "int", nullable: false),
                     BrandId = table.Column<int>(type: "int", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
                     UpdatedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -135,15 +137,15 @@ namespace ShipShop.Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Products_Categories_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "Categories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_Products_LookupItems_ProductStatusId",
                         column: x => x.ProductStatusId,
                         principalTable: "LookupItems",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Products_SubCategories_SubCategoryId",
+                        column: x => x.SubCategoryId,
+                        principalTable: "SubCategories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -158,9 +160,9 @@ namespace ShipShop.Infrastructure.Migrations
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RoleId = table.Column<int>(type: "int", nullable: false),
+                    RoleId = table.Column<int>(type: "int", nullable: true),
+                    ConfirmPassword = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Discriminator = table.Column<string>(type: "nvarchar(8)", maxLength: 8, nullable: false),
-                    ConfirmPassword = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CustomerStatusId = table.Column<int>(type: "int", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
                     UpdatedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -178,8 +180,7 @@ namespace ShipShop.Infrastructure.Migrations
                         name: "FK_Users_Roles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "Roles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -188,12 +189,11 @@ namespace ShipShop.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ProductId = table.Column<int>(type: "int", nullable: false),
                     CustomerId = table.Column<int>(type: "int", nullable: false),
                     StatusCartId = table.Column<int>(type: "int", nullable: false),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
                     UpdatedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                    IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true)
                 },
                 constraints: table =>
                 {
@@ -205,13 +205,29 @@ namespace ShipShop.Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Carts_Products_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Products",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
                         name: "FK_Carts_Users_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "WishLists",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CustomerId = table.Column<int>(type: "int", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
+                    UpdatedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WishLists", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_WishLists_Users_CustomerId",
                         column: x => x.CustomerId,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -261,9 +277,8 @@ namespace ShipShop.Infrastructure.Migrations
                     DeliveryDate = table.Column<DateOnly>(type: "date", nullable: false),
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TotalPrice = table.Column<float>(type: "real", nullable: false),
-                    Feedback = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CustomerId = table.Column<int>(type: "int", nullable: false),
-                    CartId = table.Column<int>(type: "int", nullable: false),
+                    CartId = table.Column<int>(type: "int", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
                     UpdatedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true)
@@ -276,7 +291,7 @@ namespace ShipShop.Infrastructure.Migrations
                         column: x => x.CartId,
                         principalTable: "Carts",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_Orders_LookupItems_OrderStatusId",
                         column: x => x.OrderStatusId,
@@ -288,6 +303,35 @@ namespace ShipShop.Infrastructure.Migrations
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "WishListItems",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    WishListId = table.Column<int>(type: "int", nullable: false),
+                    ProductId = table.Column<int>(type: "int", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
+                    UpdatedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WishListItems", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_WishListItems_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_WishListItems_WishLists_WishListId",
+                        column: x => x.WishListId,
+                        principalTable: "WishLists",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -337,8 +381,10 @@ namespace ShipShop.Infrastructure.Migrations
                 columns: new[] { "Id", "IsActive", "Name", "UpdatedOn" },
                 values: new object[,]
                 {
-                    { 1, true, "Admin", null },
-                    { 2, true, "Customer", null }
+                    { 1, true, "Create", null },
+                    { 2, true, "Edit", null },
+                    { 3, true, "Delete", null },
+                    { 4, true, "Read", null }
                 });
 
             migrationBuilder.InsertData(
@@ -351,18 +397,13 @@ namespace ShipShop.Infrastructure.Migrations
                     { 3, true, 2, null, "Active" },
                     { 4, true, 2, null, "Banned" },
                     { 5, true, 3, null, "New" },
-                    { 6, true, 3, null, "Confirmed" },
+                    { 6, true, 3, null, "Processing" },
                     { 7, true, 3, null, "Cancelled" },
                     { 8, true, 3, null, "Delivered" },
                     { 9, true, 4, null, "Active" },
                     { 10, true, 4, null, "Ordered" },
                     { 11, true, 4, null, "Abandoned" }
                 });
-
-            migrationBuilder.InsertData(
-                table: "Users",
-                columns: new[] { "Id", "Discriminator", "Email", "FirstName", "IsActive", "LastName", "Password", "RoleId", "UpdatedOn" },
-                values: new object[] { 1, "Admin", "yasmeensaleh147@gmail.com", "Yasmeen", true, "Saleh", "yas12345", 1, null });
 
             migrationBuilder.CreateIndex(
                 name: "IX_CartItems_CartId",
@@ -378,11 +419,6 @@ namespace ShipShop.Infrastructure.Migrations
                 name: "IX_Carts_CustomerId",
                 table: "Carts",
                 column: "CustomerId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Carts_ProductId",
-                table: "Carts",
-                column: "ProductId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Carts_StatusCartId",
@@ -408,7 +444,8 @@ namespace ShipShop.Infrastructure.Migrations
                 name: "IX_Orders_CartId",
                 table: "Orders",
                 column: "CartId",
-                unique: true);
+                unique: true,
+                filter: "[CartId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_CustomerId",
@@ -426,14 +463,14 @@ namespace ShipShop.Infrastructure.Migrations
                 column: "BrandId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Products_CategoryId",
-                table: "Products",
-                column: "CategoryId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Products_ProductStatusId",
                 table: "Products",
                 column: "ProductStatusId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Products_SubCategoryId",
+                table: "Products",
+                column: "SubCategoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_CustomerStatusId",
@@ -444,6 +481,21 @@ namespace ShipShop.Infrastructure.Migrations
                 name: "IX_Users_RoleId",
                 table: "Users",
                 column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WishListItems_ProductId",
+                table: "WishListItems",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WishListItems_WishListId",
+                table: "WishListItems",
+                column: "WishListId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WishLists_CustomerId",
+                table: "WishLists",
+                column: "CustomerId");
         }
 
         /// <inheritdoc />
@@ -456,22 +508,28 @@ namespace ShipShop.Infrastructure.Migrations
                 name: "OrderItems");
 
             migrationBuilder.DropTable(
-                name: "Orders");
+                name: "WishListItems");
 
             migrationBuilder.DropTable(
-                name: "Carts");
+                name: "Orders");
 
             migrationBuilder.DropTable(
                 name: "Products");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "WishLists");
+
+            migrationBuilder.DropTable(
+                name: "Carts");
 
             migrationBuilder.DropTable(
                 name: "Brands");
 
             migrationBuilder.DropTable(
-                name: "Categories");
+                name: "SubCategories");
+
+            migrationBuilder.DropTable(
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "LookupItems");
