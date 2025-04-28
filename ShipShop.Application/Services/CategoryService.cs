@@ -146,23 +146,29 @@ namespace ShipShop.Application.Services
 
         public async Task UpdateCategory(int id, UpdateCategoryCommand command)
         {
-
-            var category = new Category()
+            var category = await _repository.GetById(id);
+            if (category == null)
             {
-                Id = id,
-                Name = command.Name,
-                Description = command.Description,
-                ImageUrl = command.ImagePath,
-                DescriptionAr = command.DescriptionAr,
-                NameAr = command.NameAr,
-                IsActive = command.IsActive,
+                throw new Exception("Category not found.");
+            }
 
-                UpdatedOn = DateTime.Now,
+           
+            if (!string.IsNullOrEmpty(command.ImageUrl) && category.ImageUrl != command.ImageUrl)
+            {
+                category.ImageUrl = command.ImageUrl;
+            }
 
-            };
+            category.Name = command.Name;
+            category.Description = command.Description;
+            category.DescriptionAr = command.DescriptionAr;
+            category.NameAr = command.NameAr;
+            category.IsActive = command.IsActive;
+            category.UpdatedOn = DateTime.Now;
 
             await _repository.Update(category);
         }
+
+
         public async Task DeleteCategory(int id)
         {
             var category = await _repository.GetById(id);

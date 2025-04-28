@@ -54,7 +54,7 @@ namespace ShipShop.Application.Services
                 UpdatedOn = x.UpdatedOn.ToString(),
                 NameAr = x.NameAr,
                 DescriptionAr=x.DescriptionAr,
-                ImageUrl = $"https://localhost:7057/Images/{x.ImageUrl}",
+                ImageUrl = x.ImageUrl,
                 MainCategory=x.Category.Name,
 
 
@@ -74,7 +74,7 @@ namespace ShipShop.Application.Services
                 NameAr = x.NameAr,
                 Description = x.Description,
                 DescriptionAr = x.DescriptionAr,
-                ImageUrl = $"https://localhost:7057/Images/{x.ImageUrl}",
+                ImageUrl = x.ImageUrl,
                 MainCategory = x.Category.Name,
                 CreatedOn = x.CreatedOn.ToShortDateString(),
                 UpdatedOn = x.UpdatedOn.ToString(),
@@ -94,8 +94,8 @@ namespace ShipShop.Application.Services
                 Name = x.Name,
                 NameAr = x.NameAr,
                 Description = x.Description,
+                ImageUrl = x.ImageUrl,
                 DescriptionAr = x.DescriptionAr,
-                ImageUrl = $"https://localhost:7057/Images/{x.ImageUrl}",
                 MainCategory = x.Category.Name,
                 CreatedOn = x.CreatedOn.ToShortDateString(),
                 UpdatedOn = x.UpdatedOn.ToString(),
@@ -116,7 +116,7 @@ namespace ShipShop.Application.Services
                 NameAr = x.NameAr,
                 Description = x.Description,
                 DescriptionAr = x.DescriptionAr,
-                ImageUrl = $"https://localhost:7057/Images/{x.ImageUrl}",
+                ImageUrl = x.ImageUrl,
                 MainCategory = x.Category.Name,
                 CreatedOn = x.CreatedOn.ToShortDateString(),
                 UpdatedOn = x.UpdatedOn.ToString(),
@@ -141,7 +141,7 @@ namespace ShipShop.Application.Services
             result.CreatedOn = category.CreatedOn.ToShortDateString();
             result.UpdatedOn = category.UpdatedOn.ToString()   ;
             result.IsActive = category.IsActive;
-            result.ImageUrl = $"https://localhost:7057/Images/{category.ImageUrl}";
+            result.ImageUrl = category.ImageUrl;
             result.MainCategory= category.Category.Name; 
             return result;
         }
@@ -155,7 +155,7 @@ namespace ShipShop.Application.Services
                 NameAr = x.NameAr,
                 Description = x.Description,
                 DescriptionAr = x.DescriptionAr,
-                ImageUrl = $"https://localhost:7057/Images/{x.ImageUrl}",
+                ImageUrl = x.ImageUrl,
                 MainCategory = x.Category.Name,
                 CreatedOn = x.CreatedOn.ToShortDateString(),
                 UpdatedOn = x.UpdatedOn.ToString(),
@@ -169,22 +169,25 @@ namespace ShipShop.Application.Services
         }
         public async Task UpdateCategory(int id, UpdateSubCategoryCommand command)
         {
-     
-            var category = new SubCategory()
+
+            var category = await _repository.GetById(id);
+            if (category == null)
             {
-                Id=id,
-                Name = command.Name,
-                Description = command.Description,
-                ImageUrl = command.ImagePath,
-                DescriptionAr =command.DescriptionAr,
-               NameAr=command.NameAr,
-               IsActive=command.IsActive,
-                      CategoryId=command.CategoryId,
-               
+                throw new Exception("Category not found.");
+            }
 
-                UpdatedOn = DateTime.Now,
 
-            };
+            if (!string.IsNullOrEmpty(command.ImageUrl) && category.ImageUrl != command.ImageUrl)
+            {
+                category.ImageUrl = command.ImageUrl;
+            }
+
+            category.Name = command.Name;
+            category.Description = command.Description;
+            category.DescriptionAr = command.DescriptionAr;
+            category.NameAr = command.NameAr;
+            category.IsActive = command.IsActive;
+            category.UpdatedOn = DateTime.Now;
 
             await _repository.Update(category);
         }

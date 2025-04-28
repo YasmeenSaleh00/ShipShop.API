@@ -110,7 +110,7 @@ namespace ShipShop.API.Controllers
                 return BadRequest();
             }
             await _productService.AddProduct(command);
-            return Ok("Product successfully added");
+            return Ok();
         }
         [HttpPut("{id}")]
         [Authorize(Roles = "Edit")]
