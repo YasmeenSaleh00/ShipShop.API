@@ -41,14 +41,14 @@ namespace ShipShop.Infrastructure.Repositories
                    .Include(x => x.LookupItem)
                    .Include(x => x.SubCategory)
                    .Include(x => x.Brand)
-                   .AsNoTracking()
+             
                    .ToListAsync(); return products;
         }
 
         public async Task<Product> GetById(int id)
         {
             var entity = await _context
-                     .Products.AsNoTracking().Include(x => x.SubCategory)
+                     .Products.Include(x => x.SubCategory)
                      .Include(x=>x.Brand)
                      .Include(x=>x.LookupItem)
                      .FirstOrDefaultAsync(x => x.Id == id);
@@ -142,7 +142,7 @@ namespace ShipShop.Infrastructure.Repositories
 
         public async Task Update(Product input)
         {
-            _context.Products.Update(input);
+            _context.Update(input);
             await _context.SaveChangesAsync();
 
         }

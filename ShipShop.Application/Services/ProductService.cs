@@ -46,22 +46,29 @@ namespace ShipShop.Application.Services
         }
         public async Task UpdateProduct(UpdateProductCommand command, int id)
         {
-            Product product = new Product()
+            var product = await _productRepository.GetById(id);
+            if (product == null)
             {
-                Id = id,
-                Name = command.Name,
-                SubCategoryId = command.SubCategoryId,
-                NameAr = command.NameAr,
-                Description = command.Description,
-                DescriptionAr = command.DescriptionAr,
-                Price = command.Price,
-               TaxPercentage= command.TaxPercentage,
-               BrandId = command.BrandId,
-                Quantity = command.Quantity,
-                ProductStatusId = command.ProductStatusId,
+                throw new Exception("Product not found.");
+            }
+            if (!string.IsNullOrEmpty(command.ImageUrl) && product.ImageUrl != command.ImageUrl)
+            {
+                product.ImageUrl = command.ImageUrl;
+            }
 
-                UpdatedOn = DateTime.Now
-            };
+
+            product.Name = command.Name;
+            product.SubCategoryId = command.SubCategoryId;
+            product.NameAr = command.NameAr;
+            product.Description = command.Description;
+            product.DescriptionAr = command.DescriptionAr;
+            product.Price = command.Price;
+            product.TaxPercentage = command.TaxPercentage;
+            product.BrandId = command.BrandId;
+            product.Quantity = command.Quantity;
+            product.ProductStatusId = command.ProductStatusId;
+            product.UpdatedOn = DateTime.Now;
+           
 
             await _productRepository.Update(product);
         }
@@ -93,7 +100,7 @@ namespace ShipShop.Application.Services
                 CreatedOn = x.CreatedOn.ToShortDateString(),
                 UpdatedOn = x.UpdatedOn.ToString(),
                 CategoryName = x.SubCategory.Name,
-                ImageUrl = $"https://localhost:7057/Images/{x.ImageUrl}",
+                ImageUrl = x.ImageUrl,
                 IsActive= x.IsActive,  
                 Quantity=x.Quantity
 
@@ -120,7 +127,7 @@ namespace ShipShop.Application.Services
             productmodel.BrandName = product.Brand.NameAr;
             productmodel.ProductStatus = product.LookupItem.Value;
             productmodel.CreatedOn = product.CreatedOn.ToShortDateString();
-            productmodel.ImageUrl = $"https://localhost:7057/Images/{product.ImageUrl}";
+            productmodel.ImageUrl = product.ImageUrl;
             productmodel.UpdatedOn = product.UpdatedOn.ToString();
             productmodel.Quantity= product.Quantity;
             productmodel.IsActive=product.IsActive; 
@@ -143,7 +150,7 @@ namespace ShipShop.Application.Services
                 TaxPercentage = x.TaxPercentage,
                 CreatedOn = x.CreatedOn.ToShortDateString(),
                 UpdatedOn = x.UpdatedOn.ToString(),
-                ImageUrl = $"https://localhost:7057/Images/{x.ImageUrl}",
+                ImageUrl = x.ImageUrl,
                 IsActive = x.IsActive,
                 CategoryName = x.SubCategory.Name,
                 BrandName = x.Brand.Name,
@@ -168,7 +175,7 @@ namespace ShipShop.Application.Services
                 TaxPercentage = x.TaxPercentage,
                 CreatedOn = x.CreatedOn.ToShortDateString(),
                 UpdatedOn = x.UpdatedOn.ToString(),
-                ImageUrl = $"https://localhost:7057/Images/{x.ImageUrl}",
+                ImageUrl = x.ImageUrl,
                 IsActive = x.IsActive,
                 CategoryName = x.SubCategory.Name,
                 BrandName = x.Brand.Name,
@@ -192,7 +199,7 @@ namespace ShipShop.Application.Services
                 TaxPercentage = x.TaxPercentage,
                 CreatedOn = x.CreatedOn.ToShortDateString(),
                 UpdatedOn = x.UpdatedOn.ToString(),
-                ImageUrl = $"https://localhost:7057/Images/{x.ImageUrl}",
+                ImageUrl = x.ImageUrl,
                 IsActive = x.IsActive,  
                 CategoryName = x.SubCategory.Name, 
                BrandName=x.Brand.Name,
@@ -217,8 +224,8 @@ namespace ShipShop.Application.Services
                 TaxPercentage = x.TaxPercentage,
                 CreatedOn = x.CreatedOn.ToShortDateString(),
                 UpdatedOn = x.UpdatedOn.ToString(),
-                ImageUrl = $"https://localhost:7057/Images/{x.ImageUrl}",
-                IsActive= x.IsActive,
+                ImageUrl = x.ImageUrl,
+                IsActive = x.IsActive,
                 CategoryName = x.SubCategory.Name,
                 BrandName = x.Brand.Name,
                 ProductStatus = x.LookupItem.Value,
@@ -241,7 +248,7 @@ namespace ShipShop.Application.Services
                 TaxPercentage = x.TaxPercentage,
                 CreatedOn = x.CreatedOn.ToShortDateString(),
                 UpdatedOn = x.UpdatedOn.ToString(),
-                ImageUrl = $"https://localhost:7057/Images/{x.ImageUrl}",
+                ImageUrl = x.ImageUrl,
                 IsActive = x.IsActive,
                 CategoryName = x.SubCategory.Name,
                 BrandName = x.Brand.Name,
@@ -264,8 +271,8 @@ namespace ShipShop.Application.Services
                 TaxPercentage = x.TaxPercentage,
                 CreatedOn = x.CreatedOn.ToShortDateString(),
                 UpdatedOn = x.UpdatedOn.ToString(),
-                ImageUrl = $"https://localhost:7057/Images/{x.ImageUrl}",
-                IsActive= x.IsActive,
+                ImageUrl = x.ImageUrl,
+                IsActive = x.IsActive,
                 CategoryName = x.SubCategory.Name,
                 BrandName = x.Brand.Name,
                 ProductStatus = x.LookupItem.Value,
