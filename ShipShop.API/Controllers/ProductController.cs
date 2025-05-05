@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using ShipShop.Application.Commands;
 using ShipShop.Application.Queries;
 using ShipShop.Application.Services;
@@ -101,6 +102,17 @@ namespace ShipShop.API.Controllers
             return Ok(product);
 
         }
+        [HttpGet]
+        [Route("search/{name}")]
+        public async Task<IActionResult> SearchProducts(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                return BadRequest("The name is required");
+
+            var products = await _productService.Search(name);
+            return Ok(products);
+        }
+
         [HttpPost]
         [Authorize(Roles = "Add")]
         public async Task<IActionResult> CreateProduct(ProductCommand command)
@@ -113,7 +125,7 @@ namespace ShipShop.API.Controllers
             return Ok();
         }
         [HttpPut("{id}")]
-        [Authorize(Roles = "Edit")]
+        //[Authorize(Roles = "Edit")]
         public async Task<IActionResult> UpdateProduct(UpdateProductCommand command , int id)
         {
             if (command == null || id == 0 || id <0)
@@ -133,3 +145,11 @@ namespace ShipShop.API.Controllers
         }
     }
 }
+
+
+
+
+
+
+
+          

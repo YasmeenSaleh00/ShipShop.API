@@ -36,9 +36,20 @@ namespace ShipShop.Infrastructure.Repositories
         }
         public async Task UpdateCartItemQuantityAsync(int customerId, int productId, int quantity)
         {
-            var cartItem = await _context.CartItems.FirstOrDefaultAsync(x => x.ProductId == productId);
-            _context.Update(cartItem);
+            var cart = await _context.Carts.FirstOrDefaultAsync(c => c.CustomerId == customerId);
+            if (cart == null) throw new Exception("Cart not found");
+
+            var cartItem = await _context.CartItems
+                .FirstOrDefaultAsync(x => x.ProductId == productId && x.CartId == cart.Id);
+            if (cartItem == null) throw new Exception("Item not found in cart");
+
+            cartItem.Quantity = quantity;
+            cartItem.UpdatedOn = DateTime.UtcNow;
+
+
+            _context.CartItems.Update(cartItem);
             await _context.SaveChangesAsync();
+
         }
         public async Task UpdateCartItem(CartItem item)
         {

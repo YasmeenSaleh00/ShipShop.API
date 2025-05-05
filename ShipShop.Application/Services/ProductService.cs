@@ -124,13 +124,15 @@ namespace ShipShop.Application.Services
             productmodel.Price = product.Price;
             productmodel.TaxPercentage = product.TaxPercentage;
             productmodel.CategoryName = product.SubCategory.Name;
-            productmodel.BrandName = product.Brand.NameAr;
+            productmodel.BrandName = product.Brand.Name;
             productmodel.ProductStatus = product.LookupItem.Value;
             productmodel.CreatedOn = product.CreatedOn.ToShortDateString();
             productmodel.ImageUrl = product.ImageUrl;
             productmodel.UpdatedOn = product.UpdatedOn.ToString();
             productmodel.Quantity= product.Quantity;
             productmodel.IsActive=product.IsActive; 
+         
+         
 
             return productmodel;
 
@@ -279,6 +281,30 @@ namespace ShipShop.Application.Services
                 Quantity = x.Quantity,
             }).ToList();
             return productModels;
+        }
+        public async Task<List<ProductModel>> Search(string name)
+        {
+            var products = await _productRepository.Search(name);
+
+            return products.Select(p => new ProductModel
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Description = p.Description,
+                Price = p.Price,
+                BrandName = p.Brand.Name,
+                CategoryName = p.SubCategory.Name,
+                ProductStatus = p.LookupItem.Value,
+                DescriptionAr = p.DescriptionAr,
+                NameAr=p.NameAr,
+                TaxPercentage = p.TaxPercentage,
+                CreatedOn = p.CreatedOn.ToShortDateString(),
+                UpdatedOn = p.UpdatedOn.ToString(),
+                ImageUrl = p.ImageUrl,
+                IsActive = p.IsActive,
+                Quantity = p.Quantity,
+
+            }).ToList();
         }
 
     }

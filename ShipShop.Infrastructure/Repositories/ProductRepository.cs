@@ -77,6 +77,21 @@ namespace ShipShop.Infrastructure.Repositories
 
         }
 
+        public async Task<List<Product>> Search(string name)
+        {
+            name = name.ToLower(); 
+            return await _context.Products
+                .Include(x => x.SubCategory)
+                .Include(x => x.Brand)
+                .Include(x => x.LookupItem)
+                .Where(p =>
+                    p.Name.ToLower().Contains(name) ||
+                    p.Description.ToLower().Contains(name)||
+                    p.NameAr.ToLower().Contains(name))
+                    
+                .ToListAsync();
+        }
+
         public async Task<List<Product>> SortByCreationDate(string sortDirection)
         {
             IQueryable<Product> query = _context.Products.Include(x=>x.Brand).Include(x=>x.LookupItem).Include(x=>x.SubCategory);
