@@ -30,6 +30,18 @@ namespace ShipShop.API.Controllers
             return Ok(products);
 
         }
+        [HttpGet]
+        [Route("count")]
+        public async Task<IActionResult> GetAllProductCount()
+        {
+            var products = await _productService.GetAll();
+            if (products == null || products.Count == 0)
+            {
+                return NotFound();
+            }
+            return Ok(products.Count);
+
+        }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetProductById(int id)
         {
@@ -125,7 +137,7 @@ namespace ShipShop.API.Controllers
             return Ok();
         }
         [HttpPut("{id}")]
-        //[Authorize(Roles = "Edit")]
+        [Authorize(Roles = "Edit")]
         public async Task<IActionResult> UpdateProduct(UpdateProductCommand command , int id)
         {
             if (command == null || id == 0 || id <0)

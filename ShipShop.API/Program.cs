@@ -7,6 +7,9 @@ using System.Reflection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using ShipShop.Core.Entities;
+using System.Net.Mail;
+using System.Net;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -53,6 +56,7 @@ builder.Services.AddAuthentication(options =>
 
 });
 builder.Services.AddDbContext<ShipShopDbContext>();
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 builder.Services.AddInfrastructureServices();
 
 
@@ -68,7 +72,6 @@ builder.Services.AddCors(options =>
                   .AllowAnyHeader();
         });
 });
-
 
 var app = builder.Build();
 

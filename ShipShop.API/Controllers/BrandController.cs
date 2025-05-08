@@ -31,6 +31,17 @@ namespace ShipShop.API.Controllers
             return Ok(brands);
         }
         [HttpGet]
+        [Route("count")]
+        public async Task<IActionResult> GetAllBrandCount()
+        {
+            var brands = await _brandService.GetAllBrand();
+            if (brands == null || brands.Count == 0)
+            {
+                return NotFound();
+            }
+            return Ok(brands.Count);
+        }
+        [HttpGet]
         [Route("sort-by-id/{sortDirection}")]
         public async Task<IActionResult> SortById(string sortDirection)
         {

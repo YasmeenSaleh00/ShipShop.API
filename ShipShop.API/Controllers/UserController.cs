@@ -37,6 +37,20 @@ namespace ShipShop.API.Controllers
 
             return Ok(users);
         }
+        [HttpGet]
+        [Route("count")]
+        public async Task<IActionResult> GetAllUserCount()
+        {
+            var users = await _userService.GetAll();
+
+            if (users == null || users.Count == 0)
+            {
+                return NotFound("No users found.");
+            }
+
+
+            return Ok(users.Count);
+        }
         /// <summary>
         /// This EndPoint To get User info
         /// </summary>

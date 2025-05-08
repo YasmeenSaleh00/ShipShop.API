@@ -32,7 +32,17 @@ namespace ShipShop.API.Controllers
             }
             return Ok(customers);
         }
-
+        [HttpGet]
+        [Route("count")]
+        public async Task<IActionResult> GetAllCustomersCount()
+        {
+            var customers = await _customerService.GetAll();
+            if (customers == null || customers.Count == 0)
+            {
+                return NotFound();
+            }
+            return Ok(customers.Count);
+        }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCustomerById(int id)
         {

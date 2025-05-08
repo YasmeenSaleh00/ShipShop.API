@@ -28,6 +28,7 @@ namespace ShipShop.Infrastructure.Context
         public DbSet<LookupType> LookupTypes { get; set; }
         public DbSet<LookupItem> LookupItems { get; set; }  
         public DbSet<Product> Products { get; set; }
+
         public DbSet<Role> Roles { get; set; }
 
         public DbSet<User> Users { get; set; }  
@@ -38,6 +39,8 @@ namespace ShipShop.Infrastructure.Context
         public DbSet<WishListItem> WishListItems { get; set; }
         public DbSet<Order> Orders { get; set; }    
         public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<Testimonial> Testimonials { get; set; }
+        public DbSet<EmailSettings> EmailSettings  { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -177,11 +180,20 @@ namespace ShipShop.Infrastructure.Context
            .Property(e => e.IsActive)
            .HasDefaultValue(true);
 
-            modelBuilder.Entity<CartItem>()
- .Property(e => e.CreatedOn)
- .HasDefaultValueSql("GETDATE()");
+     
 
             modelBuilder.Entity<CartItem>()
+            .Property(e => e.CreatedOn)
+            .HasDefaultValueSql("GETDATE()");
+
+            modelBuilder.Entity<CartItem>()
+           .Property(e => e.IsActive)
+           .HasDefaultValue(true);
+            modelBuilder.Entity<Testimonial>()
+.Property(e => e.CreatedOn)
+.HasDefaultValueSql("GETDATE()");
+
+            modelBuilder.Entity<Testimonial>()
            .Property(e => e.IsActive)
            .HasDefaultValue(true);
 

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShipShop.Infrastructure.Context;
 
@@ -11,9 +12,11 @@ using ShipShop.Infrastructure.Context;
 namespace ShipShop.Infrastructure.Migrations
 {
     [DbContext(typeof(ShipShopDbContext))]
-    partial class ShipShopDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250507100415_remove prop")]
+    partial class removeprop
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -694,49 +697,6 @@ namespace ShipShop.Infrastructure.Migrations
                     b.ToTable("SubCategories");
                 });
 
-            modelBuilder.Entity("ShipShop.Core.Entities.Testimonial", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedOn")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETDATE()");
-
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Rating")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CustomerId")
-                        .IsUnique();
-
-                    b.ToTable("Testimonials");
-                });
-
             modelBuilder.Entity("ShipShop.Core.Entities.User", b =>
                 {
                     b.Property<int>("Id")
@@ -1028,17 +988,6 @@ namespace ShipShop.Infrastructure.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("ShipShop.Core.Entities.Testimonial", b =>
-                {
-                    b.HasOne("ShipShop.Core.Entities.Customer", "Customer")
-                        .WithOne("Testimonial")
-                        .HasForeignKey("ShipShop.Core.Entities.Testimonial", "CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
-                });
-
             modelBuilder.Entity("ShipShop.Core.Entities.User", b =>
                 {
                     b.HasOne("ShipShop.Core.Entities.Role", "Role")
@@ -1157,9 +1106,6 @@ namespace ShipShop.Infrastructure.Migrations
                     b.Navigation("Carts");
 
                     b.Navigation("Orders");
-
-                    b.Navigation("Testimonial")
-                        .IsRequired();
 
                     b.Navigation("WishList");
                 });

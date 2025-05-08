@@ -33,6 +33,17 @@ namespace ShipShop.API.Controllers
             return Ok(categories);
         }
         [HttpGet]
+        [Route("count")]
+        public async Task<IActionResult> GetAllCategoriesCount()
+        {
+            var categories = await _categoryService.GetAllCategory();
+            if (categories == null || categories.Count == 0)
+            {
+                return NoContent();
+            }
+            return Ok(categories.Count);
+        }
+        [HttpGet]
         [Route("sort-by-name/{sortDirection}")]
 
         public async Task<IActionResult> SortByName(string sortDirection)

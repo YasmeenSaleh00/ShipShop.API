@@ -63,7 +63,9 @@ namespace ShipShop.Infrastructure.Repositories
 
         public async Task<List<User>> SortUserByCreateOn(string sortDirection)
         {
-            IQueryable<User> query = _context.Users.Include(x => x.Role);
+            IQueryable<User> query = _context.Users
+                                      .Where(x => !(x is Customer))
+                                      .Include(x => x.Role);
 
 
             if (sortDirection.ToLower() == "desc")
@@ -80,7 +82,10 @@ namespace ShipShop.Infrastructure.Repositories
 
         public async Task<List<User>> SortUserByEmail(string sortDirection)
         {
-            IQueryable<User> query = _context.Users.Include(x => x.Role);
+
+            IQueryable<User> query = _context.Users
+                                      .Where(x => !(x is Customer))
+                                      .Include(x => x.Role);
 
 
             if (sortDirection.ToLower() == "desc")
@@ -97,8 +102,11 @@ namespace ShipShop.Infrastructure.Repositories
 
         public async Task<List<User>> SortUserById(string sortDirection)
         {
-         
-            IQueryable<User> query = _context.Users.Include(x => x.Role);
+
+
+            IQueryable<User> query = _context.Users
+                                      .Where(x => !(x is Customer))
+                                      .Include(x => x.Role);
 
 
             if (sortDirection.ToLower() == "desc")
@@ -115,7 +123,10 @@ namespace ShipShop.Infrastructure.Repositories
 
         public async Task<List<User>> SortUserByName(string sortDirection)
         {
-            IQueryable<User> query = _context.Users.Include(x => x.Role);
+
+            IQueryable<User> query = _context.Users
+                                      .Where(x => !(x is Customer))
+                                      .Include(x => x.Role);
 
 
             if (sortDirection.ToLower() == "desc")

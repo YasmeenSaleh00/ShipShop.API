@@ -12,5 +12,6 @@ namespace ShipShop.Core.Interfaces
     
         Task<List<Order>> GetAllOrdersByCustomerId(int customerId);
         Task<List<Order>> SortByDeliveryDate(string sortDirection);
+
     }
 }

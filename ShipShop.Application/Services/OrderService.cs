@@ -264,6 +264,7 @@ namespace ShipShop.Application.Services
             }).ToList();
             return list;
         }
+      
     }
    
 }

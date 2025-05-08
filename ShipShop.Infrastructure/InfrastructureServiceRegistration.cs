@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Identity.Client;
 using ShipShop.Core.Entities;
 using ShipShop.Core.Interfaces;
 using ShipShop.Infrastructure.Repositories;
@@ -25,7 +26,8 @@ namespace ShipShop.Infrastructure
             services.AddScoped<IAuthRepository, AuthRepository>();    
             services.AddScoped<ICartRepository, CartRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();    
-            services.AddScoped<IWishlistRepository,WishListRepository>();   
+            services.AddScoped<IWishlistRepository,WishListRepository>();
+            services.AddScoped<ITestimonialRepository, TestimonialRepository>();
         }
     }
 }
