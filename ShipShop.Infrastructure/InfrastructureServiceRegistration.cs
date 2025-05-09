@@ -20,7 +20,7 @@ namespace ShipShop.Infrastructure
             services.AddScoped<IRepository<Brand>, BrandRepository>();
             services.AddScoped<ILookupRepository, LookupRepository>();  
             services.AddScoped<IProductRepository, ProductRepository>();
-            services.AddScoped<IRoleRepository, RoleRepository>();  
+            services.AddScoped<IRepository<Role>, RoleRepository>();  
             services.AddScoped<IUserRepository, UserRepository>();  
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<IAuthRepository, AuthRepository>();    
@@ -28,6 +28,8 @@ namespace ShipShop.Infrastructure
             services.AddScoped<IOrderRepository, OrderRepository>();    
             services.AddScoped<IWishlistRepository,WishListRepository>();
             services.AddScoped<ITestimonialRepository, TestimonialRepository>();
+            services.AddScoped<IMessagesRepository, MessagesRepository>();
+
         }
     }
 }

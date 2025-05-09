@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShipShop.Infrastructure.Context;
 
@@ -11,9 +12,11 @@ using ShipShop.Infrastructure.Context;
 namespace ShipShop.Infrastructure.Migrations
 {
     [DbContext(typeof(ShipShopDbContext))]
-    partial class ShipShopDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250509091033_add new prop")]
+    partial class addnewprop
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -179,6 +182,47 @@ namespace ShipShop.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("ShipShop.Core.Entities.EmailSettings", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Port")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SenderEmail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SenderName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SmtpServer")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EmailSettings");
                 });
 
             modelBuilder.Entity("ShipShop.Core.Entities.LookupItem", b =>
@@ -366,52 +410,6 @@ namespace ShipShop.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("ShipShop.Core.Entities.Messages", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedOn")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETDATE()");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
-
-                    b.Property<string>("Message")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Phone")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Subject")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("UpdatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Messages");
-                });
-
             modelBuilder.Entity("ShipShop.Core.Entities.Order", b =>
                 {
                     b.Property<int>("Id")
@@ -570,6 +568,10 @@ namespace ShipShop.Infrastructure.Migrations
 
                     b.Property<int>("SubCategoryId")
                         .HasColumnType("int");
+
+                    b.Property<string>("SubImages")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<float>("TaxPercentage")
                         .HasColumnType("real");
@@ -887,8 +889,14 @@ namespace ShipShop.Infrastructure.Migrations
                 {
                     b.HasBaseType("ShipShop.Core.Entities.User");
 
+                    b.Property<DateTime?>("CodeExpiry")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("CustomerStatusId")
                         .HasColumnType("int");
+
+                    b.Property<string>("VerificationCode")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasIndex("CustomerStatusId");
 

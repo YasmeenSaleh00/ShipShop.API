@@ -13,12 +13,13 @@ namespace ShipShop.Application.Services
 {
     public class RoleService
     {
-        private readonly IRoleRepository _roleRepository;
+        private readonly IRepository<Role> _roleRepository;
 
-        public RoleService(IRoleRepository roleRepository)
+        public RoleService(IRepository<Role> roleRepository)
         {
             _roleRepository = roleRepository;
         }
+
         public async Task<int> Add(RoleCommand command)
         {
             if(command == null)

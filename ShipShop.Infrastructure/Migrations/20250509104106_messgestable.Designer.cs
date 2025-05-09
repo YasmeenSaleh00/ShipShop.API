@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShipShop.Infrastructure.Context;
 
@@ -11,9 +12,11 @@ using ShipShop.Infrastructure.Context;
 namespace ShipShop.Infrastructure.Migrations
 {
     [DbContext(typeof(ShipShopDbContext))]
-    partial class ShipShopDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250509104106_messgestable")]
+    partial class messgestable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -379,6 +382,9 @@ namespace ShipShop.Infrastructure.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETDATE()");
 
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -408,6 +414,8 @@ namespace ShipShop.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
 
                     b.ToTable("Messages");
                 });
@@ -887,8 +895,14 @@ namespace ShipShop.Infrastructure.Migrations
                 {
                     b.HasBaseType("ShipShop.Core.Entities.User");
 
+                    b.Property<DateTime?>("CodeExpiry")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("CustomerStatusId")
                         .HasColumnType("int");
+
+                    b.Property<string>("VerificationCode")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasIndex("CustomerStatusId");
 
@@ -942,6 +956,17 @@ namespace ShipShop.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("LookupType");
+                });
+
+            modelBuilder.Entity("ShipShop.Core.Entities.Messages", b =>
+                {
+                    b.HasOne("ShipShop.Core.Entities.Customer", "Customer")
+                        .WithMany("Messages")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("ShipShop.Core.Entities.Order", b =>
@@ -1154,6 +1179,8 @@ namespace ShipShop.Infrastructure.Migrations
             modelBuilder.Entity("ShipShop.Core.Entities.Customer", b =>
                 {
                     b.Navigation("Carts");
+
+                    b.Navigation("Messages");
 
                     b.Navigation("Orders");
 

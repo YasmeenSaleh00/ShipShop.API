@@ -1,4 +1,4 @@
-﻿using ShipShop.Application.Commands;
+﻿    using ShipShop.Application.Commands;
 using ShipShop.Application.Models;
 using ShipShop.Application.Queries;
 using ShipShop.Core.Entities;
@@ -39,6 +39,7 @@ namespace ShipShop.Application.Services
                 ProductStatusId = 1,
                 TaxPercentage = command.TaxPercentage,
                 ImageUrl = command.ImageUrl,
+             
 
             };
 
@@ -55,7 +56,7 @@ namespace ShipShop.Application.Services
             {
                 product.ImageUrl = command.ImageUrl;
             }
-
+          
 
             product.Name = command.Name;
             product.SubCategoryId = command.SubCategoryId;
@@ -130,9 +131,13 @@ namespace ShipShop.Application.Services
             productmodel.ImageUrl = product.ImageUrl;
             productmodel.UpdatedOn = product.UpdatedOn.ToString();
             productmodel.Quantity= product.Quantity;
-            productmodel.IsActive=product.IsActive; 
-         
-         
+            productmodel.IsActive=product.IsActive;
+          
+
+
+
+
+
 
             return productmodel;
 

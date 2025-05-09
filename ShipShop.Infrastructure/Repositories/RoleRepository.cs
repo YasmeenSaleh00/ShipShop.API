@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace ShipShop.Infrastructure.Repositories
 {
-    public class RoleRepository : IRoleRepository
+    public class RoleRepository : IRepository<Role>
     {
         private readonly ShipShopDbContext _context;
 

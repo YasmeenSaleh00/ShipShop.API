@@ -44,6 +44,7 @@ namespace ShipShop.Application.Services
                 Description = x.Description,
                 Rating= x.Rating,
                 CustomerId= x.CustomerId,
+                CreatedOn=x.CreatedOn.ToShortDateString(),
 
             }).ToList();   
             return testimonialModels;
@@ -61,6 +62,75 @@ namespace ShipShop.Application.Services
             test.Rating=testimonial.Rating;
             test.CreatedOn = testimonial.CreatedOn.ToShortDateString();
             return test;
+        }
+        public async Task<List<TestimonialModel>> SortTestimonialsByCreation(string sortDirection)
+        {
+            var testimonial = await _testimonialRepository.SortTestimonialsByCreation(sortDirection);
+            List<TestimonialModel> testimonialModels = testimonial.Select(x => new TestimonialModel
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Description = x.Description,
+                Rating = x.Rating,
+                CustomerId = x.CustomerId,
+                CreatedOn = x.CreatedOn.ToShortDateString(),
+
+            }).ToList();
+
+
+            return testimonialModels;
+        }
+        public async Task<List<TestimonialModel>> SortTestimonialsById(string sortDirection)
+        {
+            var testimonial = await _testimonialRepository.SortTestimonialsById(sortDirection);
+            List<TestimonialModel> testimonialModels = testimonial.Select(x => new TestimonialModel
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Description = x.Description,
+                Rating = x.Rating,
+                CustomerId = x.CustomerId,
+                CreatedOn = x.CreatedOn.ToShortDateString(),
+
+            }).ToList();
+
+
+            return testimonialModels;
+        }
+        public async Task<List<TestimonialModel>> SortTestimonialsByRating(string sortDirection)
+        {
+            var testimonial = await _testimonialRepository.SortTestimonialsByRating(sortDirection);
+            List<TestimonialModel> testimonialModels = testimonial.Select(x => new TestimonialModel
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Description = x.Description,
+                Rating = x.Rating,
+                CustomerId = x.CustomerId,
+                CreatedOn = x.CreatedOn.ToShortDateString(),
+
+            }).ToList();
+
+
+            return testimonialModels;
+        }
+        public async Task<List<TestimonialModel>> GetNegativeTestimonials()
+        {
+            var testimonial = await _testimonialRepository.GetNegativeTestimonials();
+            List<TestimonialModel> testimonialModels = testimonial.Select(x => new TestimonialModel
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Description = x.Description,
+                Rating = x.Rating,
+                CustomerId = x.CustomerId,
+                CreatedOn = x.CreatedOn.ToShortDateString(),
+
+            }).ToList();
+
+
+            return testimonialModels;
+
         }
     }
 }

@@ -21,6 +21,7 @@ namespace ShipShop.Application.Models
         public float TaxPercentage { get; set; }
         public string ProductStatus { get; set; }
         public string ImageUrl { get; set; }
+
         public string CreatedOn { get; set; }
         public string UpdatedOn { get; set; }
         public bool IsActive { get; set; }

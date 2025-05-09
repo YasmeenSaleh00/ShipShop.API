@@ -56,7 +56,7 @@ builder.Services.AddAuthentication(options =>
 
 });
 builder.Services.AddDbContext<ShipShopDbContext>();
-builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+
 builder.Services.AddInfrastructureServices();
 
 

@@ -12,5 +12,9 @@ namespace ShipShop.Core.Interfaces
         Task CreateTestimonial(Testimonial testimonial);    
         Task<List<Testimonial>> GetTestimonials();
         Task<Testimonial> GetTestimonialByCustomerId(int customerId);
+        Task<List<Testimonial>> SortTestimonialsById(string sortDirection);
+        Task<List<Testimonial>> SortTestimonialsByRating(string sortDirection);
+        Task<List<Testimonial>> SortTestimonialsByCreation(string sortDirection);
+        Task<List<Testimonial>> GetNegativeTestimonials();
     }
 }

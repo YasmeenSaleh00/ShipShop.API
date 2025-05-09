@@ -20,6 +20,7 @@ namespace ShipShop.Application.Commands
         public int  Quantity { get; set; }
         public int SubCategoryId { get; set; }
         public string ImageUrl { get; set; }
+    
         public int BrandId { get; set; }
     
     }

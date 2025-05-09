@@ -40,7 +40,8 @@ namespace ShipShop.Infrastructure.Context
         public DbSet<Order> Orders { get; set; }    
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<Testimonial> Testimonials { get; set; }
-        public DbSet<EmailSettings> EmailSettings  { get; set; }
+        public DbSet<Messages> Messages { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -122,6 +123,13 @@ namespace ShipShop.Infrastructure.Context
             modelBuilder.Entity<Category>()
            .Property(e => e.IsActive)
            .HasDefaultValue(true);
+            modelBuilder.Entity<Messages>()
+        .Property(e => e.IsActive)
+        .HasDefaultValue(true);
+
+            modelBuilder.Entity<Messages>()
+          .Property(e => e.CreatedOn)
+          .HasDefaultValueSql("GETDATE()");
             modelBuilder.Entity<Brand>()
         .Property(e => e.CreatedOn)
         .HasDefaultValueSql("GETDATE()");
@@ -259,11 +267,6 @@ namespace ShipShop.Infrastructure.Context
                 .HasForeignKey(c => c.CustomerStatusId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-      //      modelBuilder.Entity<Cart>()
-      //.HasOne(c => c.Product)
-      //.WithMany()
-      //.HasForeignKey(c => c.ProductId)
-      //.OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Cart>()
                 .HasOne(c => c.Customer)
@@ -277,10 +280,10 @@ namespace ShipShop.Infrastructure.Context
                 .HasForeignKey(c => c.StatusCartId)
                 .OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<Order>()
-          .HasOne(o => o.Cart) // الـ Order يحتوي على Cart واحد
-          .WithOne(c => c.Order) // الـ Cart يحتوي على Order واحد فقط
-          .HasForeignKey<Order>(o => o.CartId) // تحديد الـ Foreign Key في الـ Order
-          .OnDelete(DeleteBehavior.SetNull); // لا يتم حذف الطلب إذا تم حذف الكارت
+          .HasOne(o => o.Cart) 
+          .WithOne(c => c.Order) 
+          .HasForeignKey<Order>(o => o.CartId) 
+          .OnDelete(DeleteBehavior.SetNull); 
 
 
 

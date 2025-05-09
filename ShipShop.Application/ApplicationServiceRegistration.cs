@@ -25,8 +25,7 @@ namespace ShipShop.Application
             services.AddScoped<CustomerService>();
             services.AddScoped<WishListService>();
             services.AddScoped<TestimonialService>();
-            services.AddScoped<EmailService>();
-            services.AddScoped<AccountService>();
+            services.AddScoped<MessageService>();
 
         }
     }

@@ -7,12 +7,10 @@ using System.Threading.Tasks;
 
 namespace ShipShop.Core.Interfaces
 {
-    public interface IRoleRepository:IRepository<Role>
+    public interface IMessagesRepository
     {
-
-       
-
-
-
+        Task CreateMessage(Messages messages);
+        Task<Messages> GetMessages(int id);
+        Task<List<Messages>> GetAllMessages();
     }
 }

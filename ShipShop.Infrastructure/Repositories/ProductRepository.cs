@@ -79,7 +79,7 @@ namespace ShipShop.Infrastructure.Repositories
 
         public async Task<List<Product>> Search(string name)
         {
-            name = name.ToLower(); 
+            name = name.Trim().ToLower(); 
             return await _context.Products
                 .Include(x => x.SubCategory)
                 .Include(x => x.Brand)
@@ -87,7 +87,9 @@ namespace ShipShop.Infrastructure.Repositories
                 .Where(p =>
                     p.Name.ToLower().Contains(name) ||
                     p.Description.ToLower().Contains(name)||
-                    p.NameAr.ToLower().Contains(name))
+                    p.NameAr.ToLower().Contains(name)||
+                    p.SubCategory.Name.ToLower().Contains(name)||
+                    p.Brand.Name.ToLower().Contains(name))
                     
                 .ToListAsync();
         }

@@ -18,8 +18,9 @@ namespace ShipShop.Core.Entities
 
         public List<Order> Orders { get; set; }
         public List<WishList> WishList { get; set; }
-        public string? VerificationCode { get; set; }
-        public DateTime? CodeExpiry { get; set; }
+  
+ 
         public Testimonial Testimonial { get; set; }
+   
     }
 }
