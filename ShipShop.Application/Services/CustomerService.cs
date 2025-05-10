@@ -93,12 +93,17 @@ namespace ShipShop.Application.Services
             };
             return model;
         }
-        public async Task UpdatePassword(int id, ChangePasswordCommand command)
+        public async Task UpdatePassword( ChangePasswordCommand command)
         {
-            var user = await _customerRepository.GetById(id);
-            if (user == null) throw new Exception("User not found");
+            var user = await _customerRepository.GetUserByEmail(command.Email);
+            if (user == null)
+                throw new Exception("User not found");
+
+            if (string.IsNullOrWhiteSpace(command.NewPassword))
+                throw new Exception("New password cannot be empty");
 
             user.Password = command.NewPassword;
+            user.ConfirmPassword = command.NewPassword;
             user.UpdatedOn = DateTime.Now;
 
 
@@ -258,6 +263,27 @@ namespace ShipShop.Application.Services
             if (user == null)
                 throw new Exception("User not found");
             await _customerRepository.DeleteAsync(id);
+        }
+        public async Task<CustomerModel> GetUserByEmail(string email)
+        {
+            var user = await _customerRepository.GetUserByEmail(email);
+            if (user == null)
+            {
+                throw new Exception($"No Customer with the given email {email}");
+            }
+
+
+            CustomerModel model = new CustomerModel()
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                CustomerStatus = user.LookupItem.Value,
+                IsActive = user.IsActive,
+                CreateOn = user.CreatedOn.ToShortDateString(),
+                UpdateOn = user.UpdatedOn.ToString()
+            };
+            return model;
         }
     }
 

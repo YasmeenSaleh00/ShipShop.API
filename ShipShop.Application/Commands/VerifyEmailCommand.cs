@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace ShipShop.Application.Commands
 {
-    public class ChangePasswordCommand
+    public class VerifyEmailCommand
     {
         public string Email { get; set; }
-        public string NewPassword { get; set; }
     }
 }

@@ -97,7 +97,18 @@ namespace ShipShop.API.Controllers
             }
             return Ok(users);
         }
-    
+        [HttpPost("verify-email")]
+        public async Task<IActionResult> VerifyEmail([FromBody] VerifyEmailCommand command)
+        {
+            var user = await _customerService.GetUserByEmail(command.Email);
+
+            if (user == null)
+            {
+                return NotFound("Email not found.");
+            }
+
+            return Ok();
+        }
         [HttpPost]
      
         public async Task<IActionResult> Registertion(AddCustomerCommand command)
@@ -112,6 +123,14 @@ namespace ShipShop.API.Controllers
         public async Task<IActionResult> UpdateCustomer(int id, UpdateCustomerCommand command)
         {
               await _customerService.UpdateCustomer(id, command);
+            return Ok();
+
+        }
+        [HttpPut]
+        //[Authorize(Roles = "Customer")]
+        public async Task<IActionResult> UpdatePassword(ChangePasswordCommand command)
+        {
+            await _customerService.UpdatePassword(command);
             return Ok();
 
         }

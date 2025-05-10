@@ -42,7 +42,7 @@ namespace ShipShop.Infrastructure.Repositories
 
         public async Task<Customer> GetUserByEmail(string email)
         {
-            var user = await _context.Customers.Include(X => X.Role).FirstOrDefaultAsync(x => x.Email == email);
+            var user = await _context.Customers.Include(X => X.Role).Include(x=>x.LookupItem).FirstOrDefaultAsync(x => x.Email == email);
             return user;
         }
 
