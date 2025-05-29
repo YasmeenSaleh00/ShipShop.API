@@ -86,7 +86,6 @@ namespace ShipShop.Infrastructure.Repositories
                 .Include(x => x.LookupItem)
                 .Where(p =>
                     p.Name.ToLower().Contains(name) ||
-                    p.Description.ToLower().Contains(name)||
                     p.NameAr.ToLower().Contains(name)||
                     p.SubCategory.Name.ToLower().Contains(name)||
                     p.Brand.Name.ToLower().Contains(name))

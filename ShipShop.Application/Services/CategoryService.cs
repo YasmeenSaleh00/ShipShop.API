@@ -54,8 +54,6 @@ namespace ShipShop.Application.Services
                 NameAr = x.NameAr,
                 DescriptionAr = x.DescriptionAr,
                 ImageUrl =x.ImageUrl,
-
-
                 IsActive = x.IsActive
             }).ToList();
 

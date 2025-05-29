@@ -22,7 +22,9 @@ namespace ShipShop.Application.Services
         }
 
         public async Task<int> AddProduct(ProductCommand command)
+           
         {
+            if(command ==null) throw new ArgumentNullException(nameof(command));            
             Product product = new Product()
             {
                 SubCategoryId = command.SubCategoryId,
@@ -132,12 +134,6 @@ namespace ShipShop.Application.Services
             productmodel.UpdatedOn = product.UpdatedOn.ToString();
             productmodel.Quantity= product.Quantity;
             productmodel.IsActive=product.IsActive;
-          
-
-
-
-
-
 
             return productmodel;
 

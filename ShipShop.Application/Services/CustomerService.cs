@@ -24,16 +24,16 @@ namespace ShipShop.Application.Services
             {
                 throw new Exception("You must Add data");
             }
-
-            if (user.Password != user.ConfirmPassword)
-            {
-                throw new Exception("NOT THE SAME PASSWORD");
-            }
             var existingUser = await _customerRepository.GetUserByEmail(user.Email);
             if (existingUser != null)
             {
                 throw new Exception("Email is already in use.");
             }
+            if (user.Password != user.ConfirmPassword)
+            {
+                throw new Exception("NOT THE SAME PASSWORD");
+            }
+         
 
             var newUser = new Customer()
             {
@@ -129,10 +129,7 @@ namespace ShipShop.Application.Services
         public async Task<List<CustomerModel>> SortCustomerByCreateOn(string sortDirection)
         {
             
-            if (string.IsNullOrEmpty(sortDirection) || (sortDirection.ToLower() != "asc" && sortDirection.ToLower() != "desc"))
-            {
-                throw new ArgumentException("Invalid sort direction. Use 'asc' or 'desc'.", nameof(sortDirection));
-            }
+        
 
            
             var customers = await _customerRepository.SortCustomerByCreateOn(sortDirection);
@@ -155,10 +152,7 @@ namespace ShipShop.Application.Services
         public async Task<List<CustomerModel>> SortCustomerByName(string sortDirection)
         {
 
-            if (string.IsNullOrEmpty(sortDirection) || (sortDirection.ToLower() != "asc" && sortDirection.ToLower() != "desc"))
-            {
-                throw new ArgumentException("Invalid sort direction. Use 'asc' or 'desc'.", nameof(sortDirection));
-            }
+       
 
 
             var customers = await _customerRepository.SortCustomerByName(sortDirection);
@@ -182,11 +176,7 @@ namespace ShipShop.Application.Services
         public async Task<List<CustomerModel>> SortCustomerByEmail(string sortDirection)
         {
 
-            if (string.IsNullOrEmpty(sortDirection) || (sortDirection.ToLower() != "asc" && sortDirection.ToLower() != "desc"))
-            {
-                throw new ArgumentException("Invalid sort direction. Use 'asc' or 'desc'.", nameof(sortDirection));
-            }
-
+      
 
             var customers = await _customerRepository.SortCustomerByEmail(sortDirection);
 
@@ -207,10 +197,7 @@ namespace ShipShop.Application.Services
         }
         public async Task<List<CustomerModel>> SortCustomerById(string sortDirection)
         {
-            if (string.IsNullOrEmpty(sortDirection) || (sortDirection.ToLower() != "asc" && sortDirection.ToLower() != "desc"))
-            {
-                throw new ArgumentException("Invalid sort direction. Use 'asc' or 'desc'.", nameof(sortDirection));
-            }
+          
 
 
             var customers = await _customerRepository.SortCustomerById(sortDirection);

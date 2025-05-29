@@ -37,16 +37,10 @@ namespace ShipShop.Infrastructure.Repositories
         public async Task<List<User>> GetAll()
         {
 
-          
-
             var users = await _context.Users
                                       .Where(x => !(x is Customer))
                                       .Include(x => x.Role)
-                                      
                                       .ToListAsync();
-
-          
-
 
             return users;
 

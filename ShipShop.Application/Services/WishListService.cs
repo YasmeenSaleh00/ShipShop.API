@@ -14,12 +14,12 @@ namespace ShipShop.Application.Services
     public class WishListService
     {
         private readonly IWishlistRepository _wishlistRepository;
-        private readonly IHttpContextAccessor accessor;
+        
 
-        public WishListService(IWishlistRepository wishlistRepository, IHttpContextAccessor accessor)
+        public WishListService(IWishlistRepository wishlistRepository)
         {
             _wishlistRepository = wishlistRepository;
-            this.accessor = accessor;
+ 
         }
 
         public async Task<WishListModel> GetWishList(int id)

@@ -18,13 +18,13 @@ namespace ShipShop.Application.Services
     {
         private readonly IAuthRepository _authRepository;
         private readonly IConfiguration configuration;
-        private readonly CartService _cartService;
+    
 
-        public AuthService(IAuthRepository authRepository,IConfiguration configuration, CartService cartService)
+        public AuthService(IAuthRepository authRepository,IConfiguration configuration)
         {
             _authRepository = authRepository;
             this.configuration = configuration;
-            _cartService = cartService; 
+        
         }
         public async Task<AuthenticationModel> Login(AuthenticationQuery query)
         {
@@ -59,7 +59,7 @@ namespace ShipShop.Application.Services
             AuthenticationModel authenticationModel = new AuthenticationModel
             {
                 AccessToken = GenerateToken(user.Id, user.Role.Name, CartId, WishlistId),
-                ExpiresAt = DateTime.UtcNow.AddHours(1)
+                ExpiresAt = DateTime.UtcNow.AddHours(2)
             };
 
             return authenticationModel;
@@ -84,7 +84,7 @@ namespace ShipShop.Application.Services
             {
                 Issuer = configuration["JWT:ValidIssuer"],
                 Audience = configuration["JWT:ValidAudience"],
-                Expires = DateTime.Now.AddHours(1),
+                Expires = DateTime.Now.AddHours(2),
                 SigningCredentials = new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256),
                 Subject = new ClaimsIdentity(claims)
             };

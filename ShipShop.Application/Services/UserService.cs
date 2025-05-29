@@ -29,6 +29,7 @@ namespace ShipShop.Application.Services
 
         public async Task CreateNewUser(AddUserCommand user)
         {
+            if(user == null) return;    
             var person = new User()
             {
                 FirstName = user.FirstName,
@@ -101,10 +102,7 @@ namespace ShipShop.Application.Services
       
         public async Task<List<UserModel>> SortUserById(string sortDirection)
         {
-            if (string.IsNullOrEmpty(sortDirection) || (sortDirection.ToLower() != "asc" && sortDirection.ToLower() != "desc"))
-            {
-                throw new ArgumentException("Invalid sort direction. Use 'asc' or 'desc'.", nameof(sortDirection));
-            }
+        
 
 
             var customers = await _userRepository.SortUserById(sortDirection);
@@ -131,10 +129,7 @@ namespace ShipShop.Application.Services
         }
         public async Task<List<UserModel>> SortUserByName(string sortDirection)
         {
-            if (string.IsNullOrEmpty(sortDirection) || (sortDirection.ToLower() != "asc" && sortDirection.ToLower() != "desc"))
-            {
-                throw new ArgumentException("Invalid sort direction. Use 'asc' or 'desc'.", nameof(sortDirection));
-            }
+          
 
 
             var customers = await _userRepository.SortUserByName(sortDirection);
@@ -161,11 +156,6 @@ namespace ShipShop.Application.Services
         }
         public async Task<List<UserModel>> SortUserByEmail(string sortDirection)
         {
-            if (string.IsNullOrEmpty(sortDirection) || (sortDirection.ToLower() != "asc" && sortDirection.ToLower() != "desc"))
-            {
-                throw new ArgumentException("Invalid sort direction. Use 'asc' or 'desc'.", nameof(sortDirection));
-            }
-
 
             var customers = await _userRepository.SortUserByEmail(sortDirection);
 
@@ -191,10 +181,7 @@ namespace ShipShop.Application.Services
         }
         public async Task<List<UserModel>> SortUserByCreation(string sortDirection)
         {
-            if (string.IsNullOrEmpty(sortDirection) || (sortDirection.ToLower() != "asc" && sortDirection.ToLower() != "desc"))
-            {
-                throw new ArgumentException("Invalid sort direction. Use 'asc' or 'desc'.", nameof(sortDirection));
-            }
+       
 
 
             var customers = await _userRepository.SortUserByCreateOn(sortDirection);
@@ -234,7 +221,7 @@ namespace ShipShop.Application.Services
             user.Password = command.NewPassword;
             user.ConfirmPassword = command.ConfirmPassword;
             user.UpdatedOn = DateTime.Now;
-            _userRepository.Update(user);   
+        await    _userRepository.Update(user);   
         }
         
     }

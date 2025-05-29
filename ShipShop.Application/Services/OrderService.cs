@@ -29,7 +29,7 @@ namespace ShipShop.Application.Services
             result=orders.Select(x=>new OrderModel
             {
                 OrderNumber=x.Id,
-                CustomerName=x.Customer.FullName,
+                CustomerName=x.CustomerName,
                 ShippingAddress = x.ShippingAddress,
                 OrderDate =x.CreatedOn.ToShortDateString(),
                 DeliveryDate=x.DeliveryDate.ToString(), 

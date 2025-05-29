@@ -16,11 +16,11 @@ namespace ShipShop.Application.Services
     public class CartService
     {
         private readonly ICartRepository _cartRepository;
-        private readonly IHttpContextAccessor accessor;
-        public CartService(ICartRepository cartRepository, IHttpContextAccessor accessor)
+    
+        public CartService(ICartRepository cartRepository)
         {
             _cartRepository = cartRepository;
-            this.accessor = accessor;
+
         }
 
         public async Task<CartModel> GetCartById(int cartId)
@@ -120,18 +120,18 @@ namespace ShipShop.Application.Services
             return cart.Id; 
         }
 
-        public async Task<int> CreateEmptyCartAsync(int customerId)
-        {
-            var cart = new Cart
-            {
-                CustomerId = customerId,
-                CreatedOn = DateTime.UtcNow,
-                StatusCartId = 9
-            };
+        //public async Task<int> CreateEmptyCartAsync(int customerId)
+        //{
+        //    var cart = new Cart
+        //    {
+        //        CustomerId = customerId,
+        //        CreatedOn = DateTime.UtcNow,
+        //        StatusCartId = 9
+        //    };
 
-            await _cartRepository.Add(cart);
-            return cart.Id;
-        }
+        //    await _cartRepository.Add(cart);
+        //    return cart.Id;
+        //}
         public async Task UpdateCartItemQuantityAsync(int customerId,int productId, int quantity)
         {
             var cart = await _cartRepository.GetCartByCustomerAsync(customerId);

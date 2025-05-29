@@ -11,10 +11,7 @@ namespace ShipShop.Core.Interfaces
     {
         Task<List<Product>> GetProductsByBrand(string brandName);
         Task<List<Product>> GetProductsByFilters(string categoryName);
-        Task<List<Product>> SortByName(string sortDirection);
         Task<List<Product>> SortByPrice(string sortDirection);
-        Task<List<Product>> SortById(string sortDirection);
-        Task<List<Product>> SortByCreationDate(string sortDirection);
         Task<List<Product>> Search(string name);
 
 
