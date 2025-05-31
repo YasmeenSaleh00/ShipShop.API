@@ -20,7 +20,7 @@ namespace ShipShop.API.Controllers
             {
                 throw new Exception("Please Enter Valid File");
             }
-
+            //create name for file
             string newFileURL2 = Guid.NewGuid().ToString() + "" + file.FileName;
             using (var inputFile = new FileStream(Path.Combine(uploadFolder, newFileURL2), FileMode.Create))
             {
