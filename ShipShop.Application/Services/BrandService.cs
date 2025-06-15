@@ -77,7 +77,7 @@ namespace ShipShop.Application.Services
               
                 CreatedOn = x.CreatedOn.ToShortDateString(),
                 UpdatedOn = x.UpdatedOn.ToString(),
-                ImagePath = $"https://localhost:7057/Images/{x.ImagePath}",
+                ImagePath = x.ImagePath,
                 IsActive = x.IsActive,
                 
             }).ToList();
@@ -96,7 +96,7 @@ namespace ShipShop.Application.Services
 
                 CreatedOn = x.CreatedOn.ToShortDateString(),
                 UpdatedOn = x.UpdatedOn.ToString(),
-                ImagePath = $"https://localhost:7057/Images/{x.ImagePath}",
+                ImagePath = x.ImagePath,
                 IsActive = x.IsActive,
 
             }).ToList();
@@ -113,7 +113,7 @@ namespace ShipShop.Application.Services
                 NameAr = x.NameAr,
                 CreatedOn = x.CreatedOn.ToShortDateString(),
                 UpdatedOn = x.UpdatedOn.ToString(),
-                ImagePath = $"https://localhost:7057/Images/{x.ImagePath}",
+                ImagePath = x.ImagePath,
                 IsActive = x.IsActive,
 
             }).ToList();
