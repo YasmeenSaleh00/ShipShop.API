@@ -23,23 +23,28 @@ namespace ShipShop.Infrastructure.Repositories
 
         public async Task<User> Login(string username, string password)
         {
+            // نبحث عن المستخدم ونشمل كل الـ navigation properties الممكنة حسب نوعه
             var user = await _context.Users
                 .Include(x => x.Role)
                 .FirstOrDefaultAsync(x => x.Email == username && x.Password == password);
 
-            if (user is Customer)
+            if (user == null)
+                return null;
+
+            if (user is Customer customer)
             {
-                user = await _context.Customers
-                    .Include(c => c.Carts)
-                    .Include(c => c.Role)
-                    .Include(x=>x.WishList)
-                    .FirstOrDefaultAsync(c => c.Email == username && c.Password == password);
+                // التحقق من أن الحساب مفعّل
+                if (!customer.IsActive)
+                    throw new Exception("Your account has been banned");
+
+                // تحميل تفاصيل إضافية
+                await _context.Entry(customer).Collection(c => c.Carts).LoadAsync();
+                await _context.Entry(customer).Collection(c => c.WishList).LoadAsync();
+                return customer;
             }
 
             return user;
         }
-
-
 
     }
 

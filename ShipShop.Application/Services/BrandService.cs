@@ -41,7 +41,7 @@ namespace ShipShop.Application.Services
                 Id = x.Id,
                 Name = x.Name,
                 NameAr=x.NameAr,
-                ImagePath = $"https://localhost:7057/Images/{x.ImagePath}",
+               ImagePath = x.ImagePath,
                 CreatedOn = x.CreatedOn.ToShortDateString(),
                 UpdatedOn = x.UpdatedOn.ToString()
             }).ToList();
@@ -57,7 +57,7 @@ namespace ShipShop.Application.Services
             result.Id = brand.Id;
             result.Name = brand.Name;
             result.NameAr= brand.NameAr;
-            result.ImagePath = $"https://localhost:7057/Images/{brand.ImagePath}";
+            result.ImagePath = brand.ImagePath;
             result.CreatedOn = brand.CreatedOn.ToShortDateString();
           
             result.UpdatedOn = brand.UpdatedOn.ToString();

@@ -25,9 +25,9 @@ namespace ShipShop.API.Controllers
         {
             AuthenticationModel result = await _authService.Login(model);
 
-            if (result == null)
+            if (!string.IsNullOrEmpty(result.ErrorMessage))
             {
-                return BadRequest("Email Or Password is incorrect");
+                return BadRequest(new { message = result.ErrorMessage });
             }
             else
             {

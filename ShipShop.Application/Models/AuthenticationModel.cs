@@ -10,5 +10,6 @@ namespace ShipShop.Application.Models
     {
         public string AccessToken { get; set; }
         public DateTime ExpiresAt { get; set; }
+      public string ErrorMessage { get; set; }    
     }
 }
