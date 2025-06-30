@@ -135,7 +135,7 @@ namespace ShipShop.API.Controllers
 
         }
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Delete")]
+        [Authorize(Roles = "Delete,Admin")]
         public async Task<IActionResult> DeleteUser(int id)
         {
             await _customerService.DeleteAsync(id); 
@@ -143,7 +143,7 @@ namespace ShipShop.API.Controllers
         }
         [HttpPut]
         [Route("[action]/{custId}")]
-        [Authorize(Roles = "Edit")]
+        [Authorize(Roles = "Edit,Admin")]
         public async Task<IActionResult> BanCustomer(int custId)
         {
             await _customerService.BanCustomer(custId);
@@ -151,7 +151,7 @@ namespace ShipShop.API.Controllers
         }
         [HttpPut]
         [Route("[action]/{custId}")]
-        [Authorize(Roles = "Edit")]
+        [Authorize(Roles = "Edit,Admin")]
         public async Task<IActionResult> ActivateCustomer(int custId)
         {
             await _customerService.ActivateCustomer(custId);    

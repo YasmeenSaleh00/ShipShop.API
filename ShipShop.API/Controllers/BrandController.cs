@@ -86,7 +86,7 @@ namespace ShipShop.API.Controllers
         /// This EndPoint To Add new  Brand  
         /// </summary>
         [HttpPost]
-        [Authorize(Roles = "Add")]
+        [Authorize(Roles = "Add,Admin")]
         public async Task<IActionResult> AddBrand(BrandCommand command)
         {
             if(command == null)
@@ -100,7 +100,7 @@ namespace ShipShop.API.Controllers
         /// This EndPoint To update Brand info
         /// </summary>
         [HttpPut("{id}")]
-        [Authorize(Roles = "Edit")]
+        [Authorize(Roles = "Edit,Admin")]
         public async Task<IActionResult> UpdateBrand(int id ,BrandCommand command)
         {
             var brand = await _brandService.GetById(id);
@@ -116,7 +116,7 @@ namespace ShipShop.API.Controllers
         /// This EndPoint To delete  Brand
         /// </summary>
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Delete")]
+        [Authorize(Roles = "Delete,Admin")]
         public async Task<IActionResult> DeleteBrand(int id)
         {
             var brand = await _brandService.GetById(id);

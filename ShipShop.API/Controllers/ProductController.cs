@@ -126,7 +126,7 @@ namespace ShipShop.API.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Add")]
+        [Authorize(Roles = "Add,Admin")]
         public async Task<IActionResult> CreateProduct(ProductCommand command)
         {
             if (command == null)
@@ -137,7 +137,7 @@ namespace ShipShop.API.Controllers
             return Ok();
         }
         [HttpPut("{id}")]
-        [Authorize(Roles = "Edit")]
+        [Authorize(Roles = "Edit,Admin")]
         public async Task<IActionResult> UpdateProduct(UpdateProductCommand command , int id)
         {
             if (command == null || id == 0 || id <0)
@@ -149,7 +149,7 @@ namespace ShipShop.API.Controllers
         }
       
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Delete")]
+        [Authorize(Roles = "Delete,Admin")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
             await _productService.Delete(id);

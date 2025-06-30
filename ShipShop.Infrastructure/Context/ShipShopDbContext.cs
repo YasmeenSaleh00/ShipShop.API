@@ -88,6 +88,11 @@ namespace ShipShop.Infrastructure.Context
                       Id=4,
                       Name= "Customer"
                   }
+                  , new Role
+                  {
+                      Id=5,
+                      Name="Admin"
+                  }
             );
             modelBuilder.Entity<User>().HasData(
                 new User
